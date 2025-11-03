@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="background_gray">#b2b4aa</color>
+    <color name="background_gray_80">#cecfc9</color>
+    <color name="experience">#3060D8</color>
+    <color name="experience_light">#4890F8</color>
+</resources>
