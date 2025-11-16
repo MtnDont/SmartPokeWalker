@@ -72,7 +72,7 @@ tasks.register<Exec>("extractImageBinaries") {
     description = "Runs a Python script safely (Gradle 8 compatible)."
 
     workingDir = rootDir
-    commandLine("python3", "scripts/extract_walker_images.py", "rom.nds", "-o", "app/src/main/res/raw", "-s")
+    commandLine("python", "scripts/extract_walker_images.py", "rom.nds", "-o", "app/src/main/res/raw", "-s")
 }
 
 dependencies {
