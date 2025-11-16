@@ -5,24 +5,30 @@ import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.random.Random
 
 @HiltViewModel
-class SettingsScreenViewModel @Inject constructor(
+class TrainerDetailsScreenViewModel @Inject constructor(
     private val monsterDataRepository: MonsterDataRepository,
     private val monstersRepository: MonstersRepository
 ) : ViewModel() {
+
+    val trainerName: StateFlow<String> = monsterDataRepository.trainerName
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = "Red")
+
     fun createNewMonster() {
         viewModelScope.launch {
             monstersRepository.createMonster(
                 dexId = Random.nextInt(1, 6),
                 name = "test",
                 experience = 0L,
-                sex = Random.nextInt(1, 2),
+                sex = Random.nextInt(1, 3),
                 form = 0
             )
         }

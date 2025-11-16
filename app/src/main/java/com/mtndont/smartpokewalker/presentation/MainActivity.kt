@@ -1,8 +1,3 @@
-/* While this template provides a good starting point for using Wear Compose, you can always
- * take a look at https://github.com/android/wear-os-samples/tree/main/ComposeStarter to find the
- * most up to date changes to the libraries and their usages.
- */
-
 package com.mtndont.smartpokewalker.presentation
 
 import android.Manifest
@@ -12,9 +7,18 @@ import android.os.Build
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.foundation.background
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.colorResource
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import androidx.wear.compose.foundation.pager.HorizontalPager
+import androidx.wear.compose.foundation.pager.rememberPagerState
+import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.service.StepService
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -64,7 +68,26 @@ class MainActivity : ComponentActivity() {
         setTheme(android.R.style.Theme_DeviceDefault)
 
         setContent {
-            WalkPagerApp()
+
+            val pagerState = rememberPagerState(pageCount = {
+                2
+            })
+            HorizontalPager(
+                state = pagerState,
+                modifier = Modifier.background(colorResource(R.color.background_gray))
+            ) { page ->
+                AnimatedVisibility(
+                    visible = pagerState.currentPage == page,
+                    enter = fadeIn(),
+                    exit = fadeOut()
+                ) {
+                    when(page) {
+                        0 -> WalkPagerApp()
+                        1 -> TrainerDetailsApp()
+                        else -> WalkPagerApp()
+                    }
+                }
+            }
         }
     }
 }

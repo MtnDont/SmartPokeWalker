@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.CurvedAlignment
@@ -42,7 +43,7 @@ import com.mtndont.smartpokewalker.R
 @OptIn(ExperimentalWearFoundationApi::class)
 @Composable
 fun WalkPagerApp(
-    viewModel: MainScreenAppViewModel = viewModel()
+    viewModel: MainScreenAppViewModel = hiltViewModel()
 ) {
     val currentSteps by viewModel.currentSteps.collectAsStateWithLifecycle()
     val totalWatts by viewModel.totalWatts.collectAsStateWithLifecycle()
