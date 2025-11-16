@@ -1,9 +1,11 @@
 package com.mtndont.smartpokewalker.presentation
 
 import android.annotation.SuppressLint
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.focusable
-import androidx.compose.foundation.gestures.scrollBy
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -18,7 +20,6 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
-import androidx.compose.ui.input.rotary.onRotaryScrollEvent
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -36,9 +37,6 @@ import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
 import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
 
 @SuppressLint("ResourceType")
 @OptIn(ExperimentalWearFoundationApi::class)
@@ -79,17 +77,23 @@ fun WalkPagerScreen(
     ) { page ->
         Box {
             MonsterDetailsScreen(currentSteps, totalWatts)
-            MonsterImage(
-                when (page + 1) {
-                    1 -> R.raw.a131//R.raw.ditto_new
-                    2 -> R.raw.a24//R.raw.pikachu
-                    3 -> R.raw.a132//R.raw.eevee
-                    4 -> R.raw.a654//R.raw.rotom
-                    5 -> R.raw.a663//R.raw.pichu_notch
-                    6 -> R.raw.a490//R.raw.darkrai
-                    else -> R.raw.a131//R.raw.ditto_new
-                }
-            )
+            AnimatedVisibility(
+                visible = pagerState.currentPage == page,
+                enter = fadeIn(),
+                exit = fadeOut()
+            ) {
+                MonsterImage(
+                    when (page + 1) {
+                        1 -> R.raw.a131//R.raw.ditto_new
+                        2 -> R.raw.a24//R.raw.pikachu
+                        3 -> R.raw.a132//R.raw.eevee
+                        4 -> R.raw.a654//R.raw.rotom
+                        5 -> R.raw.a663//R.raw.pichu_notch
+                        6 -> R.raw.a490//R.raw.darkrai
+                        else -> R.raw.a131//R.raw.ditto_new
+                    }
+                )
+            }
         }
     }
 
