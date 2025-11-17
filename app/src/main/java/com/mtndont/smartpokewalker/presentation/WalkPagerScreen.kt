@@ -5,6 +5,7 @@ import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.focusable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -20,18 +21,18 @@ import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
+import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.wear.compose.foundation.CurvedAlignment
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
-import androidx.wear.compose.foundation.ExperimentalWearFoundationApi
 import androidx.wear.compose.foundation.curvedComposable
 import androidx.wear.compose.foundation.curvedRow
+import androidx.wear.compose.foundation.pager.HorizontalPager
 import androidx.wear.compose.foundation.pager.VerticalPager
 import androidx.wear.compose.foundation.pager.rememberPagerState
 import androidx.wear.compose.foundation.rotary.RotaryScrollableDefaults
@@ -39,8 +40,29 @@ import androidx.wear.compose.foundation.rotary.rotaryScrollable
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
 
-@SuppressLint("ResourceType")
-@OptIn(ExperimentalWearFoundationApi::class)
+@Composable
+fun TrainerViewNavigatorApp() {
+    val pagerState = rememberPagerState(pageCount = {
+        2
+    })
+    HorizontalPager(
+        state = pagerState,
+        modifier = Modifier.background(colorResource(R.color.background_gray))
+    ) { page ->
+        AnimatedVisibility(
+            visible = pagerState.currentPage == page,
+            enter = fadeIn(),
+            exit = fadeOut()
+        ) {
+            when(page) {
+                0 -> WalkPagerApp()
+                1 -> TrainerDetailsApp()
+                else -> WalkPagerApp()
+            }
+        }
+    }
+}
+
 @Composable
 fun WalkPagerApp(
     viewModel: MainScreenAppViewModel = hiltViewModel()
@@ -103,18 +125,18 @@ fun WalkPagerScreen(
     }
 
     CurvedLayout(
-        anchor = 90f,
+        anchor = 0f,
         modifier = Modifier.padding(2.dp)
     ) {
         curvedRow(
             radialAlignment = CurvedAlignment.Radial.Center,
-            angularDirection = CurvedDirection.Angular.CounterClockwise
+            angularDirection = CurvedDirection.Angular.Clockwise
         ) {
             repeat(pagerState.pageCount) { iteration ->
                 curvedComposable {
                     Box(
                         modifier = Modifier
-                            .padding(2.dp)
+                            .padding(1.dp)
                             .size(10.dp)
                     ) {
                         Image(
@@ -134,8 +156,14 @@ fun WalkPagerScreen(
     }
 }
 
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Composable
+fun WalkPagerScreenSmallPreview() {
+    WalkPagerScreen(100000L, 88888888L)
+}
+
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun WalkPagerScreenPreview() {
-    WalkPagerScreen(0L, 0L)
+fun WalkPagerScreenLargePreview() {
+    WalkPagerScreen(0L, 88888888L)
 }

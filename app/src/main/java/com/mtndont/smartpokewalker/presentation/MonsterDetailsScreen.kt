@@ -28,6 +28,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.wear.compose.foundation.AnchorType
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.material.CircularProgressIndicator
@@ -91,7 +92,7 @@ fun MonsterDetailsScreen(
                     )
             )
             CurvedLayout(
-                anchor = 45f
+                anchor = 215f //225f
             ) {
                 curvedText(
                     text = "$totalWatts w",
@@ -99,8 +100,7 @@ fun MonsterDetailsScreen(
                     color = Color.Black,
                     fontFamily = FontFamily(
                         Font(R.font.pixelfont)
-                    ),
-                    angularDirection = CurvedDirection.Angular.Reversed
+                    )
                 )
             }
             CurvedLayout(
@@ -116,15 +116,33 @@ fun MonsterDetailsScreen(
                 )
             }
             CurvedLayout(
-                anchor = 220f //225f
+                anchor = 165f,
+                anchorType = AnchorType.End,
+                modifier = Modifier.padding(22.dp)
             ) {
                 curvedText(
-                    text = "${1000 - (currentSteps % 1000)}/1000 w",
+                    text = "${1000 - (currentSteps % 1000)} w",
                     fontSize = 24.sp,
                     color = Color.Black,
                     fontFamily = FontFamily(
                         Font(R.font.pixelfont)
-                    )
+                    ),
+                    angularDirection = CurvedDirection.Angular.Reversed
+                )
+            }
+            CurvedLayout(
+                anchor = 15f,
+                anchorType = AnchorType.Start,
+                modifier = Modifier.padding(22.dp)
+            ) {
+                curvedText(
+                    text = "1000 w",
+                    fontSize = 24.sp,
+                    color = Color.Black,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    angularDirection = CurvedDirection.Angular.Reversed
                 )
             }
         }
@@ -183,9 +201,19 @@ fun MonsterImage(@DrawableRes monsterResId: Int? = null) {
     }
 }
 
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Composable
+fun MonsterDetailsScreenSmallPreview() {
+    MonsterDetailsScreen(
+        125L,
+        1234L
+    )
+    MonsterImage()
+}
+
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun MonsterDetailsScreenPreview() {
+fun MonsterDetailsScreenLargePreview() {
     MonsterDetailsScreen(
         125L,
         1234L
