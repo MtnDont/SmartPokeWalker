@@ -3,11 +3,11 @@ package com.mtndont.smartpokewalker.presentation
 import android.Manifest
 import android.content.Intent
 import android.health.connect.HealthPermissions
-import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.core.app.ActivityCompat
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mtndont.smartpokewalker.service.StepService
@@ -21,32 +21,17 @@ class MainActivity : ComponentActivity() {
 
         super.onCreate(savedInstanceState)
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(
-                        Manifest.permission.ACTIVITY_RECOGNITION,
-                    Manifest.permission.BODY_SENSORS
-                ),
-                0
+        requestMultiplePermissions.launch(
+            arrayOf(
+                Manifest.permission.ACTIVITY_RECOGNITION,
+                Manifest.permission.BODY_SENSORS,
+                HealthPermissions.READ_STEPS,
+                Manifest.permission.BODY_SENSORS_BACKGROUND,
+                Manifest.permission.BLUETOOTH_CONNECT,
+                Manifest.permission.BLUETOOTH_ADVERTISE,
+                Manifest.permission.BLUETOOTH_SCAN
             )
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.UPSIDE_DOWN_CAKE) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(HealthPermissions.READ_STEPS),
-                0
-            )
-        }
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            ActivityCompat.requestPermissions(
-                this,
-                arrayOf(Manifest.permission.BODY_SENSORS_BACKGROUND),
-                0
-            )
-        }
+        )
 
         ContextCompat.startForegroundService(
             this.applicationContext,
@@ -62,4 +47,11 @@ class MainActivity : ComponentActivity() {
             TrainerViewNavigatorApp()
         }
     }
+
+    private val requestMultiplePermissions =
+        registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+            permissions.entries.forEach {
+                Log.d("MainActivity", "${it.key} = ${it.value}")
+            }
+        }
 }

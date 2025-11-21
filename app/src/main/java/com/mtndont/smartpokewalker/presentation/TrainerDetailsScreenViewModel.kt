@@ -2,6 +2,7 @@ package com.mtndont.smartpokewalker.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mtndont.smartpokewalker.ble.BLEManager
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,6 +16,7 @@ import kotlin.random.Random
 
 @HiltViewModel
 class TrainerDetailsScreenViewModel @Inject constructor(
+    private val bleManager: BLEManager,
     private val monsterDataRepository: MonsterDataRepository,
     private val monstersRepository: MonstersRepository
 ) : ViewModel() {
@@ -39,5 +41,14 @@ class TrainerDetailsScreenViewModel @Inject constructor(
             val monsterList = monstersRepository.getMonstersStream().first()
             monstersRepository.setPartyFromMonsters(monsterList)
         }
+    }
+
+    fun testBluetooth() {
+        bleManager.startServer()
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        bleManager.stopServer()
     }
 }
