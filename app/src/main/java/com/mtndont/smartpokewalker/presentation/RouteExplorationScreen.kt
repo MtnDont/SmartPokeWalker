@@ -69,6 +69,7 @@ fun RouteExplorationScreen() {
                     .align(Alignment.BottomCenter)
             )
             LoadingDots(
+                numOfDots = 4,
                 baseDotColor = colorResource(R.color.dark_gray),
                 dotColor = colorResource(R.color.black),
                 modifier = Modifier
@@ -81,6 +82,7 @@ fun RouteExplorationScreen() {
 
 @Composable
 fun LoadingDots(
+    numOfDots: Int,
     baseDotColor: Color,
     dotColor: Color,
     modifier: Modifier = Modifier
@@ -92,7 +94,6 @@ fun LoadingDots(
         horizontalArrangement = Arrangement.spacedBy(5.dp),
         modifier = modifier
     ) {
-        val numOfDots = 4
         val animationDelay = 400
         val duration = numOfDots * animationDelay
         repeat(numOfDots) {

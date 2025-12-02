@@ -12,4 +12,5 @@ data class Monster(
     val experience: Long,
     val sex: Int,
     val form: Int,
+    val traded: Boolean
 )

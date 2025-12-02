@@ -29,7 +29,7 @@ interface MonstersDao {
         FROM party AS p
         INNER JOIN monsters AS m ON p.monsterId = m.id
         ORDER BY p.slot ASC
-        LIMIT 6
+        LIMIT ${PartyModel.MAX_PARTY_SIZE}
     """)
     fun getPartyMonsters(): Flow<List<Monster>>
 

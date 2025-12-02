@@ -41,7 +41,7 @@ fun ScrollingImageView(
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.spacedBy((-2).dp),
-                modifier = Modifier.basicMarquee(
+                modifier = modifier.basicMarquee(
                     iterations = Int.MAX_VALUE,
                     animationMode = MarqueeAnimationMode.Immediately,
                     repeatDelayMillis = 0,
