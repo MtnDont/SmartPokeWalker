@@ -6,7 +6,8 @@ fun MonsterModel.toLocal() = Monster(
     name = name,
     experience = experience,
     sex = sex,
-    form = form
+    form = form,
+    traded = traded
 )
 
 fun List<MonsterModel>.toLocal() = map(MonsterModel::toLocal)
@@ -17,7 +18,8 @@ fun Monster.toExternal() = MonsterModel(
     name = name,
     experience = experience,
     sex = sex,
-    form = form
+    form = form,
+    traded = traded
 )
 
 fun List<Monster>.toExternal() = map(Monster::toExternal)
