@@ -133,7 +133,7 @@ data class MonsterModel(
             val sex = if (randomDefinition.genderless) {
                 -1
             } else {
-                Random.nextInt(2)
+                Random.nextInt(1, 3)
             }
 
             val form = if (!randomDefinition.hasGenderDifferences || randomDefinition.genderless) {
@@ -161,7 +161,7 @@ data class MonsterModel(
             val sex = if (definition.genderless) {
                 -1
             } else {
-                Random.nextInt(2)
+                Random.nextInt(1, 3)
             }
 
             val form = if (!definition.hasGenderDifferences || definition.genderless) {

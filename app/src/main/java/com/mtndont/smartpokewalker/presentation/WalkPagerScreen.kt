@@ -2,6 +2,7 @@ package com.mtndont.smartpokewalker.presentation
 
 import android.annotation.SuppressLint
 import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.Crossfade
 import androidx.compose.animation.animateColorAsState
 import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
@@ -26,15 +27,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -65,7 +68,9 @@ import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
+import androidx.wear.compose.material3.CircularProgressIndicator
 import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.ProgressIndicatorDefaults
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.mtndont.smartpokewalker.R
@@ -123,40 +128,29 @@ fun TrainerViewNavigatorApp() {
 fun WalkPagerApp(
     viewModel: MainScreenAppViewModel = hiltViewModel()
 ) {
-    val currentSteps by viewModel.currentSteps.collectAsStateWithLifecycle()
-    val totalWatts by viewModel.totalWatts.collectAsStateWithLifecycle()
     val uiState by viewModel.uiState
-    val party by viewModel.party.collectAsStateWithLifecycle()
+    val partyState by viewModel.partyUiState.collectAsStateWithLifecycle()
 
-    AnimatedVisibility(
-        visible = party.isNotEmpty(),
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        WalkPagerScreen(currentSteps, totalWatts, party)
-    }
-    AnimatedVisibility(
-        visible = party.isEmpty(),
-        enter = fadeIn(),
-        exit = fadeOut()
-    ) {
-        StarterMonsterScreen(
-            starterMonsters = listOf(
-                MonsterModel.getRandomMonster(MonsterDefinitions.entries[0].id),
-                MonsterModel.getRandomMonster(MonsterDefinitions.entries[3].id),
-                MonsterModel.getRandomMonster(MonsterDefinitions.entries[6].id)
-            ),
-            confirmOnClick = { starterMonster ->
-                viewModel.addMonsterToParty(starterMonster)
-            }
-        )
+    Crossfade(targetState = partyState) { partyUiState ->
+        when(partyUiState) {
+            is WalkUiState.Loading -> LoadingScreen()
+            is WalkUiState.StarterSelection -> StarterMonsterScreen(
+                starterMonsters = partyUiState.starterMonsters,
+                confirmOnClick = { starterMonster ->
+                    viewModel.onEvent(WalkEvent.ConfirmStarter(starterMonster))
+                }
+            )
+            is WalkUiState.Walking -> WalkPagerScreen(
+                totalWatts = partyUiState.totalWatts,
+                party = partyUiState.party
+            )
+        }
     }
 }
 
 @SuppressLint("ResourceType")
 @Composable
 fun WalkPagerScreen(
-    currentSteps: Long,
     totalWatts: Long,
     party: List<MonsterModel>
 ) {
@@ -191,21 +185,13 @@ fun WalkPagerScreen(
                 enter = fadeIn(),
                 exit = fadeOut()
             ) {
-                /*MonsterImage(
-                    when (page + 1) {
-                        1 -> context.getRawIdentifier("a131") // R.raw.a131 -> ditto
-                        2 -> context.getRawIdentifier("a24") // R.raw.a24 -> pikachu
-                        3 -> context.getRawIdentifier("a132") // R.raw.a132 -> eevee
-                        4 -> context.getRawIdentifier("a654") // R.raw.a654 -> rotom
-                        5 -> context.getRawIdentifier("a663") // R.raw.a663 -> pichu_notch
-                        6 -> context.getRawIdentifier("a490") // R.raw.a490 -> darkrai
-                        else -> context.getRawIdentifier("a131") // R.raw.a131 -> ditto
-                    }
-                )*/
-                MonsterImage(
-                    monsterResId = party[page].getFormResId(),
-                    name = party[page].name
-                )
+                if (pagerState.currentPage in page..(page+1)) {
+                    MonsterImage(
+                        monsterResId = party[page].getFormResId(),
+                        name = party[page].name,
+                        modifier = Modifier.graphicsLayer()
+                    )
+                }
             }
         }
     }
@@ -251,7 +237,7 @@ fun StarterMonsterScreen(
     starterMonsters: List<MonsterModel>,
     confirmOnClick: (MonsterModel) -> Unit
 ) {
-    val selectedMonsterIdx = remember { mutableIntStateOf(-1) }
+    var selectedMonsterIdx by remember { mutableIntStateOf(-1) }
 
     Row(
         verticalAlignment = Alignment.CenterVertically,
@@ -262,7 +248,7 @@ fun StarterMonsterScreen(
     ) {
         repeat(starterMonsters.size) {
             val selectedButtonColor by animateColorAsState(
-                targetValue = if (selectedMonsterIdx.intValue != it) {
+                targetValue = if (selectedMonsterIdx != it) {
                     colorResource(R.color.light_gray)
                 } else {
                     colorResource(R.color.dark_gray)
@@ -287,7 +273,7 @@ fun StarterMonsterScreen(
 
             Button(
                 onClick = {
-                    selectedMonsterIdx.intValue = it
+                    selectedMonsterIdx = it
                 },
                 shape = RoundedCornerShape(10),
                 colors = ButtonDefaults.buttonColors(
@@ -343,17 +329,13 @@ fun StarterMonsterScreen(
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        val buttonEnabled = remember { mutableStateOf(true) }
         EdgeButton(
             onClick = {
-                if (selectedMonsterIdx.intValue != -1) {
-                    buttonEnabled.value = false
-                    confirmOnClick.invoke(
-                        starterMonsters[selectedMonsterIdx.intValue]
-                    )
-                }
+                confirmOnClick.invoke(
+                    starterMonsters[selectedMonsterIdx]
+                )
             },
-            enabled = buttonEnabled.value,
+            enabled = selectedMonsterIdx != -1,
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(R.color.dark_gray)
             ),
@@ -372,11 +354,27 @@ fun StarterMonsterScreen(
     }
 }
 
+@Composable
+fun LoadingScreen() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        CircularProgressIndicator(
+            colors = ProgressIndicatorDefaults.colors(
+                indicatorColor = colorResource(R.color.dark_gray),
+                trackColor = Color.Transparent
+            ),
+            modifier = Modifier.fillMaxSize(0.4f)
+        )
+    }
+}
+
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun WalkPagerScreenSmallPreview() {
     WalkPagerScreen(
-        currentSteps = 100000L,
         totalWatts = 88888888L,
         party = listOf(
             MonsterModel(id = 1, experience = 99000L, sex = 1),
@@ -393,7 +391,6 @@ fun WalkPagerScreenSmallPreview() {
 @Composable
 fun WalkPagerScreenLargePreview() {
     WalkPagerScreen(
-        currentSteps = 0L,
         totalWatts = 88888888L,
         party = listOf(
             MonsterModel(id = 0, experience = 99000L),
@@ -430,4 +427,22 @@ fun StarterMonsterScreenLargePreview() {
         ),
         confirmOnClick = {}
     )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun LoadingScreenLargePreview() {
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier.fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        CircularProgressIndicator(
+            colors = ProgressIndicatorDefaults.colors(
+                indicatorColor = colorResource(R.color.dark_gray),
+                trackColor = Color.Transparent
+            ),
+            modifier = Modifier.fillMaxSize(0.4f)
+        )
+    }
 }
