@@ -9,6 +9,6 @@ class RouteExplorationViewModel @Inject constructor(
     private val monsterDataRepository: MonsterDataRepository
 ) : ViewModel() {
     fun randomMonster(): MonsterModel {
-        return MonsterModel.getRandomMonster()
+        return MonsterModel.getRandomInitialMonster()
     }
 }

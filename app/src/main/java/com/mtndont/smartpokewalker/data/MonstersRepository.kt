@@ -16,6 +16,10 @@ interface MonstersRepository {
         form: Int
     ): Long
 
+    suspend fun createMonster(monster: MonsterModel): Long
+
+    suspend fun createStarterAndParty(monster: MonsterModel): Long
+
     suspend fun getMonster(id: Long): MonsterModel?
 
     suspend fun setPartyFromMonsters(monsters: List<MonsterModel>)
@@ -25,4 +29,6 @@ interface MonstersRepository {
     suspend fun updateMonster(id: Long, name: String, experience: Long)
 
     suspend fun deleteMonster(id: Long): Int
+
+    suspend fun addStepsToParty(steps: Long)
 }

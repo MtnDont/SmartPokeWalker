@@ -45,6 +45,14 @@ class DefaultMonstersRepository @Inject constructor(
         return dataSource.upsert(monster.toLocal())
     }
 
+    override suspend fun createMonster(monster: MonsterModel): Long {
+        return dataSource.upsert(monster.toLocal())
+    }
+
+    override suspend fun createStarterAndParty(monster: MonsterModel): Long {
+        return dataSource.createStarterAndParty(monster.toLocal())
+    }
+
     override suspend fun getMonster(id: Long): MonsterModel? {
         return dataSource.findById(id)?.toExternal()
     }
@@ -75,5 +83,9 @@ class DefaultMonstersRepository @Inject constructor(
 
     override suspend fun deleteMonster(id: Long): Int {
         return dataSource.deleteById(id)
+    }
+
+    override suspend fun addStepsToParty(steps: Long) {
+        dataSource.addStepsToParty(steps)
     }
 }

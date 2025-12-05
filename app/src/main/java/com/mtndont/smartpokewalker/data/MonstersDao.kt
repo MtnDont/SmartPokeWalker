@@ -34,6 +34,18 @@ interface MonstersDao {
     fun getPartyMonsters(): Flow<List<Monster>>
 
     @Transaction
+    suspend fun createStarterAndParty(monster: Monster): Long {
+        val monsterId = upsert(monster)
+        insertPartyMember(
+            Party(
+                slot = 0,
+                monsterId = monsterId
+            )
+        )
+        return monsterId
+    }
+
+    @Transaction
     suspend fun setParty(newPartyIds: List<Long>) {
         clearParty()
         newPartyIds.take(6).forEachIndexed { index, monsterId ->
@@ -51,4 +63,12 @@ interface MonstersDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertPartyMember(party: Party)
+
+    @Query("""
+        UPDATE monsters
+        SET experience = experience + :steps
+        WHERE id IN (SELECT monsterId FROM party)
+            AND experience < ${MonsterModel.MAX_EXPERIENCE}
+    """)
+    suspend fun addStepsToParty(steps: Long)
 }

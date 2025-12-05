@@ -4,7 +4,6 @@ import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.Service
-import android.content.Context
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -14,16 +13,13 @@ import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
-import com.mtndont.smartpokewalker.R
+import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,6 +33,9 @@ class StepService : Service(), SensorEventListener {
 
     @Inject
     lateinit var monsterDataRepository: MonsterDataRepository
+
+    @Inject
+    lateinit var monstersRepository: MonstersRepository
 
     private val sensorManager by lazy {
         this.applicationContext.getSystemService(SENSOR_SERVICE) as SensorManager
@@ -103,7 +102,8 @@ class StepService : Service(), SensorEventListener {
             Sensor.TYPE_STEP_DETECTOR -> {
                 detectScope.launch {
                     //Log.d("StepService", "Type: ${event.sensor.stringType}\nValue: ${event.values[0].toLong()}\naccuracy: ${event.accuracy}")
-                    monsterDataRepository.addCurrentSteps(1L)
+                    //monsterDataRepository.addCurrentSteps(1L)
+                    monstersRepository.addStepsToParty(1L)
                 }
             }
             Sensor.TYPE_STEP_COUNTER -> {
@@ -121,7 +121,8 @@ class StepService : Service(), SensorEventListener {
                     monsterDataRepository.setTotalWatts(stepsSinceBoot)
                     if (delta > 0) {
                         // STEP_COUNTER appears to be more trustworthy over the STEP_DETECTOR
-                        monsterDataRepository.addCurrentSteps(delta)
+                        //monsterDataRepository.addCurrentSteps(delta)
+                        monstersRepository.addStepsToParty(delta)
                     }
                 }
             }

@@ -5,6 +5,7 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -25,6 +26,7 @@ import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -32,12 +34,14 @@ import androidx.wear.compose.foundation.AnchorType
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
 import androidx.wear.compose.material.curvedText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.mtndont.smartpokewalker.R
+import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.presentation.theme.SmartPokeWalkerTheme
 import com.mtndont.smartpokewalker.util.AnimatedDrawableUtil
 import kotlin.math.abs
@@ -46,7 +50,8 @@ import kotlin.math.min
 @Composable
 fun MonsterDetailsScreen(
     currentSteps: Long,
-    totalWatts: Long
+    totalWatts: Long,
+    sex: Int? = null
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -55,6 +60,12 @@ fun MonsterDetailsScreen(
                 .background(colorResource(R.color.background_gray)),
             contentAlignment = Alignment.Center
         ) {
+            val experienceRemainder = if (currentSteps < MonsterModel.MAX_EXPERIENCE) {
+                currentSteps % 1000
+            } else {
+                0
+            }
+
             TimeText(
                 timeTextStyle = TimeTextDefaults.timeTextStyle(
                     color = Color.Black,
@@ -77,7 +88,7 @@ fun MonsterDetailsScreen(
                     .padding(20.dp)
             )
             CircularProgressIndicator(
-                progress = (currentSteps % 1000) / 1000f,
+                progress = experienceRemainder / 1000f,
                 trackColor = Color.Transparent,
                 indicatorColor = colorResource(R.color.experience_light),
                 startAngle = 15f,
@@ -107,7 +118,13 @@ fun MonsterDetailsScreen(
                 anchor = 315f
             ) {
                 curvedText(
-                    text = "Lv.${min(abs(currentSteps / 1000) + 1, 100)}",
+                    text = "${
+                        when(sex) {
+                            1 -> "♂ "
+                            2 -> "♀ "
+                            else -> ""
+                        }
+                    }Lv.${min(abs(currentSteps / 1000) + 1, 100)}",
                     fontSize = 24.sp,
                     color = Color.Black,
                     fontFamily = FontFamily(
@@ -121,7 +138,7 @@ fun MonsterDetailsScreen(
                 modifier = Modifier.padding(22.dp)
             ) {
                 curvedText(
-                    text = "${1000 - (currentSteps % 1000)} w",
+                    text = "${1000 - experienceRemainder} w",
                     fontSize = 24.sp,
                     color = Color.Black,
                     fontFamily = FontFamily(
@@ -151,14 +168,17 @@ fun MonsterDetailsScreen(
 
 @SuppressLint("ResourceType")
 @Composable
-fun MonsterImage(@DrawableRes monsterResId: Int? = null) {
+fun MonsterImage(
+    modifier: Modifier = Modifier,
+    @DrawableRes monsterResId: Int? = null,
+    name: String = "",
+) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
 
     SmartPokeWalkerTheme {
         Box(
-            modifier = Modifier
-                .fillMaxSize(),
+            modifier = modifier,
             contentAlignment = Alignment.Center
         ) {
             Box(
@@ -166,34 +186,46 @@ fun MonsterImage(@DrawableRes monsterResId: Int? = null) {
                     .fillMaxSize(),
                 contentAlignment = Alignment.TopCenter
             ) {
-                if (LocalInspectionMode.current) {
-                    Image(
-                        painter = BitmapPainter(
-                            //image = ImageBitmap.imageResource(R.raw.dittopng),
-                            image = ImageBitmap.imageResource(R.raw.testpng),
-                            filterQuality = FilterQuality.None
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth(0.6f)
-                            .fillMaxHeight(0.6f)
-                            .padding(top = (configuration.screenHeightDp / 4.5).dp)
-                    )
-                }
-                else {
-                    Image(
-                        painter = rememberDrawablePainter(
-                            drawable = AnimatedDrawableUtil.createAnimatedImageDrawableFromImageDecoder(
-                                context.applicationContext,
-                                //monsterResId ?: R.raw.ditto
-                                monsterResId ?: R.raw.a1
-                            )
-                        ),
-                        contentDescription = null,
-                        modifier = Modifier
-                            .fillMaxWidth(0.6f)
-                            .fillMaxHeight(0.6f)
-                            .padding(top = (configuration.screenHeightDp / 4.5).dp)
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally
+                ) {
+                    if (LocalInspectionMode.current) {
+                        Image(
+                            painter = BitmapPainter(
+                                //image = ImageBitmap.imageResource(R.raw.dittopng),
+                                image = ImageBitmap.imageResource(R.raw.testpng),
+                                filterQuality = FilterQuality.None
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth(0.6f)
+                                .fillMaxHeight(0.6f)
+                                .padding(top = (configuration.screenHeightDp / 4.5).dp)
+                        )
+                    } else {
+                        Image(
+                            painter = rememberDrawablePainter(
+                                drawable = AnimatedDrawableUtil.createAnimatedImageDrawableFromImageDecoder(
+                                    context.applicationContext,
+                                    //monsterResId ?: R.raw.ditto
+                                    monsterResId ?: R.raw.a1
+                                )
+                            ),
+                            contentDescription = null,
+                            modifier = Modifier
+                                .fillMaxWidth(0.6f)
+                                .fillMaxHeight(0.6f)
+                                .padding(top = (configuration.screenHeightDp / 4.5).dp)
+                        )
+                    }
+                    Text(
+                        text = name,
+                        textAlign = TextAlign.Center,
+                        fontSize = 18.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        )
                     )
                 }
             }
@@ -208,15 +240,20 @@ fun MonsterDetailsScreenSmallPreview() {
         125L,
         1234L
     )
-    MonsterImage()
+    MonsterImage(
+        name = "Android"
+    )
 }
 
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
 fun MonsterDetailsScreenLargePreview() {
     MonsterDetailsScreen(
-        125L,
+        //125L,
+        99500L,
         1234L
     )
-    MonsterImage()
+    MonsterImage(
+        name = "Android"
+    )
 }

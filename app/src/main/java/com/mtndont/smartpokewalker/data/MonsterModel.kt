@@ -18,7 +18,7 @@ data class MonsterModel(
     val traded: Boolean = false
 ) {
     fun getDefinition(): MonsterDefinition {
-        val dId = if (dexId < 0 || dexId >= MonsterDefinitions.entries.size) 0 else dexId
+        val dId = if (dexId < 1 || dexId >= MonsterDefinitions.entries.size) 1 else dexId
         return MonsterDefinitions.entries[dId - 1]
     }
 
@@ -34,7 +34,7 @@ data class MonsterModel(
         val definition = getDefinition()
         val resIds = definition.formResIds
 
-        return  try {
+        return try {
             if (definition.hasGenderDifferences) {
                 resIds[sex - 1]
             }
@@ -122,10 +122,13 @@ data class MonsterModel(
     }
 
     companion object {
-        fun getRandomMonster(): MonsterModel {
-            val randomDefinition = MonsterDefinitions.entries[
-                Random.nextInt(MonsterDefinitions.entries.size)
-            ]
+        const val MAX_EXPERIENCE = 99000L
+
+        fun getRandomInitialMonster(): MonsterModel {
+
+            val randomDefinition = MonsterDefinitions.entries.filter {
+                it.firstInEvolutionChain
+            }.random()
 
             val sex = if (randomDefinition.genderless) {
                 -1
@@ -143,6 +146,34 @@ data class MonsterModel(
                 id = 0,
                 dexId = randomDefinition.id,
                 name = randomDefinition.name,
+                sex = sex,
+                form = form
+            )
+        }
+
+        fun getRandomMonster(dexId: Int? = null): MonsterModel {
+            val definition = if (dexId != null && dexId > 0 && dexId <= MonsterDefinitions.entries.size) {
+                MonsterDefinitions.entries[dexId - 1]
+            } else {
+                MonsterDefinitions.entries.random()
+            }
+
+            val sex = if (definition.genderless) {
+                -1
+            } else {
+                Random.nextInt(2)
+            }
+
+            val form = if (!definition.hasGenderDifferences || definition.genderless) {
+                Random.nextInt(definition.formResIds.size)
+            } else {
+                0
+            }
+
+            return MonsterModel(
+                id = 0,
+                dexId = definition.id,
+                name = definition.name,
                 sex = sex,
                 form = form
             )

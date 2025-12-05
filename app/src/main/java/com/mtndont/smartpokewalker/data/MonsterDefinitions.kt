@@ -17,6 +17,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 2,
             name = "Ivysaur",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a1),
             evolutions = mapOf(
                 3 to listOf(
@@ -27,6 +28,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 3,
             name = "Venusaur",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a2,R.raw.a493),
         ),
@@ -43,6 +45,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 5,
             name = "Charmeleon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a4),
             evolutions = mapOf(
                 6 to listOf(
@@ -53,6 +56,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 6,
             name = "Charizard",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a5),
         ),
         MonsterDefinition(
@@ -68,6 +72,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 8,
             name = "Wartortle",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a7),
             evolutions = mapOf(
                 9 to listOf(
@@ -78,6 +83,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 9,
             name = "Blastoise",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a8),
         ),
         MonsterDefinition(
@@ -93,6 +99,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 11,
             name = "Metapod",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a10),
             evolutions = mapOf(
                 12 to listOf(
@@ -103,6 +110,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 12,
             name = "Butterfree",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a11,R.raw.a494),
         ),
@@ -119,6 +127,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 14,
             name = "Kakuna",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a13),
             evolutions = mapOf(
                 15 to listOf(
@@ -129,6 +138,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 15,
             name = "Beedrill",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a14),
         ),
         MonsterDefinition(
@@ -144,6 +154,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 17,
             name = "Pidgeotto",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a16),
             evolutions = mapOf(
                 18 to listOf(
@@ -154,6 +165,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 18,
             name = "Pidgeot",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a17),
         ),
         MonsterDefinition(
@@ -170,6 +182,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 20,
             name = "Raticate",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a19,R.raw.a496),
         ),
@@ -186,6 +199,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 22,
             name = "Fearow",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a21),
         ),
         MonsterDefinition(
@@ -201,11 +215,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 24,
             name = "Arbok",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a23),
         ),
         MonsterDefinition(
             id = 25,
             name = "Pikachu",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a24,R.raw.a497),
             evolutions = mapOf(
@@ -217,6 +233,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 26,
             name = "Raichu",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a25,R.raw.a498),
         ),
@@ -233,6 +250,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 28,
             name = "Sandslash",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a27),
         ),
         MonsterDefinition(
@@ -248,6 +266,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 30,
             name = "Nidorina",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a29),
             evolutions = mapOf(
                 31 to listOf(
@@ -258,6 +277,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 31,
             name = "Nidoqueen",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a30),
         ),
         MonsterDefinition(
@@ -273,6 +293,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 33,
             name = "Nidorino",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a32),
             evolutions = mapOf(
                 34 to listOf(
@@ -283,11 +304,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 34,
             name = "Nidoking",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a33),
         ),
         MonsterDefinition(
             id = 35,
             name = "Clefairy",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a34),
             evolutions = mapOf(
                 36 to listOf(
@@ -298,6 +321,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 36,
             name = "Clefable",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a35),
         ),
         MonsterDefinition(
@@ -313,11 +337,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 38,
             name = "Ninetales",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a37),
         ),
         MonsterDefinition(
             id = 39,
             name = "Jigglypuff",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a38),
             evolutions = mapOf(
                 40 to listOf(
@@ -328,6 +354,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 40,
             name = "Wigglytuff",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a39),
         ),
         MonsterDefinition(
@@ -344,6 +371,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 42,
             name = "Golbat",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a41,R.raw.a500),
             evolutions = mapOf(
@@ -365,6 +393,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 44,
             name = "Gloom",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a43,R.raw.a501),
             evolutions = mapOf(
@@ -379,6 +408,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 45,
             name = "Vileplume",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a44,R.raw.a502),
         ),
@@ -395,6 +425,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 47,
             name = "Parasect",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a46),
         ),
         MonsterDefinition(
@@ -410,6 +441,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 49,
             name = "Venomoth",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a48),
         ),
         MonsterDefinition(
@@ -425,6 +457,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 51,
             name = "Dugtrio",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a50),
         ),
         MonsterDefinition(
@@ -440,6 +473,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 53,
             name = "Persian",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a52),
         ),
         MonsterDefinition(
@@ -455,6 +489,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 55,
             name = "Golduck",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a54),
         ),
         MonsterDefinition(
@@ -470,6 +505,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 57,
             name = "Primeape",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a56),
         ),
         MonsterDefinition(
@@ -485,6 +521,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 59,
             name = "Arcanine",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a58),
         ),
         MonsterDefinition(
@@ -500,6 +537,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 61,
             name = "Poliwhirl",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a60),
             evolutions = mapOf(
                 62 to listOf(
@@ -513,6 +551,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 62,
             name = "Poliwrath",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a61),
         ),
         MonsterDefinition(
@@ -528,6 +567,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 64,
             name = "Kadabra",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a63,R.raw.a503),
             evolutions = mapOf(
@@ -539,6 +579,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 65,
             name = "Alakazam",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a64,R.raw.a504),
         ),
@@ -555,6 +596,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 67,
             name = "Machoke",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a66),
             evolutions = mapOf(
                 68 to listOf(
@@ -565,6 +607,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 68,
             name = "Machamp",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a67),
         ),
         MonsterDefinition(
@@ -580,6 +623,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 70,
             name = "Weepinbell",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a69),
             evolutions = mapOf(
                 71 to listOf(
@@ -590,6 +634,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 71,
             name = "Victreebel",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a70),
         ),
         MonsterDefinition(
@@ -605,6 +650,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 73,
             name = "Tentacruel",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a72),
         ),
         MonsterDefinition(
@@ -620,6 +666,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 75,
             name = "Graveler",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a74),
             evolutions = mapOf(
                 76 to listOf(
@@ -630,6 +677,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 76,
             name = "Golem",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a75),
         ),
         MonsterDefinition(
@@ -645,6 +693,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 78,
             name = "Rapidash",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a77),
         ),
         MonsterDefinition(
@@ -663,6 +712,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 80,
             name = "Slowbro",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a79),
         ),
         MonsterDefinition(
@@ -679,6 +729,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 82,
             name = "Magneton",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a81),
             evolutions = mapOf(
@@ -706,6 +757,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 85,
             name = "Dodrio",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a84,R.raw.a506),
         ),
@@ -722,6 +774,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 87,
             name = "Dewgong",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a86),
         ),
         MonsterDefinition(
@@ -737,6 +790,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 89,
             name = "Muk",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a88),
         ),
         MonsterDefinition(
@@ -752,6 +806,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 91,
             name = "Cloyster",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a90),
         ),
         MonsterDefinition(
@@ -767,6 +822,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 93,
             name = "Haunter",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a92),
             evolutions = mapOf(
                 94 to listOf(
@@ -777,6 +833,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 94,
             name = "Gengar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a93),
         ),
         MonsterDefinition(
@@ -802,6 +859,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 97,
             name = "Hypno",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a96,R.raw.a507),
         ),
@@ -818,6 +876,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 99,
             name = "Kingler",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a98),
         ),
         MonsterDefinition(
@@ -834,6 +893,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 101,
             name = "Electrode",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a100),
         ),
@@ -850,6 +910,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 103,
             name = "Exeggutor",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a102),
         ),
         MonsterDefinition(
@@ -865,16 +926,19 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 105,
             name = "Marowak",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a104),
         ),
         MonsterDefinition(
             id = 106,
             name = "Hitmonlee",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a105),
         ),
         MonsterDefinition(
             id = 107,
             name = "Hitmonchan",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a106),
         ),
         MonsterDefinition(
@@ -898,6 +962,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 110,
             name = "Weezing",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a109),
         ),
         MonsterDefinition(
@@ -914,6 +979,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 112,
             name = "Rhydon",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a111,R.raw.a509),
             evolutions = mapOf(
@@ -925,6 +991,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 113,
             name = "Chansey",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a112),
             evolutions = mapOf(
                 242 to listOf(
@@ -958,6 +1025,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 117,
             name = "Seadra",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a116),
             evolutions = mapOf(
                 230 to listOf(
@@ -979,6 +1047,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 119,
             name = "Seaking",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a118,R.raw.a511),
         ),
@@ -996,12 +1065,14 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 121,
             name = "Starmie",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a120),
         ),
         MonsterDefinition(
             id = 122,
             name = "Mr-mime",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a121),
         ),
         MonsterDefinition(
@@ -1018,11 +1089,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 124,
             name = "Jynx",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a123),
         ),
         MonsterDefinition(
             id = 125,
             name = "Electabuzz",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a124),
             evolutions = mapOf(
                 466 to listOf(
@@ -1033,6 +1106,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 126,
             name = "Magmar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a125),
             evolutions = mapOf(
                 467 to listOf(
@@ -1064,6 +1138,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 130,
             name = "Gyarados",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a129,R.raw.a514),
         ),
@@ -1109,16 +1184,19 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 134,
             name = "Vaporeon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a133),
         ),
         MonsterDefinition(
             id = 135,
             name = "Jolteon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a134),
         ),
         MonsterDefinition(
             id = 136,
             name = "Flareon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a135),
         ),
         MonsterDefinition(
@@ -1145,6 +1223,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 139,
             name = "Omastar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a138),
         ),
         MonsterDefinition(
@@ -1160,6 +1239,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 141,
             name = "Kabutops",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a140),
         ),
         MonsterDefinition(
@@ -1170,6 +1250,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 143,
             name = "Snorlax",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a142),
         ),
         MonsterDefinition(
@@ -1203,6 +1284,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 148,
             name = "Dragonair",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a147),
             evolutions = mapOf(
                 149 to listOf(
@@ -1213,6 +1295,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 149,
             name = "Dragonite",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a148),
         ),
         MonsterDefinition(
@@ -1240,6 +1323,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 153,
             name = "Bayleef",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a152),
             evolutions = mapOf(
                 154 to listOf(
@@ -1250,6 +1334,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 154,
             name = "Meganium",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a153,R.raw.a515),
         ),
@@ -1266,6 +1351,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 156,
             name = "Quilava",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a155),
             evolutions = mapOf(
                 157 to listOf(
@@ -1276,6 +1362,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 157,
             name = "Typhlosion",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a156),
         ),
         MonsterDefinition(
@@ -1291,6 +1378,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 159,
             name = "Croconaw",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a158),
             evolutions = mapOf(
                 160 to listOf(
@@ -1301,6 +1389,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 160,
             name = "Feraligatr",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a159),
         ),
         MonsterDefinition(
@@ -1316,6 +1405,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 162,
             name = "Furret",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a161),
         ),
         MonsterDefinition(
@@ -1331,6 +1421,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 164,
             name = "Noctowl",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a163),
         ),
         MonsterDefinition(
@@ -1347,6 +1438,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 166,
             name = "Ledian",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a165,R.raw.a517),
         ),
@@ -1363,11 +1455,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 168,
             name = "Ariados",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a167),
         ),
         MonsterDefinition(
             id = 169,
             name = "Crobat",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a168),
         ),
         MonsterDefinition(
@@ -1383,6 +1477,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 171,
             name = "Lanturn",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a170),
         ),
         MonsterDefinition(
@@ -1428,6 +1523,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 176,
             name = "Togetic",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a175),
             evolutions = mapOf(
                 468 to listOf(
@@ -1448,6 +1544,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 178,
             name = "Xatu",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a177,R.raw.a518),
         ),
@@ -1464,6 +1561,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 180,
             name = "Flaaffy",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a179),
             evolutions = mapOf(
                 181 to listOf(
@@ -1474,16 +1572,19 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 181,
             name = "Ampharos",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a180),
         ),
         MonsterDefinition(
             id = 182,
             name = "Bellossom",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a181),
         ),
         MonsterDefinition(
             id = 183,
             name = "Marill",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a182),
             evolutions = mapOf(
                 184 to listOf(
@@ -1494,17 +1595,20 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 184,
             name = "Azumarill",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a183),
         ),
         MonsterDefinition(
             id = 185,
             name = "Sudowoodo",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a184,R.raw.a519),
         ),
         MonsterDefinition(
             id = 186,
             name = "Politoed",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a185,R.raw.a520),
         ),
@@ -1521,6 +1625,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 188,
             name = "Skiploom",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a187),
             evolutions = mapOf(
                 189 to listOf(
@@ -1531,6 +1636,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 189,
             name = "Jumpluff",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a188),
         ),
         MonsterDefinition(
@@ -1555,6 +1661,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 192,
             name = "Sunflora",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a191),
         ),
         MonsterDefinition(
@@ -1579,17 +1686,20 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 195,
             name = "Quagsire",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a194,R.raw.a523),
         ),
         MonsterDefinition(
             id = 196,
             name = "Espeon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a195),
         ),
         MonsterDefinition(
             id = 197,
             name = "Umbreon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a196),
         ),
         MonsterDefinition(
@@ -1606,6 +1716,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 199,
             name = "Slowking",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a198),
         ),
         MonsterDefinition(
@@ -1627,6 +1738,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 202,
             name = "Wobbuffet",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a201,R.raw.a525),
         ),
@@ -1649,6 +1761,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 205,
             name = "Forretress",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a204),
         ),
         MonsterDefinition(
@@ -1670,6 +1783,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 208,
             name = "Steelix",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a207,R.raw.a528),
         ),
@@ -1686,6 +1800,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 210,
             name = "Granbull",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a209),
         ),
         MonsterDefinition(
@@ -1696,6 +1811,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 212,
             name = "Scizor",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a211,R.raw.a529),
         ),
@@ -1734,6 +1850,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 217,
             name = "Ursaring",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a216,R.raw.a532),
         ),
@@ -1750,6 +1867,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 219,
             name = "Magcargo",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a218),
         ),
         MonsterDefinition(
@@ -1765,6 +1883,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 221,
             name = "Piloswine",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a220,R.raw.a533),
             evolutions = mapOf(
@@ -1789,6 +1908,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 224,
             name = "Octillery",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a223,R.raw.a534),
         ),
@@ -1800,6 +1920,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 226,
             name = "Mantine",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a225),
         ),
         MonsterDefinition(
@@ -1820,12 +1941,14 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 229,
             name = "Houndoom",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a228,R.raw.a535),
         ),
         MonsterDefinition(
             id = 230,
             name = "Kingdra",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a229),
         ),
         MonsterDefinition(
@@ -1841,12 +1964,14 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 232,
             name = "Donphan",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a231,R.raw.a536),
         ),
         MonsterDefinition(
             id = 233,
             name = "Porygon2",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a232),
             evolutions = mapOf(
@@ -1884,6 +2009,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 237,
             name = "Hitmontop",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a236),
         ),
         MonsterDefinition(
@@ -1924,6 +2050,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 242,
             name = "Blissey",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a241),
         ),
         MonsterDefinition(
@@ -1957,6 +2084,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 247,
             name = "Pupitar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a246),
             evolutions = mapOf(
                 248 to listOf(
@@ -1967,6 +2095,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 248,
             name = "Tyranitar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a247),
         ),
         MonsterDefinition(
@@ -2000,6 +2129,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 253,
             name = "Grovyle",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a252),
             evolutions = mapOf(
                 254 to listOf(
@@ -2010,6 +2140,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 254,
             name = "Sceptile",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a253),
         ),
         MonsterDefinition(
@@ -2026,6 +2157,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 256,
             name = "Combusken",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a255,R.raw.a538),
             evolutions = mapOf(
@@ -2037,6 +2169,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 257,
             name = "Blaziken",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a256,R.raw.a539),
         ),
@@ -2053,6 +2186,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 259,
             name = "Marshtomp",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a258),
             evolutions = mapOf(
                 260 to listOf(
@@ -2063,6 +2197,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 260,
             name = "Swampert",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a259),
         ),
         MonsterDefinition(
@@ -2078,6 +2213,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 262,
             name = "Mightyena",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a261),
         ),
         MonsterDefinition(
@@ -2093,6 +2229,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 264,
             name = "Linoone",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a263),
         ),
         MonsterDefinition(
@@ -2111,6 +2248,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 266,
             name = "Silcoon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a265),
             evolutions = mapOf(
                 267 to listOf(
@@ -2121,12 +2259,14 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 267,
             name = "Beautifly",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a266,R.raw.a540),
         ),
         MonsterDefinition(
             id = 268,
             name = "Cascoon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a267),
             evolutions = mapOf(
                 269 to listOf(
@@ -2137,6 +2277,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 269,
             name = "Dustox",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a268,R.raw.a541),
         ),
@@ -2153,6 +2294,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 271,
             name = "Lombre",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a270),
             evolutions = mapOf(
                 272 to listOf(
@@ -2163,6 +2305,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 272,
             name = "Ludicolo",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a271,R.raw.a542),
         ),
@@ -2179,6 +2322,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 274,
             name = "Nuzleaf",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a273,R.raw.a543),
             evolutions = mapOf(
@@ -2190,6 +2334,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 275,
             name = "Shiftry",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a274,R.raw.a544),
         ),
@@ -2206,6 +2351,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 277,
             name = "Swellow",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a276),
         ),
         MonsterDefinition(
@@ -2221,6 +2367,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 279,
             name = "Pelipper",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a278),
         ),
         MonsterDefinition(
@@ -2236,6 +2383,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 281,
             name = "Kirlia",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a280),
             evolutions = mapOf(
                 282 to listOf(
@@ -2249,6 +2397,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 282,
             name = "Gardevoir",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a281),
         ),
         MonsterDefinition(
@@ -2264,6 +2413,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 284,
             name = "Masquerain",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a283),
         ),
         MonsterDefinition(
@@ -2279,6 +2429,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 286,
             name = "Breloom",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a285),
         ),
         MonsterDefinition(
@@ -2294,6 +2445,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 288,
             name = "Vigoroth",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a287),
             evolutions = mapOf(
                 289 to listOf(
@@ -2304,6 +2456,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 289,
             name = "Slaking",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a288),
         ),
         MonsterDefinition(
@@ -2322,11 +2475,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 291,
             name = "Ninjask",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a290),
         ),
         MonsterDefinition(
             id = 292,
             name = "Shedinja",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a291),
         ),
@@ -2343,6 +2498,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 294,
             name = "Loudred",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a293),
             evolutions = mapOf(
                 295 to listOf(
@@ -2353,6 +2509,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 295,
             name = "Exploud",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a294),
         ),
         MonsterDefinition(
@@ -2368,6 +2525,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 297,
             name = "Hariyama",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a296),
         ),
         MonsterDefinition(
@@ -2401,6 +2559,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 301,
             name = "Delcatty",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a300),
         ),
         MonsterDefinition(
@@ -2426,6 +2585,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 305,
             name = "Lairon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a304),
             evolutions = mapOf(
                 306 to listOf(
@@ -2436,6 +2596,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 306,
             name = "Aggron",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a305),
         ),
         MonsterDefinition(
@@ -2452,6 +2613,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 308,
             name = "Medicham",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a307,R.raw.a546),
         ),
@@ -2468,6 +2630,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 310,
             name = "Manectric",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a309),
         ),
         MonsterDefinition(
@@ -2493,6 +2656,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 315,
             name = "Roselia",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a314,R.raw.a547),
             evolutions = mapOf(
@@ -2515,6 +2679,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 317,
             name = "Swalot",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a316,R.raw.a549),
         ),
@@ -2531,6 +2696,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 319,
             name = "Sharpedo",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a318),
         ),
         MonsterDefinition(
@@ -2546,6 +2712,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 321,
             name = "Wailord",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a320),
         ),
         MonsterDefinition(
@@ -2562,6 +2729,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 323,
             name = "Camerupt",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a322,R.raw.a551),
         ),
@@ -2583,6 +2751,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 326,
             name = "Grumpig",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a325),
         ),
         MonsterDefinition(
@@ -2603,6 +2772,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 329,
             name = "Vibrava",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a328),
             evolutions = mapOf(
                 330 to listOf(
@@ -2613,6 +2783,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 330,
             name = "Flygon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a329),
         ),
         MonsterDefinition(
@@ -2628,6 +2799,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 332,
             name = "Cacturne",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a331,R.raw.a552),
         ),
@@ -2644,6 +2816,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 334,
             name = "Altaria",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a333),
         ),
         MonsterDefinition(
@@ -2681,6 +2854,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 340,
             name = "Whiscash",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a339),
         ),
         MonsterDefinition(
@@ -2696,6 +2870,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 342,
             name = "Crawdaunt",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a341),
         ),
         MonsterDefinition(
@@ -2712,6 +2887,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 344,
             name = "Claydol",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a343),
         ),
@@ -2728,6 +2904,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 346,
             name = "Cradily",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a345),
         ),
         MonsterDefinition(
@@ -2743,6 +2920,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 348,
             name = "Armaldo",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a347),
         ),
         MonsterDefinition(
@@ -2758,6 +2936,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 350,
             name = "Milotic",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a349,R.raw.a553),
         ),
@@ -2784,6 +2963,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 354,
             name = "Banette",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a353),
         ),
         MonsterDefinition(
@@ -2799,6 +2979,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 356,
             name = "Dusclops",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a355),
             evolutions = mapOf(
                 477 to listOf(
@@ -2814,6 +2995,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 358,
             name = "Chimecho",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a357),
         ),
         MonsterDefinition(
@@ -2847,6 +3029,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 362,
             name = "Glalie",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a361),
         ),
         MonsterDefinition(
@@ -2862,6 +3045,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 364,
             name = "Sealeo",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a363),
             evolutions = mapOf(
                 365 to listOf(
@@ -2872,6 +3056,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 365,
             name = "Walrein",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a364),
         ),
         MonsterDefinition(
@@ -2890,11 +3075,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 367,
             name = "Huntail",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a366),
         ),
         MonsterDefinition(
             id = 368,
             name = "Gorebyss",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a367),
         ),
         MonsterDefinition(
@@ -2921,6 +3108,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 372,
             name = "Shelgon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a371),
             evolutions = mapOf(
                 373 to listOf(
@@ -2931,6 +3119,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 373,
             name = "Salamence",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a372),
         ),
         MonsterDefinition(
@@ -2947,6 +3136,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 375,
             name = "Metang",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a374),
             evolutions = mapOf(
@@ -2958,6 +3148,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 376,
             name = "Metagross",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a375),
         ),
@@ -3032,6 +3223,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 388,
             name = "Grotle",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a387),
             evolutions = mapOf(
                 389 to listOf(
@@ -3042,6 +3234,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 389,
             name = "Torterra",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a388),
         ),
         MonsterDefinition(
@@ -3057,6 +3250,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 391,
             name = "Monferno",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a390),
             evolutions = mapOf(
                 392 to listOf(
@@ -3067,6 +3261,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 392,
             name = "Infernape",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a391),
         ),
         MonsterDefinition(
@@ -3082,6 +3277,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 394,
             name = "Prinplup",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a393),
             evolutions = mapOf(
                 395 to listOf(
@@ -3092,6 +3288,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 395,
             name = "Empoleon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a394),
         ),
         MonsterDefinition(
@@ -3108,6 +3305,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 397,
             name = "Staravia",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a396,R.raw.a563),
             evolutions = mapOf(
@@ -3119,6 +3317,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 398,
             name = "Staraptor",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a397,R.raw.a564),
         ),
@@ -3136,6 +3335,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 400,
             name = "Bibarel",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a399,R.raw.a568),
         ),
@@ -3153,6 +3353,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 402,
             name = "Kricketune",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a401,R.raw.a581),
         ),
@@ -3170,6 +3371,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 404,
             name = "Luxio",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a403,R.raw.a575),
             evolutions = mapOf(
@@ -3181,6 +3383,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 405,
             name = "Luxray",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a404,R.raw.a576),
         ),
@@ -3197,6 +3400,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 407,
             name = "Roserade",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a406,R.raw.a557),
         ),
@@ -3213,6 +3417,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 409,
             name = "Rampardos",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a408),
         ),
         MonsterDefinition(
@@ -3228,6 +3433,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 411,
             name = "Bastiodon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a410),
         ),
         MonsterDefinition(
@@ -3246,11 +3452,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 413,
             name = "Wormadam",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a412,R.raw.a625,R.raw.a626,R.raw.a627),
         ),
         MonsterDefinition(
             id = 414,
             name = "Mothim",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a413),
         ),
         MonsterDefinition(
@@ -3267,6 +3475,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 416,
             name = "Vespiquen",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a415),
         ),
         MonsterDefinition(
@@ -3289,6 +3498,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 419,
             name = "Floatzel",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a418,R.raw.a561),
         ),
@@ -3305,6 +3515,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 421,
             name = "Cherrim",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a632,R.raw.a633),
         ),
         MonsterDefinition(
@@ -3320,11 +3531,13 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 423,
             name = "Gastrodon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a630,R.raw.a631),
         ),
         MonsterDefinition(
             id = 424,
             name = "Ambipom",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a423,R.raw.a585),
         ),
@@ -3341,6 +3554,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 426,
             name = "Drifblim",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a425),
         ),
         MonsterDefinition(
@@ -3356,16 +3570,19 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 428,
             name = "Lopunny",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a427),
         ),
         MonsterDefinition(
             id = 429,
             name = "Mismagius",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a428),
         ),
         MonsterDefinition(
             id = 430,
             name = "Honchkrow",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a429),
         ),
         MonsterDefinition(
@@ -3381,6 +3598,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 432,
             name = "Purugly",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a431),
         ),
         MonsterDefinition(
@@ -3406,6 +3624,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 435,
             name = "Skuntank",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a434),
         ),
         MonsterDefinition(
@@ -3422,6 +3641,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 437,
             name = "Bronzong",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a436),
         ),
@@ -3475,6 +3695,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 444,
             name = "Gabite",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a443,R.raw.a583),
             evolutions = mapOf(
@@ -3486,6 +3707,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 445,
             name = "Garchomp",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a444,R.raw.a584),
         ),
@@ -3512,6 +3734,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 448,
             name = "Lucario",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a447),
         ),
         MonsterDefinition(
@@ -3528,6 +3751,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 450,
             name = "Hippowdon",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a449,R.raw.a570),
         ),
@@ -3544,6 +3768,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 452,
             name = "Drapion",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a451),
         ),
         MonsterDefinition(
@@ -3560,6 +3785,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 454,
             name = "Toxicroak",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a453,R.raw.a566),
         ),
@@ -3582,6 +3808,7 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 457,
             name = "Lumineon",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a456,R.raw.a572),
         ),
@@ -3609,103 +3836,122 @@ object MonsterDefinitions {
         MonsterDefinition(
             id = 460,
             name = "Abomasnow",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a459,R.raw.a578),
         ),
         MonsterDefinition(
             id = 461,
             name = "Weavile",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a460,R.raw.a555),
         ),
         MonsterDefinition(
             id = 462,
             name = "Magnezone",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a461),
         ),
         MonsterDefinition(
             id = 463,
             name = "Lickilicky",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a462),
         ),
         MonsterDefinition(
             id = 464,
             name = "Rhyperior",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a463,R.raw.a562),
         ),
         MonsterDefinition(
             id = 465,
             name = "Tangrowth",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a464,R.raw.a558),
         ),
         MonsterDefinition(
             id = 466,
             name = "Electivire",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a465),
         ),
         MonsterDefinition(
             id = 467,
             name = "Magmortar",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a466),
         ),
         MonsterDefinition(
             id = 468,
             name = "Togekiss",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a467),
         ),
         MonsterDefinition(
             id = 469,
             name = "Yanmega",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a468),
         ),
         MonsterDefinition(
             id = 470,
             name = "Leafeon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a469),
         ),
         MonsterDefinition(
             id = 471,
             name = "Glaceon",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a470),
         ),
         MonsterDefinition(
             id = 472,
             name = "Gliscor",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a471),
         ),
         MonsterDefinition(
             id = 473,
             name = "Mamoswine",
+            firstInEvolutionChain = false,
             hasGenderDifferences = true,
             formResIds = listOf(R.raw.a472,R.raw.a559),
         ),
         MonsterDefinition(
             id = 474,
             name = "Porygon-z",
+            firstInEvolutionChain = false,
             genderless = true,
             formResIds = listOf(R.raw.a473),
         ),
         MonsterDefinition(
             id = 475,
             name = "Gallade",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a474),
         ),
         MonsterDefinition(
             id = 476,
             name = "Probopass",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a475),
         ),
         MonsterDefinition(
             id = 477,
             name = "Dusknoir",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a476),
         ),
         MonsterDefinition(
             id = 478,
             name = "Froslass",
+            firstInEvolutionChain = false,
             formResIds = listOf(R.raw.a477),
         ),
         MonsterDefinition(

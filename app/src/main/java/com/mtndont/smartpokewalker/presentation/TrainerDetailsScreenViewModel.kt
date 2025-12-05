@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.ble.BLEManager
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
+import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
@@ -12,7 +13,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
-import kotlin.random.Random
 
 @HiltViewModel
 class TrainerDetailsScreenViewModel @Inject constructor(
@@ -26,12 +26,13 @@ class TrainerDetailsScreenViewModel @Inject constructor(
 
     fun createNewMonster() {
         viewModelScope.launch {
+            val randomMonster = MonsterModel.getRandomInitialMonster()
             monstersRepository.createMonster(
-                dexId = Random.nextInt(1, 6),
-                name = "test",
+                dexId = randomMonster.dexId,
+                name = randomMonster.name,
                 experience = 0L,
-                sex = Random.nextInt(1, 3),
-                form = 0
+                sex = randomMonster.sex,
+                form = randomMonster.form
             )
         }
     }

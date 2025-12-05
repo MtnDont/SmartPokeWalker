@@ -5,15 +5,19 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
+import com.mtndont.smartpokewalker.data.MonsterModel
+import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class MainScreenAppViewModel @Inject constructor(
-    private val monsterDataRepository: MonsterDataRepository
+    private val monsterDataRepository: MonsterDataRepository,
+    private val monstersRepository: MonstersRepository
 ) : ViewModel() {
 
     val currentSteps = monsterDataRepository.currentSteps
@@ -24,6 +28,9 @@ class MainScreenAppViewModel @Inject constructor(
 
     val uiState: MutableState<UiState> = mutableStateOf(UiState.Startup)
 
+    val party: StateFlow<List<MonsterModel>> = monstersRepository.getPartyStream()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), listOf())
+
     init {
         viewModelScope.launch {
             val supported = true
@@ -32,6 +39,12 @@ class MainScreenAppViewModel @Inject constructor(
             } else {
                 UiState.NotSupported
             }
+        }
+    }
+
+    fun addMonsterToParty(monster: MonsterModel) {
+        viewModelScope.launch {
+            monstersRepository.createStarterAndParty(monster)
         }
     }
 }

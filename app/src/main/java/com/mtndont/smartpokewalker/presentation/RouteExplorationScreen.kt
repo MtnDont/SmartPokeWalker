@@ -1,5 +1,6 @@
 package com.mtndont.smartpokewalker.presentation
 
+import android.annotation.SuppressLint
 import androidx.compose.animation.core.FastOutSlowInEasing
 import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.animateFloat
@@ -38,6 +39,7 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.widget.ScrollingImageView
 
+@SuppressLint("ResourceType")
 @Composable
 fun RouteExplorationScreen() {
     Box(
