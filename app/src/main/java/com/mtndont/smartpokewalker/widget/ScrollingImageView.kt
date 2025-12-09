@@ -1,5 +1,6 @@
 package com.mtndont.smartpokewalker.widget
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.MarqueeAnimationMode
 import androidx.compose.foundation.MarqueeSpacing
@@ -67,6 +68,7 @@ fun ScrollingImageView(
     }
 }
 
+@SuppressLint("ResourceType")
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Composable
 fun ScrollingImageViewSmallPreview() {
@@ -81,6 +83,7 @@ fun ScrollingImageViewSmallPreview() {
     )
 }
 
+@SuppressLint("ResourceType")
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
 fun ScrollingImageViewLargePreview() {

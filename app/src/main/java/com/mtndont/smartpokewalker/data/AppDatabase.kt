@@ -6,7 +6,8 @@ import androidx.room.RoomDatabase
 @Database(
     entities = [
         Monster::class,
-        Party::class
+        Party::class,
+        MonsterBox::class
     ],
     version = 1
 )

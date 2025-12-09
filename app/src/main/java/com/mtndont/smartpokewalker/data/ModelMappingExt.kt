@@ -33,3 +33,11 @@ fun PartyModel.toLocal() = Party(
     slot = slot,
     monsterId = monsterId
 )
+
+fun PartyMonster.toExternal() = PartyMonsterModel(
+    slot = slot,
+    monster = monster.toExternal()
+)
+
+@JvmName("partyMonsterToExternal")
+fun List<PartyMonster>.toExternal() = map(PartyMonster::toExternal)

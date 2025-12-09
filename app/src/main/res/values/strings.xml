@@ -9,4 +9,12 @@
     <string name="complication_label">Example complication</string>
     <string name="trainer_card">Trainer Card</string>
     <string name="confirm">Confirm</string>
+    <string name="slot_num">Slot %1$d</string>
+    <string name="box_num">Box %1$d</string>
+    <string name="release">Release</string>
+    <string name="box">Box</string>
+    <string name="explore">Explore</string>
+    <string name="move_to_party">Move to Party</string>
+    <string name="move_to_box">Move to Box</string>
+    <string name="release_monster">Release %1$s?</string>
 </resources>

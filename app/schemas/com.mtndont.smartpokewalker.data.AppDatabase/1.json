@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "172b3a0ccb70dbff450cf714b2a54661",
+    "identityHash": "e72123db9ea105bfb97270c3c7903f8b",
     "entities": [
       {
         "tableName": "monsters",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dexId` INTEGER NOT NULL, `name` TEXT NOT NULL, `experience` INTEGER NOT NULL, `sex` INTEGER NOT NULL, `form` INTEGER NOT NULL)",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `dexId` INTEGER NOT NULL, `name` TEXT NOT NULL, `experience` INTEGER NOT NULL, `sex` INTEGER NOT NULL, `form` INTEGER NOT NULL, `traded` INTEGER NOT NULL)",
         "fields": [
           {
             "fieldPath": "id",
@@ -41,6 +41,12 @@
           {
             "fieldPath": "form",
             "columnName": "form",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "traded",
+            "columnName": "traded",
             "affinity": "INTEGER",
             "notNull": true
           }
@@ -99,11 +105,66 @@
             ]
           }
         ]
+      },
+      {
+        "tableName": "box",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`boxId` INTEGER NOT NULL, `boxSlot` INTEGER NOT NULL, `monsterId` INTEGER NOT NULL, PRIMARY KEY(`boxId`, `boxSlot`), FOREIGN KEY(`monsterId`) REFERENCES `monsters`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE )",
+        "fields": [
+          {
+            "fieldPath": "boxId",
+            "columnName": "boxId",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "boxSlot",
+            "columnName": "boxSlot",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "monsterId",
+            "columnName": "monsterId",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "boxId",
+            "boxSlot"
+          ]
+        },
+        "indices": [
+          {
+            "name": "index_box_monsterId",
+            "unique": false,
+            "columnNames": [
+              "monsterId"
+            ],
+            "orders": [],
+            "createSql": "CREATE INDEX IF NOT EXISTS `index_box_monsterId` ON `${TABLE_NAME}` (`monsterId`)"
+          }
+        ],
+        "foreignKeys": [
+          {
+            "table": "monsters",
+            "onDelete": "CASCADE",
+            "onUpdate": "NO ACTION",
+            "columns": [
+              "monsterId"
+            ],
+            "referencedColumns": [
+              "id"
+            ]
+          }
+        ]
       }
     ],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '172b3a0ccb70dbff450cf714b2a54661')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'e72123db9ea105bfb97270c3c7903f8b')"
     ]
   }
 }

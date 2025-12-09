@@ -18,16 +18,12 @@ data class MonsterModel(
     val traded: Boolean = false
 ) {
     fun getDefinition(): MonsterDefinition {
-        val dId = if (dexId < 1 || dexId >= MonsterDefinitions.entries.size) 1 else dexId
+        val dId = if (dexId < 1 || dexId > MonsterDefinitions.entries.size) 1 else dexId
         return MonsterDefinitions.entries[dId - 1]
     }
 
     fun getDefaultName(): String {
         return getDefinition().name
-    }
-
-    fun getGender(): Int {
-        return sex
     }
 
     fun getFormResId(): Int {

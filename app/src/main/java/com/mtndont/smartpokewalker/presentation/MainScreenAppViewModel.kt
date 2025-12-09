@@ -52,7 +52,7 @@ class MainScreenAppViewModel @Inject constructor(
 
     fun onEvent(event: WalkEvent) {
         when (event) {
-            is WalkEvent.ConfirmStarter -> addMonsterToParty(event.monster)
+            is WalkEvent.ConfirmStarter -> addMonster(event.monster)
         }
     }
 
@@ -64,9 +64,9 @@ class MainScreenAppViewModel @Inject constructor(
         )
     }
 
-    fun addMonsterToParty(monster: MonsterModel) {
+    fun addMonster(monster: MonsterModel) {
         viewModelScope.launch {
-            monstersRepository.createStarterAndParty(monster)
+            monstersRepository.createMonster(monster)
         }
     }
 }

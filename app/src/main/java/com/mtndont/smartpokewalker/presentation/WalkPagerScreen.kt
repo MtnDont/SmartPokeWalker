@@ -79,7 +79,12 @@ import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.util.AnimatedDrawableUtil
 
 @Composable
-fun TrainerViewNavigatorApp() {
+fun TrainerViewNavigatorApp(
+    viewModel: TrainerDetailsViewModel = hiltViewModel(),
+    boxOnClick: () -> Unit
+) {
+    val overlayState by viewModel.overlayState.collectAsStateWithLifecycle()
+
     val pagerState = rememberPagerState(pageCount = {
         2
     })
@@ -87,38 +92,55 @@ fun TrainerViewNavigatorApp() {
     Box(
         modifier = Modifier.fillMaxSize()
     ) {
-        HorizontalPager(
-            state = pagerState,
-            modifier = Modifier.background(colorResource(R.color.background_gray))
-        ) { page ->
-            AnimatedVisibility(
-                visible = pagerState.currentPage == page,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                when (page) {
-                    0 -> WalkPagerApp()
-                    1 -> TrainerDetailsApp()
-                    else -> WalkPagerApp()
-                }
-            }
-        }
-        Row(
-            modifier = Modifier
-                .wrapContentSize()
-                .align(Alignment.BottomCenter)
-                .padding(bottom = 3.dp),
-            horizontalArrangement = Arrangement.Center
+        Crossfade(
+            targetState = overlayState
         ) {
-            repeat(pagerState.pageCount) { iteration ->
-                val color = if (pagerState.currentPage == iteration) colorResource(R.color.dark_gray) else colorResource(R.color.light_gray)
-                Box(
-                    modifier = Modifier
-                        .padding(2.dp)
-                        .size(10.dp)
-                        .clip(CircleShape)
-                        .background(color)
-                )
+            when (it) {
+                AppOverlayState.RouteExploration -> RouteExplorationScreen(durationMillis = 10_000)
+                AppOverlayState.WalkPager -> {
+                    HorizontalPager(
+                        state = pagerState,
+                        modifier = Modifier.background(colorResource(R.color.background_gray))
+                    ) { page ->
+                        AnimatedVisibility(
+                            visible = pagerState.currentPage == page,
+                            enter = fadeIn(),
+                            exit = fadeOut()
+                        ) {
+                            when (page) {
+                                0 -> WalkPagerApp()
+                                1 -> TrainerDetailsApp(
+                                    viewModel = viewModel,
+                                    boxOnClick = boxOnClick
+                                )
+
+                                else -> WalkPagerApp()
+                            }
+                        }
+                    }
+
+                    Row(
+                        modifier = Modifier
+                            .wrapContentSize()
+                            .align(Alignment.BottomCenter)
+                            .padding(bottom = 3.dp),
+                        horizontalArrangement = Arrangement.Center
+                    ) {
+                        repeat(pagerState.pageCount) { iteration ->
+                            val color =
+                                if (pagerState.currentPage == iteration) colorResource(R.color.dark_gray) else colorResource(
+                                    R.color.light_gray
+                                )
+                            Box(
+                                modifier = Modifier
+                                    .padding(2.dp)
+                                    .size(10.dp)
+                                    .clip(CircleShape)
+                                    .background(color)
+                            )
+                        }
+                    }
+                }
             }
         }
     }
@@ -158,7 +180,6 @@ fun WalkPagerScreen(
         party.size
     })
     val focusRequester: FocusRequester = remember { FocusRequester() }
-    val context = LocalContext.current
 
     VerticalPager(
         state = pagerState,

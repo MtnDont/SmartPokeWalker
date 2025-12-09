@@ -35,30 +35,29 @@ import java.util.Locale.getDefault
 
 @Composable
 fun TrainerDetailsApp(
-    viewModel: TrainerDetailsScreenViewModel = hiltViewModel()
+    viewModel: TrainerDetailsViewModel = hiltViewModel(),
+    boxOnClick: () -> Unit
 ) {
     val trainerName by viewModel.trainerName.collectAsStateWithLifecycle()
 
     TrainerDetailsScreen(
         trainerName = trainerName,
-        addMonsterOnClick = {
-            viewModel.createNewMonster()
-        },
-        addPartyOnClick = {
-            viewModel.addMonstersToParty()
-        },
         testBluetoothOnClick = {
             viewModel.testBluetooth()
-        }
+        },
+        exploreOnClick = {
+            viewModel.explore()
+        },
+        boxOnClick = boxOnClick
     )
 }
 
 @Composable
 fun TrainerDetailsScreen(
     trainerName: String,
-    addMonsterOnClick: () -> Unit,
-    addPartyOnClick: () -> Unit,
-    testBluetoothOnClick: () -> Unit
+    testBluetoothOnClick: () -> Unit,
+    exploreOnClick: () -> Unit,
+    boxOnClick: () -> Unit
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -103,26 +102,26 @@ fun TrainerDetailsScreen(
                     )
                 )
                 Button(
-                    onClick = addMonsterOnClick,
+                    onClick = exploreOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
                 ) {
                     Text(
-                        text = "Add Pokemon",
+                        text = stringResource(R.string.explore),
                         color = colorResource(R.color.background_gray)
                     )
                 }
                 Button(
-                    onClick = addPartyOnClick,
+                    onClick = boxOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
                 ) {
                     Text(
-                        text = "Add to Party",
+                        text = stringResource(R.string.box),
                         color = colorResource(R.color.background_gray)
                     )
                 }
@@ -148,8 +147,8 @@ fun TrainerDetailsScreen(
 fun TrainerDetailsScreenPreview() {
     TrainerDetailsScreen(
         trainerName = "Red",
-        addMonsterOnClick = {},
-        addPartyOnClick = {},
-        testBluetoothOnClick = {}
+        testBluetoothOnClick = {},
+        exploreOnClick = {},
+        boxOnClick = {}
     )
 }

@@ -27,6 +27,22 @@ class DefaultMonstersRepository @Inject constructor(
         }
     }
 
+    override fun getPartyMonstersNameWithSlot(): Flow<List<PartyMonsterModel>> {
+        return dataSource.getPartyMonstersNameWithSlot().map { partyMonsters ->
+            withContext(Dispatchers.Default) {
+                partyMonsters.toExternal()
+            }
+        }
+    }
+
+    override fun getMonstersInBox(boxId: Int): Flow<List<MonsterModel>> {
+        return dataSource.getMonstersInBox(boxId).map { monster ->
+            withContext(Dispatchers.Default) {
+                monster.toExternal()
+            }
+        }
+    }
+
     override suspend fun createMonster(
         dexId: Int,
         name: String,
@@ -46,15 +62,25 @@ class DefaultMonstersRepository @Inject constructor(
     }
 
     override suspend fun createMonster(monster: MonsterModel): Long {
-        return dataSource.upsert(monster.toLocal())
+        return dataSource.createMonster(monster.toLocal())
     }
 
-    override suspend fun createStarterAndParty(monster: MonsterModel): Long {
-        return dataSource.createStarterAndParty(monster.toLocal())
+    override suspend fun moveMonsterToParty(monsterId: Long, partySlot: Int): Long {
+        return dataSource.moveMonsterToParty(monsterId, partySlot)
     }
 
-    override suspend fun getMonster(id: Long): MonsterModel? {
-        return dataSource.findById(id)?.toExternal()
+    override suspend fun moveMonsterToBox(monsterId: Long, boxId: Int): Long {
+        return dataSource.moveMonsterToBox(monsterId, boxId)
+    }
+
+    override fun getMonster(id: Long): Flow<MonsterModel> {
+        return dataSource.findById(id).map { monster ->
+            monster.toExternal()
+        }
+    }
+
+    override fun getUsedBoxSlots(boxId: Int): Flow<List<Int>> {
+        return dataSource.getUsedBoxSlots(boxId)
     }
 
     override suspend fun setPartyFromMonsters(monsters: List<MonsterModel>) {
@@ -66,19 +92,6 @@ class DefaultMonstersRepository @Inject constructor(
 
     override suspend fun setPartyFromIDs(ids: List<Long>) {
         return dataSource.setParty(ids)
-    }
-
-    override suspend fun updateMonster(
-        id: Long,
-        name: String,
-        experience: Long
-    ) {
-        val monster = getMonster(id)?.copy(
-            name = name,
-            experience = experience
-        ) ?: throw Exception("Monster (id $id) not found")
-
-        dataSource.upsert(monster.toLocal())
     }
 
     override suspend fun deleteMonster(id: Long): Int {

@@ -8,6 +8,10 @@ interface MonstersRepository {
 
     fun getPartyStream(): Flow<List<MonsterModel>>
 
+    fun getPartyMonstersNameWithSlot(): Flow<List<PartyMonsterModel>>
+
+    fun getMonstersInBox(boxId: Int): Flow<List<MonsterModel>>
+
     suspend fun createMonster(
         dexId: Int,
         name: String,
@@ -18,15 +22,17 @@ interface MonstersRepository {
 
     suspend fun createMonster(monster: MonsterModel): Long
 
-    suspend fun createStarterAndParty(monster: MonsterModel): Long
+    suspend fun moveMonsterToParty(monsterId: Long, partySlot: Int): Long
 
-    suspend fun getMonster(id: Long): MonsterModel?
+    suspend fun moveMonsterToBox(monsterId: Long, boxId: Int): Long
+
+    fun getMonster(id: Long): Flow<MonsterModel>
+
+    fun getUsedBoxSlots(boxId: Int): Flow<List<Int>>
 
     suspend fun setPartyFromMonsters(monsters: List<MonsterModel>)
 
     suspend fun setPartyFromIDs(ids: List<Long>)
-
-    suspend fun updateMonster(id: Long, name: String, experience: Long)
 
     suspend fun deleteMonster(id: Long): Int
 
