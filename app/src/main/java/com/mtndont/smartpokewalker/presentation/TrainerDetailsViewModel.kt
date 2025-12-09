@@ -60,6 +60,10 @@ class TrainerDetailsViewModel @Inject constructor(
         return monstersRepository.getMonster(monsterId)
     }
 
+    fun isMonsterExclusiveInParty(monsterId: Long): Flow<Boolean> {
+        return monstersRepository.isMonsterExclusiveInParty(monsterId)
+    }
+
     fun getUnusedBoxSlots(boxId: Int): Flow<List<Int>> {
         return monstersRepository.getUsedBoxSlots(boxId).map {
             (0 until MonsterBoxModel.MAX_BOX_SIZE).filter { boxSlot ->

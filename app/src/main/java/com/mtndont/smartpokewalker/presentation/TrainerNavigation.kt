@@ -48,10 +48,13 @@ import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.PartyModel
 import com.mtndont.smartpokewalker.data.PartyMonsterModel
 
-enum class MonsterListAction(val labelResId: Int) {
-    Release(R.string.release),
-    MoveToParty(R.string.move_to_party),
-    MoveToBox(R.string.move_to_box)
+enum class MonsterListAction(
+    val labelResId: Int,
+    val lastInPartyEnabled: Boolean
+) {
+    Release(R.string.release, false),
+    MoveToParty(R.string.move_to_party, true),
+    MoveToBox(R.string.move_to_box, false)
 }
 
 @Composable
@@ -123,8 +126,13 @@ fun TrainerNav(
                 null
             )
 
+            val isLastInParty by viewModel.isMonsterExclusiveInParty(monsterId).collectAsStateWithLifecycle(
+                true
+            )
+
             MonsterActionScreen(
                 monster = monster,
+                isLastInParty = isLastInParty,
                 actionOnHit = { action ->
                     when(action) {
                         MonsterListAction.MoveToParty -> {
@@ -141,10 +149,6 @@ fun TrainerNav(
                             monster?.let {
                                 navController.navigate("monster/${it.id}/${it.name}/confirmRelease")
                             }
-                        }
-                        else -> {
-                            Log.d("TrainerNavigation", action.name)
-                            navController.popBackStack()
                         }
                     }
                 }
@@ -329,6 +333,7 @@ fun MonsterListScreen(
 @Composable
 fun MonsterActionScreen(
     monster: MonsterModel?,
+    isLastInParty: Boolean,
     actionOnHit: (MonsterListAction) -> Unit
 ) {
     monster?.let {
@@ -372,17 +377,23 @@ fun MonsterActionScreen(
                     )
                 }
                 items(actions) { action ->
+                    val enabled = if (isLastInParty) action.lastInPartyEnabled else true
                     Button(
                         label = {
                             Text(
                                 text = stringResource(action.labelResId),
-                                color = colorResource(R.color.light_gray),
+                                color = if (enabled) {
+                                    colorResource(R.color.light_gray)
+                                } else {
+                                    colorResource(R.color.dark_gray)
+                                },
                                 fontSize = 24.sp,
                                 fontFamily = FontFamily(
                                     Font(R.font.pixelfont)
                                 )
                             )
                         },
+                        enabled = enabled,
                         onClick = {
                             actionOnHit.invoke(action)
                         },
@@ -649,6 +660,7 @@ fun MonsterListScreenLargePreview() {
 fun MonsterActionScreenLargePreview() {
     MonsterActionScreen(
         monster = MonsterModel(id = 0, dexId = 1, name = "Android"),
+        isLastInParty = false,
         actionOnHit = {}
     )
 }

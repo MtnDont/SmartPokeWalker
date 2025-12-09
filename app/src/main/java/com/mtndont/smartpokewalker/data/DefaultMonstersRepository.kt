@@ -101,4 +101,8 @@ class DefaultMonstersRepository @Inject constructor(
     override suspend fun addStepsToParty(steps: Long) {
         dataSource.addStepsToParty(steps)
     }
+
+    override fun isMonsterExclusiveInParty(monsterId: Long): Flow<Boolean> {
+        return dataSource.isMonsterExclusiveInParty(monsterId)
+    }
 }

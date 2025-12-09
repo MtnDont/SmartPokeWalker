@@ -114,6 +114,7 @@ interface MonstersDao {
         //    move monter to partySlot if partySlot isn't taken
         //    swap monsters PartyModel
         if (boxEntry != null) {
+            deleteMonsterBoxByMonsterId(monsterId)
             occupant?.let { otherPartyMember ->
                 insertBoxMonster(
                     MonsterBox(
@@ -131,6 +132,7 @@ interface MonstersDao {
             )
         }
         else if (partyEntry != null) {
+            deletePartyByMonsterId(monsterId)
             occupant?.let { otherPartyMember ->
                 insertPartyMember(
                     Party(
@@ -233,6 +235,14 @@ interface MonstersDao {
             AND experience < ${MonsterModel.MAX_EXPERIENCE}
     """)
     suspend fun addStepsToParty(steps: Long)
+
+    @Query("""
+        SELECT 1
+        FROM party
+        WHERE monsterId = :monsterId
+            AND (SELECT COUNT(*) FROM party) = 1
+    """)
+    fun isMonsterExclusiveInParty(monsterId: Long): Flow<Boolean>
 }
 
 data class BoxUsage(
