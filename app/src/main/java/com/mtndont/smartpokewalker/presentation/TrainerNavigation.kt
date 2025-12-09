@@ -3,23 +3,24 @@ package com.mtndont.smartpokewalker.presentation
 import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material.icons.filled.Close
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.mtndont.smartpokewalker.R
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
@@ -39,6 +40,7 @@ import androidx.wear.compose.material3.lazy.transformedHeight
 import androidx.wear.compose.navigation.SwipeDismissableNavHost
 import androidx.wear.compose.navigation.composable
 import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
+import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.compose.layout.ColumnItemType
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
 import com.mtndont.smartpokewalker.data.MonsterBoxModel
@@ -68,6 +70,9 @@ fun TrainerNav(
                 viewModel = viewModel,
                 boxOnClick = {
                     navController.navigate("boxList")
+                },
+                partyOnClick = {
+                    navController.navigate("party")
                 }
             )
         }
@@ -76,6 +81,22 @@ fun TrainerNav(
             BoxListScreen(
                 onBoxSelected = { boxId ->
                     navController.navigate("box/$boxId")
+                }
+            )
+        }
+
+        composable("party") {
+            val partyList by viewModel.getMonstersInParty().collectAsStateWithLifecycle(
+                initialValue = listOf()
+            )
+
+            PartyListScreen(
+                header = stringResource(R.string.party),
+                partyMonsters = partyList,
+                partySlotOnHit = { _, monster ->
+                    monster?.let {
+                        navController.navigate("monster/${it.id}")
+                    }
                 }
             )
         }
@@ -108,12 +129,12 @@ fun TrainerNav(
                     when(action) {
                         MonsterListAction.MoveToParty -> {
                             monster?.let {
-                                navController.navigate("moveToParty/${it.id}")
+                                navController.navigate("monster/${it.id}/moveToParty")
                             }
                         }
                         MonsterListAction.MoveToBox -> {
                             monster?.let {
-                                navController.navigate("moveToBox/${it.id}")
+                                navController.navigate("monster/${it.id}/moveToBox")
                             }
                         }
                         MonsterListAction.Release -> {
@@ -130,23 +151,27 @@ fun TrainerNav(
             )
         }
 
-        composable("moveToParty/{monsterId}") { backStackEntry ->
+        composable("monster/{monsterId}/moveToParty") { backStackEntry ->
             val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
 
             val partyList by viewModel.getMonstersInParty().collectAsStateWithLifecycle(
                 initialValue = listOf()
             )
 
-            MoveToPartyScreen(
+            PartyListScreen(
+                header = stringResource(R.string.move_to_party),
+                disabledSlot = partyList.firstOrNull {
+                    it.monster.id == monsterId
+                }?.slot,
                 partyMonsters = partyList,
-                partySlotOnHit = { slot ->
-                    viewModel.moveMonsterToParty(monsterId, slot)
+                partySlotOnHit = { partySlot, _ ->
+                    viewModel.moveMonsterToParty(monsterId, partySlot)
                     navController.popBackStack("monster/${monsterId}", true)
                 }
             )
         }
 
-        composable("moveToBox/{monsterId}") { backStackEntry ->
+        composable("monster/{monsterId}/moveToBox") { backStackEntry ->
             val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
 
             MoveToBoxScreen(
@@ -168,6 +193,7 @@ fun TrainerNav(
                 },
                 onConfirm = {
                     viewModel.releaseMonster(monsterId)
+                    navController.popBackStack("monster/${monsterId}", true)
                 }
             )
         }
@@ -196,11 +222,22 @@ fun BoxListScreen(
             state = listState,
             contentPadding = contentPadding
         ) {
+            item {
+                Text(
+                    text = "Select a Box",
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
             items(items) { boxId ->
                 Button(
                     label = {
                         Text(
-                            text = "Box $boxId",
+                            text = stringResource(R.string.box_num, boxId+1),
                             color = colorResource(R.color.light_gray),
                             fontSize = 24.sp,
                             fontFamily = FontFamily(
@@ -242,6 +279,17 @@ fun MonsterListScreen(
             state = listState,
             contentPadding = contentPadding
         ) {
+            item {
+                Text(
+                    text = stringResource(R.string.monsters),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
             items(boxMonsters) { monster ->
                 Button(
                     label = {
@@ -312,6 +360,17 @@ fun MonsterActionScreen(
                 state = listState,
                 contentPadding = contentPadding,
             ) {
+                item {
+                    Text(
+                        text = stringResource(R.string.actions),
+                        color = colorResource(R.color.black),
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        ),
+                        textAlign = TextAlign.Center
+                    )
+                }
                 items(actions) { action ->
                     Button(
                         label = {
@@ -342,9 +401,11 @@ fun MonsterActionScreen(
 }
 
 @Composable
-fun MoveToPartyScreen(
+fun PartyListScreen(
+    header: String,
+    disabledSlot: Long? = null,
     partyMonsters: List<PartyMonsterModel>,
-    partySlotOnHit: (Int) -> Unit
+    partySlotOnHit: (Int, MonsterModel?) -> Unit
 ) {
     val listState = rememberTransformingLazyColumnState()
     val transformationSpec = rememberTransformationSpec()
@@ -366,12 +427,27 @@ fun MoveToPartyScreen(
             state = listState,
             contentPadding = contentPadding
         ) {
+            item {
+                Text(
+                    text = header,
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
             items(PartyModel.MAX_PARTY_SIZE) { idx ->
                 Button(
                     label = {
                         Text(
                             text = stringResource(R.string.slot_num, idx+1),
-                            color = colorResource(R.color.light_gray),
+                            color = if (disabledSlot != (idx+1).toLong()) {
+                                colorResource(R.color.light_gray)
+                            } else {
+                                colorResource(R.color.dark_gray)
+                            },
                             fontSize = 24.sp,
                             fontFamily = FontFamily(
                                 Font(R.font.pixelfont)
@@ -384,7 +460,11 @@ fun MoveToPartyScreen(
                         }?.let {
                             Text(
                                 text = it.monster.name,
-                                color = colorResource(R.color.light_gray),
+                                color = if (disabledSlot != (idx+1).toLong()) {
+                                    colorResource(R.color.light_gray)
+                                } else {
+                                    colorResource(R.color.dark_gray)
+                                },
                                 fontSize = 20.sp,
                                 fontFamily = FontFamily(
                                     Font(R.font.pixelfont)
@@ -392,8 +472,14 @@ fun MoveToPartyScreen(
                             )
                         }
                     },
+                    enabled = disabledSlot != (idx+1).toLong(),
                     onClick = {
-                        partySlotOnHit.invoke(idx+1)
+                        partySlotOnHit.invoke(
+                            idx+1,
+                            partyMonsters.firstOrNull {
+                                it.slot == (idx+1).toLong()
+                            }?.monster
+                        )
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(R.color.black)
@@ -432,6 +518,17 @@ fun MoveToBoxScreen(
             state = listState,
             contentPadding = contentPadding
         ) {
+            item {
+                Text(
+                    text = stringResource(R.string.move_to_box),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
             items(MonsterBoxModel.MAX_NUM_OF_BOXES) { idx ->
                 Button(
                     label = {
@@ -466,81 +563,125 @@ fun ConfirmReleaseScreen(
     onConfirm: () -> Unit,
     onCancel: () -> Unit
 ) {
-    val listState = rememberTransformingLazyColumnState()
-
-    ScreenScaffold(
-        scrollState = listState,
-        contentPadding = rememberResponsiveColumnPadding(
-            first = ColumnItemType.ListHeader,
-            last = ColumnItemType.IconButton
-        ),
-        modifier = Modifier.background(colorResource(R.color.background_gray))
-    ) { contentPadding ->
-        TransformingLazyColumn(
-            state = listState,
-            contentPadding = contentPadding,
+    Column(
+        verticalArrangement = Arrangement.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        Text(
+            text = stringResource(R.string.release_monster, monsterName),
+            color = colorResource(R.color.black),
+            fontSize = 24.sp,
+            fontFamily = FontFamily(Font(R.font.pixelfont)),
             modifier = Modifier
-                .background(colorResource(R.color.background_gray))
+                .padding(top = 16.dp, bottom = 24.dp)
+                .fillMaxWidth(),
+            textAlign = TextAlign.Center
+        )
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(vertical = 8.dp),
+            horizontalArrangement = Arrangement.SpaceEvenly
         ) {
-            item {
-                Text(
-                    text = stringResource(R.string.release_monster, monsterName),
-                    color = colorResource(R.color.black),
-                    fontSize = 24.sp,
-                    fontFamily = FontFamily(Font(R.font.pixelfont)),
-                    modifier = Modifier
-                        .padding(top = 16.dp, bottom = 24.dp)
-                        .fillMaxWidth(),
-                    textAlign = TextAlign.Center
+            IconButton(
+                onClick = onCancel,
+                modifier = Modifier
+                    .size(52.dp)
+                    .background(
+                        colorResource(R.color.black),
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.close),
+                    contentDescription = "Cancel Release",
+                    tint = colorResource(R.color.background_gray),
+                    modifier = Modifier.size(32.dp)
                 )
             }
 
-            // Row of two icon buttons
-            item {
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(vertical = 8.dp),
-                    horizontalArrangement = Arrangement.SpaceEvenly
-                ) {
-
-                    // ❌ Cancel Button
-                    IconButton(
-                        onClick = onCancel,
-                        modifier = Modifier
-                            .size(52.dp)
-                            .background(
-                                colorResource(R.color.black),
-                                shape = CircleShape
-                            )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Close,
-                            contentDescription = "Cancel Release",
-                            tint = colorResource(R.color.background_gray),
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-
-                    // ✔ Confirm Button
-                    IconButton(
-                        onClick = onConfirm,
-                        modifier = Modifier
-                            .size(52.dp)
-                            .background(
-                                colorResource(R.color.black),
-                                shape = CircleShape
-                            )
-                    ) {
-                        Icon(
-                            imageVector = Icons.Default.Check,
-                            contentDescription = "Confirm Release",
-                            tint = colorResource(R.color.background_gray),
-                            modifier = Modifier.size(32.dp)
-                        )
-                    }
-                }
+            IconButton(
+                onClick = onConfirm,
+                modifier = Modifier
+                    .size(52.dp)
+                    .background(
+                        colorResource(R.color.black),
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.check),
+                    contentDescription = "Confirm Release",
+                    tint = colorResource(R.color.background_gray),
+                    modifier = Modifier.size(32.dp)
+                )
             }
         }
     }
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun BoxListScreenLargePreview() {
+    BoxListScreen(
+        onBoxSelected = {}
+    )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun MonsterListScreenLargePreview() {
+    MonsterListScreen(
+        boxMonsters = listOf(
+            MonsterModel(id = 0, dexId = 1, name = "Android"),
+            MonsterModel(id = 0, dexId = 1, name = "Android", experience = 2000L),
+            MonsterModel(id = 0, dexId = 1, name = "Android", experience = 99000L),
+        ),
+        onMonsterSelected = {}
+    )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun MonsterActionScreenLargePreview() {
+    MonsterActionScreen(
+        monster = MonsterModel(id = 0, dexId = 1, name = "Android"),
+        actionOnHit = {}
+    )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun PartyListScreenLargePreview() {
+    PartyListScreen(
+        header = "Move to Party",
+        disabledSlot = 3,
+        partyMonsters = listOf(
+            PartyMonsterModel(slot = 1, monster = MonsterModel(id = 0, dexId = 1, name = "Android")),
+            PartyMonsterModel(slot = 2, monster = MonsterModel(id = 0, dexId = 1, name = "Android"))
+        ),
+        partySlotOnHit = {_,_ ->}
+    )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun MoveToBoxScreenLargePreview() {
+    MoveToBoxScreen(
+        boxIdOnHit = {}
+    )
+}
+
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun ConfirmReleaseScreenLargePreview() {
+    ConfirmReleaseScreen(
+        monsterName = "Android",
+        onConfirm = {},
+        onCancel = {}
+    )
 }

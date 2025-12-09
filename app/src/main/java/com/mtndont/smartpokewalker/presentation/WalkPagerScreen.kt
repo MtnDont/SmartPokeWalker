@@ -81,7 +81,8 @@ import com.mtndont.smartpokewalker.util.AnimatedDrawableUtil
 @Composable
 fun TrainerViewNavigatorApp(
     viewModel: TrainerDetailsViewModel = hiltViewModel(),
-    boxOnClick: () -> Unit
+    boxOnClick: () -> Unit,
+    partyOnClick: () -> Unit
 ) {
     val overlayState by viewModel.overlayState.collectAsStateWithLifecycle()
 
@@ -111,7 +112,8 @@ fun TrainerViewNavigatorApp(
                                 0 -> WalkPagerApp()
                                 1 -> TrainerDetailsApp(
                                     viewModel = viewModel,
-                                    boxOnClick = boxOnClick
+                                    boxOnClick = boxOnClick,
+                                    partyOnClick = partyOnClick
                                 )
 
                                 else -> WalkPagerApp()

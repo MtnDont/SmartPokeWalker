@@ -13,7 +13,10 @@
     <string name="box_num">Box %1$d</string>
     <string name="release">Release</string>
     <string name="box">Box</string>
+    <string name="party">Party</string>
     <string name="explore">Explore</string>
+    <string name="monsters">Monsters</string>
+    <string name="actions">Actions</string>
     <string name="move_to_party">Move to Party</string>
     <string name="move_to_box">Move to Box</string>
     <string name="release_monster">Release %1$s?</string>
