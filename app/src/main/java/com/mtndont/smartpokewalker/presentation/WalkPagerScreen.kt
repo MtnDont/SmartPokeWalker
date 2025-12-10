@@ -154,6 +154,7 @@ fun WalkPagerApp(
 ) {
     val uiState by viewModel.uiState
     val partyState by viewModel.partyUiState.collectAsStateWithLifecycle()
+    val totalWatts by viewModel.totalWatts.collectAsStateWithLifecycle()
 
     Crossfade(targetState = partyState) { partyUiState ->
         when(partyUiState) {
@@ -165,7 +166,7 @@ fun WalkPagerApp(
                 }
             )
             is WalkUiState.Walking -> WalkPagerScreen(
-                totalWatts = partyUiState.totalWatts,
+                totalWatts = totalWatts,
                 party = partyUiState.party
             )
         }

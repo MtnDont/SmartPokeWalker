@@ -4,6 +4,7 @@ import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.longPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
@@ -21,8 +22,8 @@ class MonsterDataRepository @Inject constructor(
         prefs[TRAINER_NAME] ?: "Red"
     }
 
-    val currentSteps: Flow<Long> = context.dataStore.data.map { prefs ->
-        prefs[CURRENT_STEPS] ?: 0L
+    val exploreSteps: Flow<Int> = context.dataStore.data.map { prefs ->
+        prefs[EXPLORE_STEPS] ?: 0
     }
 
     val totalWatts: Flow<Long> = context.dataStore.data.map { prefs ->
@@ -35,16 +36,16 @@ class MonsterDataRepository @Inject constructor(
         }
     }
 
-    suspend fun setCurrentSteps(steps: Long) {
+    suspend fun setExploreSteps(steps: Long) {
         context.dataStore.edit { prefs ->
-            prefs[CURRENT_STEPS] = steps
+            prefs[EXPLORE_STEPS] = steps.toInt()
         }
     }
 
-    suspend fun addCurrentSteps(steps: Long) {
+    suspend fun addExploreSteps(steps: Long) {
         context.dataStore.edit { prefs ->
-            val total = prefs[CURRENT_STEPS] ?: 0L
-            prefs[CURRENT_STEPS] = total + steps
+            val total = prefs[EXPLORE_STEPS] ?: 0
+            prefs[EXPLORE_STEPS] = total + steps.toInt()
         }
     }
 
@@ -70,7 +71,7 @@ class MonsterDataRepository @Inject constructor(
 
     companion object {
         private val TRAINER_NAME = stringPreferencesKey("trainer_name")
-        private val CURRENT_STEPS = longPreferencesKey("current_steps")
+        private val EXPLORE_STEPS = intPreferencesKey("explore_steps")
         private val TOTAL_WATTS = longPreferencesKey("total_watts")
     }
 }

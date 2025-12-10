@@ -11,7 +11,7 @@ import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -24,20 +24,21 @@ class MainScreenAppViewModel @Inject constructor(
 
     val uiState: MutableState<UiState> = mutableStateOf(UiState.Startup)
 
-    val partyUiState: StateFlow<WalkUiState> = combine(
-        monstersRepository.getPartyStream(),
-        monsterDataRepository.totalWatts
-    ) { partyList, totalWatts ->
-        when(partyList.size) {
-            0 -> WalkUiState.StarterSelection(
-                starterMonsters = getRandomStarters()
-            )
-            else -> WalkUiState.Walking(
-                totalWatts = totalWatts,
-                party = partyList
-            )
+    val totalWatts: StateFlow<Long> = monsterDataRepository.totalWatts
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), 0L)
+
+    val partyUiState: StateFlow<WalkUiState> = monstersRepository.getPartyStream()
+        .map { partyList ->
+            when(partyList.size) {
+                0 -> WalkUiState.StarterSelection(
+                    starterMonsters = getRandomStarters()
+                )
+                else -> WalkUiState.Walking(
+                    party = partyList
+                )
+            }
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), WalkUiState.Loading)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), WalkUiState.Loading)
 
     init {
         viewModelScope.launch {
@@ -86,7 +87,6 @@ sealed interface WalkUiState {
     ) : WalkUiState
 
     data class Walking(
-        val totalWatts: Long,
         val party: List<MonsterModel>
     ) : WalkUiState
 }
