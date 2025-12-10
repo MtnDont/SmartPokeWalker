@@ -14,7 +14,7 @@ class StartupReceiver : BroadcastReceiver() {
         if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
 
         // Make sure we have permission.
-        val result = context.checkSelfPermission(android.Manifest.permission.BODY_SENSORS)
+        val result = context.checkSelfPermission(android.Manifest.permission.ACTIVITY_RECOGNITION)
         if (result == PackageManager.PERMISSION_GRANTED) {
             context.startForegroundService(
                 Intent(

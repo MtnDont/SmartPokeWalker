@@ -101,7 +101,6 @@ dependencies {
     implementation(libs.tiles.tooling.preview)
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.datastore)
-    implementation(libs.androidx.health.services)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.work.ktx)
     implementation(libs.androidx.work)

@@ -2,7 +2,6 @@ package com.mtndont.smartpokewalker.presentation
 
 import android.Manifest
 import android.content.Intent
-import android.health.connect.HealthPermissions
 import android.os.Bundle
 import android.util.Log
 import androidx.activity.ComponentActivity
@@ -16,29 +15,23 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
+    private val criticalPermissions = arrayOf(
+        Manifest.permission.ACTIVITY_RECOGNITION
+    )
+
+    private val permissions = arrayOf(
+        Manifest.permission.BLUETOOTH_CONNECT,
+        Manifest.permission.BLUETOOTH_ADVERTISE,
+        Manifest.permission.BLUETOOTH_SCAN
+    )
+
     override fun onCreate(savedInstanceState: Bundle?) {
         installSplashScreen()
 
         super.onCreate(savedInstanceState)
 
         requestMultiplePermissions.launch(
-            arrayOf(
-                Manifest.permission.ACTIVITY_RECOGNITION,
-                Manifest.permission.BODY_SENSORS,
-                HealthPermissions.READ_STEPS,
-                Manifest.permission.BODY_SENSORS_BACKGROUND,
-                Manifest.permission.BLUETOOTH_CONNECT,
-                Manifest.permission.BLUETOOTH_ADVERTISE,
-                Manifest.permission.BLUETOOTH_SCAN
-            )
-        )
-
-        ContextCompat.startForegroundService(
-            this.applicationContext,
-            Intent(
-                this.applicationContext,
-                StepService::class.java
-            )
+            criticalPermissions.plus(permissions)
         )
 
         setTheme(android.R.style.Theme_DeviceDefault)
@@ -52,6 +45,22 @@ class MainActivity : ComponentActivity() {
         registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
             permissions.entries.forEach {
                 Log.d("MainActivity", "${it.key} = ${it.value}")
+            }
+
+            val criticalGranted = criticalPermissions.all {
+                permissions[it] ?: false
+            }
+
+            if (criticalGranted) {
+                ContextCompat.startForegroundService(
+                    this.applicationContext,
+                    Intent(
+                        this.applicationContext,
+                        StepService::class.java
+                    )
+                )
+            } else {
+                Log.e("MainActivity", "Critical permissions denied. Unable to start StepService")
             }
         }
 }
