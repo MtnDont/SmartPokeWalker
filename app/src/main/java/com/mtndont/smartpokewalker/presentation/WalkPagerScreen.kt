@@ -25,6 +25,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -153,6 +154,7 @@ fun WalkPagerApp(
     viewModel: MainScreenAppViewModel = hiltViewModel()
 ) {
     val uiState by viewModel.uiState
+    val partyList by viewModel.partyList.collectAsStateWithLifecycle()
     val partyState by viewModel.partyUiState.collectAsStateWithLifecycle()
     val totalWatts by viewModel.totalWatts.collectAsStateWithLifecycle()
 
@@ -167,7 +169,7 @@ fun WalkPagerApp(
             )
             is WalkUiState.Walking -> WalkPagerScreen(
                 totalWatts = totalWatts,
-                party = partyUiState.party
+                party = partyList ?: listOf()
             )
         }
     }
@@ -198,25 +200,16 @@ fun WalkPagerScreen(
             .focusable()
     ) { page ->
         Box {
-            val currentExperience = party[page].experience
             MonsterDetailsScreen(
-                currentSteps = currentExperience,
+                currentSteps = party[page].experience,
                 totalWatts = totalWatts,
                 sex = party[page].sex
             )
-            AnimatedVisibility(
-                visible = pagerState.currentPage == page,
-                enter = fadeIn(),
-                exit = fadeOut()
-            ) {
-                if (pagerState.currentPage in page..(page+1)) {
-                    MonsterImage(
-                        monsterResId = party[page].getFormResId(),
-                        name = party[page].name,
-                        modifier = Modifier.graphicsLayer()
-                    )
-                }
-            }
+            MonsterImage(
+                monsterResId = party[page].getFormResId(),
+                name = party[page].name,
+                modifier = Modifier.graphicsLayer()
+            )
         }
     }
 
@@ -401,7 +394,7 @@ fun WalkPagerScreenSmallPreview() {
     WalkPagerScreen(
         totalWatts = 88888888L,
         party = listOf(
-            MonsterModel(id = 1, experience = 99000L, sex = 1),
+            MonsterModel(id = 1, name = "Android", experience = 99000L, sex = 1),
             MonsterModel(id = 0),
             MonsterModel(id = 0),
             MonsterModel(id = 0),
@@ -417,7 +410,7 @@ fun WalkPagerScreenLargePreview() {
     WalkPagerScreen(
         totalWatts = 88888888L,
         party = listOf(
-            MonsterModel(id = 0, experience = 99000L),
+            MonsterModel(id = 0, name = "Android", experience = 99000L),
             MonsterModel(id = 0),
             MonsterModel(id = 0),
             MonsterModel(id = 0),
