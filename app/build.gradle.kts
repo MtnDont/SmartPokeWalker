@@ -83,6 +83,7 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.compose.material)
+    implementation(libs.compose.wear.material)
     implementation(libs.compose.foundation)
     implementation(libs.androidx.room)
     implementation(libs.androidx.compose.navigation)

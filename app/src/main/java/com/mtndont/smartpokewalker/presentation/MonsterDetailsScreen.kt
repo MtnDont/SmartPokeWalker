@@ -172,6 +172,7 @@ fun MonsterImage(
     modifier: Modifier = Modifier,
     @DrawableRes monsterResId: Int? = null,
     name: String = "",
+    content: @Composable (() -> Unit)? = null
 ) {
     val configuration = LocalConfiguration.current
     val context = LocalContext.current
@@ -227,6 +228,7 @@ fun MonsterImage(
                             Font(R.font.pixelfont)
                         )
                     )
+                    content?.invoke()
                 }
             }
         }
@@ -255,5 +257,18 @@ fun MonsterDetailsScreenLargePreview() {
     )
     MonsterImage(
         name = "Android"
+    )
+}
+
+@SuppressLint("ResourceType")
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun MonsterImageLargePreview() {
+    MonsterImage(
+        name = "Android",
+        monsterResId = R.raw.a2,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
     )
 }

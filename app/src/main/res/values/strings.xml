@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
     <string name="app_name">SmartPokeWalker</string>
     <!--
     This string is used for square devices and overridden by hello_world in
@@ -20,4 +20,6 @@
     <string name="move_to_party">Move to Party</string>
     <string name="move_to_box">Move to Box</string>
     <string name="release_monster">Release %1$s?</string>
+    <string name="a_new_form">A New Form!</string>
+    <string name="evolving" tools:ignore="TypographyEllipsis">Evolving...</string>
 </resources>
