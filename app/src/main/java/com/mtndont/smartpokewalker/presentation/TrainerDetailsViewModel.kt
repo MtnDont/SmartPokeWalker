@@ -26,12 +26,15 @@ import javax.inject.Inject
 @HiltViewModel
 class TrainerDetailsViewModel @Inject constructor(
     private val bleManager: BLEManager,
-    monsterDataRepository: MonsterDataRepository,
+    private val monsterDataRepository: MonsterDataRepository,
     private val monstersRepository: MonstersRepository
 ) : ViewModel() {
 
     val trainerName: StateFlow<String> = monsterDataRepository.trainerName
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = "Red")
+
+    val exploreSteps: StateFlow<Int> = monsterDataRepository.exploreSteps
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5_000), initialValue = 0)
 
     val mOverlayState: MutableStateFlow<AppOverlayState> = MutableStateFlow(AppOverlayState.WalkPager)
     val overlayState: StateFlow<AppOverlayState> = mOverlayState.asStateFlow()
@@ -45,6 +48,8 @@ class TrainerDetailsViewModel @Inject constructor(
             mOverlayState.value = AppOverlayState.RouteExploration
             delay(10_000)
             resetOverlay()
+
+            monsterDataRepository.setExploreSteps(0)
 
             monstersRepository.addItem(
                 ItemModel.getRandomItem()

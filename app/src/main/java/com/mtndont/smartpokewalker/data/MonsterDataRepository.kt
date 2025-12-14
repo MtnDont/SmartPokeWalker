@@ -45,7 +45,9 @@ class MonsterDataRepository @Inject constructor(
     suspend fun addExploreSteps(steps: Long) {
         context.dataStore.edit { prefs ->
             val total = prefs[EXPLORE_STEPS] ?: 0
-            prefs[EXPLORE_STEPS] = total + steps.toInt()
+            if (total <= MonsterModel.MAX_EXPLORE_STEPS) {
+                prefs[EXPLORE_STEPS] = total + steps.toInt()
+            }
         }
     }
 

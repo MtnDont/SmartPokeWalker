@@ -122,6 +122,7 @@ class StepService : Service(), SensorEventListener {
                     if (delta > 0) {
                         // STEP_COUNTER appears to be more trustworthy over the STEP_DETECTOR
                         //monsterDataRepository.addCurrentSteps(delta)
+                        monsterDataRepository.addExploreSteps(delta)
                         monstersRepository.addStepsToParty(delta)
                     }
                 }

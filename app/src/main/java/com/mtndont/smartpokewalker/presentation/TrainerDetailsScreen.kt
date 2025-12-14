@@ -30,6 +30,7 @@ import androidx.wear.compose.material3.Text
 import androidx.wear.compose.material3.curvedText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
+import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.presentation.theme.SmartPokeWalkerTheme
 import java.util.Locale.getDefault
 
@@ -42,8 +43,11 @@ fun TrainerDetailsApp(
 ) {
     val trainerName by viewModel.trainerName.collectAsStateWithLifecycle()
 
+    val exploreSteps by viewModel.exploreSteps.collectAsStateWithLifecycle()
+
     TrainerDetailsScreen(
         trainerName = trainerName,
+        exploreSteps = exploreSteps,
         testBluetoothOnClick = {
             viewModel.testBluetooth()
         },
@@ -59,6 +63,7 @@ fun TrainerDetailsApp(
 @Composable
 fun TrainerDetailsScreen(
     trainerName: String,
+    exploreSteps: Int,
     testBluetoothOnClick: () -> Unit,
     exploreOnClick: () -> Unit,
     boxOnClick: () -> Unit,
@@ -101,82 +106,110 @@ fun TrainerDetailsScreen(
                 )
                 Text(
                     text = "Refreshing Field",
-                    fontSize = 25.sp,
                     color = Color.Black,
+                    fontSize = 25.sp,
                     fontFamily = FontFamily(
                         Font(R.font.pixelfont)
                     )
                 )
                 Button(
+                    label = {
+                        Text(
+                            text = stringResource(R.string.explore_button, exploreSteps, MonsterModel.MAX_EXPLORE_STEPS),
+                            fontSize = 25.sp,
+                            color = if (exploreSteps >= MonsterModel.MAX_EXPLORE_STEPS) {
+                                colorResource(R.color.light_gray)
+                            } else {
+                                colorResource(R.color.dark_gray)
+                            },
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
                     onClick = exploreOnClick,
+                    enabled = exploreSteps >= MonsterModel.MAX_EXPLORE_STEPS,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
-                ) {
-                    Text(
-                        text = stringResource(R.string.explore),
-                        color = colorResource(R.color.background_gray)
-                    )
-                }
+                )
                 Button(
+                    label = {
+                        Text(
+                            text = stringResource(R.string.box),
+                            color = colorResource(R.color.background_gray),
+                            fontSize = 25.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
                     onClick = boxOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
-                ) {
-                    Text(
-                        text = stringResource(R.string.box),
-                        color = colorResource(R.color.background_gray)
-                    )
-                }
+                )
                 Button(
+                    label = {
+                        Text(
+                            text = stringResource(R.string.party),
+                            color = colorResource(R.color.background_gray),
+                            fontSize = 25.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
                     onClick = partyOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
-                ) {
-                    Text(
-                        text = stringResource(R.string.party),
-                        color = colorResource(R.color.background_gray)
-                    )
-                }
+                )
                 Button(
+                    label = {
+                        Text(
+                            text = stringResource(R.string.items),
+                            color = colorResource(R.color.background_gray),
+                            fontSize = 25.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
                     onClick = itemsOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
-                ) {
-                    Text(
-                        text = stringResource(R.string.items),
-                        color = colorResource(R.color.background_gray)
-                    )
-                }
+                )
                 Button(
+                    label = {
+                        Text(
+                            text = "Test Bluetooth Server",
+                            color = colorResource(R.color.background_gray)
+                        )
+                    },
                     onClick = testBluetoothOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
                     modifier = Modifier
-                ) {
-                    Text(
-                        text = "Test Bluetooth Server",
-                        color = colorResource(R.color.background_gray)
-                    )
-                }
+                )
             }
         }
     }
 }
 
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
 fun TrainerDetailsScreenPreview() {
     TrainerDetailsScreen(
         trainerName = "Red",
+        exploreSteps = 499,
         testBluetoothOnClick = {},
         exploreOnClick = {},
         boxOnClick = {},

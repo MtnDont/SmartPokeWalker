@@ -157,6 +157,7 @@ data class MonsterModel(
 
     companion object {
         const val MAX_EXPERIENCE = 99000L
+        const val MAX_EXPLORE_STEPS = 500
 
         fun getRandomInitialMonster(): MonsterModel {
 
