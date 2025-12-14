@@ -52,69 +52,107 @@ data class MonsterModel(
     /**
      * Verifies that the MonsterModel passses any of its defined EvolutionDefinitions
      */
-    fun getAvailableEvolutions(party: List<MonsterModel>, includeHidden: Boolean = false): List<Pair<EvolutionMode, MonsterDefinition>> {
+    fun getAvailableEvolutions(
+        party: List<MonsterModel>,
+        items: List<ItemModel>,
+        includeHidden: Boolean = false
+    ): List<Pair<EvolutionMode, MonsterDefinition>> {
         val availableEvolutions = mutableListOf<Pair<EvolutionMode, MonsterDefinition>>()
 
-        getDefinition().evolutions?.let { evolutionList ->
-            val test = evolutionList.forEach { (dexId, evoDetailList) ->
-                var evolutionMode = EvolutionMode.LEVEL_UP
+        getDefinition().evolutions?.forEach { (dexId, evoDetailList) ->
+            var evolutionMode = EvolutionMode.LEVEL_UP
 
-                val idPasses = evoDetailList?.any { detail ->
-                    evolutionMode = EvolutionMode.LEVEL_UP
-                    val passedSex = detail.sex?.let {
-                        it == sex
-                    } ?: true
-
-                    val passedMinLevel = detail.minLevel?.let {
-                        getLevel() >= it
-                    } ?: true
-
-                    val passedTimeOfDay = detail.timeOfDay?.let {
-                        val now = LocalTime.now()
-                        // Night -> 20:00 to 03:59
-                        // Day   -> 04:00 to 19:59
-                        val night = now.isBefore(LocalTime.of(20, 0)).not()
-                                || now.isBefore(LocalTime.of(4, 0))
-
-                        when (it) {
-                            "day" -> !night
-                            "night" -> night
-                            else -> !night
-                        }
-                    } ?: true
-
-                    val passedRequiredMember = detail.requiredMember?.let {
-                        party.any { partyMember ->
-                            partyMember.dexId == it
-                        }
-                    } ?: true
-
-                    val passedOtherAction = detail.otherAction?.let {
-                        when (it) {
-                            "trade" -> {
-                                evolutionMode = EvolutionMode.TRADE
-                                traded
-                            }
-                            "shed" -> {
-                                evolutionMode = EvolutionMode.SHED
-                                includeHidden && (party.size < PartyModel.MAX_PARTY_SIZE)
-                            }
-                            else -> true
-                        }
-                    } ?: true
-
-                    passedSex && passedMinLevel && passedTimeOfDay && passedRequiredMember && passedOtherAction
+            val idPasses = evoDetailList?.any { detail ->
+                evolutionMode = EvolutionMode.LEVEL_UP
+                val passedSex = detail.sex?.let {
+                    it == sex
                 } ?: true
 
-                if (idPasses) {
-                    availableEvolutions.add(
-                        Pair(evolutionMode, MonsterDefinitions.entries[dexId - 1])
-                    )
-                }
+                val passedMinLevel = detail.minLevel?.let {
+                    getLevel() >= it
+                } ?: true
+
+                val passedItem = detail.item?.let { requiredItem ->
+                    items.any {
+                        requiredItem == ItemDefinitions.entries[it.id].nameId
+                    }
+                } ?: true
+
+                val passedTimeOfDay = detail.timeOfDay?.let {
+                    val now = LocalTime.now()
+                    // Night -> 20:00 to 03:59
+                    // Day   -> 04:00 to 19:59
+                    val night = now.isBefore(LocalTime.of(20, 0)).not()
+                            || now.isBefore(LocalTime.of(4, 0))
+
+                    when (it) {
+                        "day" -> !night
+                        "night" -> night
+                        else -> !night
+                    }
+                } ?: true
+
+                val passedRequiredMember = detail.requiredMember?.let {
+                    party.any { partyMember ->
+                        partyMember.dexId == it
+                    }
+                } ?: true
+
+                val passedOtherAction = detail.otherAction?.let {
+                    when (it) {
+                        EvolutionMode.TRADE.label -> {
+                            evolutionMode = EvolutionMode.TRADE
+                            traded
+                        }
+                        EvolutionMode.SHED.label -> {
+                            evolutionMode = EvolutionMode.SHED
+                            includeHidden && (party.size < PartyModel.MAX_PARTY_SIZE)
+                        }
+                        else -> true
+                    }
+                } ?: true
+
+                passedSex && passedMinLevel && passedItem && passedTimeOfDay && passedRequiredMember && passedOtherAction
+            } ?: true
+
+            if (idPasses) {
+                availableEvolutions.add(
+                    Pair(evolutionMode, MonsterDefinitions.entries[dexId - 1])
+                )
             }
         }
 
         return availableEvolutions.toList()
+    }
+
+    fun evolveToDefinition(monsterDefinition: MonsterDefinition): MonsterModel {
+        val name = if (this.name == this.getDefaultName()) {
+            monsterDefinition.name
+        } else {
+            this.name
+        }
+
+        return MonsterModel(
+            id = this.id,
+            dexId = monsterDefinition.id,
+            name = name,
+            experience = this.experience,
+            sex = this.sex,
+            form = this.form,
+            traded = false
+        )
+    }
+
+    fun evolveToHiddenDefinition(monsterDefinition: MonsterDefinition): MonsterModel {
+        return MonsterModel(
+            id = 0,
+            dexId = monsterDefinition.id,
+            name = monsterDefinition.name,
+            experience = this.experience,
+            sex = if (monsterDefinition.genderless) -1 else this.sex,
+            form = this.form,
+            traded = false
+        )
     }
 
     companion object {

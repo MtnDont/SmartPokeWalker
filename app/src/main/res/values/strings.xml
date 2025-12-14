@@ -11,11 +11,15 @@
     <string name="confirm">Confirm</string>
     <string name="slot_num">Slot %1$d</string>
     <string name="box_num">Box %1$d</string>
+    <string name="evolve">Evolve</string>
+    <string name="select_evolution">Select Evolution</string>
     <string name="release">Release</string>
     <string name="box">Box</string>
     <string name="party">Party</string>
+    <string name="items">Items</string>
     <string name="explore">Explore</string>
     <string name="monsters">Monsters</string>
+    <string name="box_num_monsters">Box %1$d Monsters</string>
     <string name="actions">Actions</string>
     <string name="move_to_party">Move to Party</string>
     <string name="move_to_box">Move to Box</string>

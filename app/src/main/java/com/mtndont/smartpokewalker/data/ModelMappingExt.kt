@@ -41,3 +41,16 @@ fun PartyMonster.toExternal() = PartyMonsterModel(
 
 @JvmName("partyMonsterToExternal")
 fun List<PartyMonster>.toExternal() = map(PartyMonster::toExternal)
+
+fun Item.toExternal() = ItemModel(
+    id = id,
+    itemCount = itemCount
+)
+
+fun ItemModel.toInternal() = Item(
+    id = id,
+    itemCount = itemCount
+)
+
+@JvmName("itemListToExternal")
+fun List<Item>.toExternal() = map(Item::toExternal)

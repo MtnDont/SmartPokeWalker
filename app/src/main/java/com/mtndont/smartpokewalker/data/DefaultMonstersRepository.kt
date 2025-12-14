@@ -43,6 +43,12 @@ class DefaultMonstersRepository @Inject constructor(
         }
     }
 
+    override suspend fun upsertMonster(monster: MonsterModel): Long {
+        return dataSource.upsert(
+            monster.toLocal()
+        )
+    }
+
     override suspend fun createMonster(
         dexId: Int,
         name: String,
@@ -83,6 +89,10 @@ class DefaultMonstersRepository @Inject constructor(
         return dataSource.getUsedBoxSlots(boxId)
     }
 
+    override fun getAllBoxUsage(): Flow<List<Long>> {
+        return dataSource.getAllBoxUsage()
+    }
+
     override suspend fun setPartyFromMonsters(monsters: List<MonsterModel>) {
         val idList = monsters.map { monster ->
             monster.id
@@ -96,6 +106,26 @@ class DefaultMonstersRepository @Inject constructor(
 
     override suspend fun deleteMonster(id: Long): Int {
         return dataSource.deleteById(id)
+    }
+
+    override fun getAllItems(): Flow<List<ItemModel>> {
+        return dataSource.getAllItems().map {
+            withContext(Dispatchers.Default) {
+                it.toExternal()
+            }
+        }
+    }
+
+    override fun getItemsAvailable(): Flow<List<ItemModel>> {
+        return dataSource.getItemsAvailable().map {
+            withContext(Dispatchers.Default) {
+                it.toExternal()
+            }
+        }
+    }
+
+    override suspend fun addItem(item: ItemDefinition): Long {
+        return dataSource.addItem(item)
     }
 
     override suspend fun addStepsToParty(steps: Long) {

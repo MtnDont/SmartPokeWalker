@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +24,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -33,7 +35,9 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
+import androidx.wear.compose.foundation.curvedComposable
 import androidx.wear.compose.material.CircularProgressIndicator
+import androidx.wear.compose.material.Icon
 import androidx.wear.compose.material.Text
 import androidx.wear.compose.material.TimeText
 import androidx.wear.compose.material.TimeTextDefaults
@@ -51,7 +55,8 @@ import kotlin.math.min
 fun MonsterDetailsScreen(
     currentSteps: Long,
     totalWatts: Long,
-    sex: Int? = null
+    sex: Int? = null,
+    canEvolve: Boolean = false
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -147,6 +152,23 @@ fun MonsterDetailsScreen(
                     angularDirection = CurvedDirection.Angular.Reversed
                 )
             }
+            if (canEvolve) {
+                CurvedLayout(
+                    anchor = 90f,
+                    anchorType = AnchorType.Center,
+                    angularDirection = CurvedDirection.Angular.Reversed,
+                    modifier = Modifier.padding(22.dp)
+                ) {
+                    curvedComposable {
+                        Icon(
+                            painter = painterResource(R.drawable.arrow_shape_up_stack),
+                            contentDescription = null,
+                            tint = colorResource(R.color.black),
+                            modifier = Modifier.size(30.dp)
+                        )
+                    }
+                }
+            }
             CurvedLayout(
                 anchor = 15f,
                 anchorType = AnchorType.Start,
@@ -240,7 +262,8 @@ fun MonsterImage(
 fun MonsterDetailsScreenSmallPreview() {
     MonsterDetailsScreen(
         125L,
-        1234L
+        1234L,
+        canEvolve = true
     )
     MonsterImage(
         name = "Android"
@@ -253,7 +276,8 @@ fun MonsterDetailsScreenLargePreview() {
     MonsterDetailsScreen(
         //125L,
         99500L,
-        1234L
+        1234L,
+        canEvolve = true
     )
     MonsterImage(
         name = "Android"

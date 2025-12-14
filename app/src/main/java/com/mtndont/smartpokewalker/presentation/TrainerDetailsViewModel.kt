@@ -3,6 +3,7 @@ package com.mtndont.smartpokewalker.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.ble.BLEManager
+import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterBoxModel
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
 import com.mtndont.smartpokewalker.data.MonsterModel
@@ -15,15 +16,17 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import javax.inject.Inject
 
 @HiltViewModel
 class TrainerDetailsViewModel @Inject constructor(
     private val bleManager: BLEManager,
-    private val monsterDataRepository: MonsterDataRepository,
+    monsterDataRepository: MonsterDataRepository,
     private val monstersRepository: MonstersRepository
 ) : ViewModel() {
 
@@ -38,10 +41,15 @@ class TrainerDetailsViewModel @Inject constructor(
     }
 
     fun explore() {
-        mOverlayState.value = AppOverlayState.RouteExploration
         viewModelScope.launch {
+            mOverlayState.value = AppOverlayState.RouteExploration
             delay(10_000)
             resetOverlay()
+
+            monstersRepository.addItem(
+                ItemModel.getRandomItem()
+            )
+
             monstersRepository.createMonster(
                 MonsterModel.getRandomInitialMonster()
             )
@@ -56,12 +64,50 @@ class TrainerDetailsViewModel @Inject constructor(
         return monstersRepository.getPartyMonstersNameWithSlot()
     }
 
+    fun getPartyListInstance(): List<MonsterModel> {
+        return runBlocking {
+            monstersRepository.getPartyStream().first()
+        }
+    }
+
     fun getMonsterFromId(monsterId: Long): Flow<MonsterModel> {
         return monstersRepository.getMonster(monsterId)
     }
 
+    fun getMonsterInstanceFromId(monsterId: Long): MonsterModel {
+        return runBlocking {
+            monstersRepository.getMonster(monsterId).first()
+        }
+    }
+
     fun isMonsterExclusiveInParty(monsterId: Long): Flow<Boolean> {
         return monstersRepository.isMonsterExclusiveInParty(monsterId)
+    }
+
+    fun evolveMonsters(monster: MonsterModel) {
+        viewModelScope.launch {
+            monstersRepository.upsertMonster(monster)
+        }
+    }
+
+    fun evolveHiddenMonster(monster: MonsterModel) {
+        viewModelScope.launch {
+            monstersRepository.createMonster(monster)
+        }
+    }
+
+    fun getAllItems(): Flow<List<ItemModel>> {
+        return monstersRepository.getAllItems()
+    }
+
+    fun getItemsAvailable(): Flow<List<ItemModel>> {
+        return monstersRepository.getItemsAvailable()
+    }
+
+    fun getItemsAvailableInstance(): List<ItemModel> {
+        return runBlocking {
+            monstersRepository.getItemsAvailable().first()
+        }
     }
 
     fun getUnusedBoxSlots(boxId: Int): Flow<List<Int>> {
@@ -70,6 +116,10 @@ class TrainerDetailsViewModel @Inject constructor(
                 boxSlot !in it
             }
         }
+    }
+
+    fun getFullBoxSlots(): Flow<List<Long>> {
+        return monstersRepository.getAllBoxUsage()
     }
 
     fun moveMonsterToParty(monsterId: Long, partySlot: Int) {
@@ -107,8 +157,6 @@ class TrainerDetailsViewModel @Inject constructor(
 }
 
 sealed interface AppOverlayState {
-
     data object RouteExploration : AppOverlayState
-
     data object WalkPager : AppOverlayState
 }

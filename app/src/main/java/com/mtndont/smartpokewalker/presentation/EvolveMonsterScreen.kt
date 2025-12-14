@@ -23,7 +23,6 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3ExpressiveApi
 import androidx.compose.material3.LoadingIndicator
-import androidx.compose.material3.LoadingIndicatorDefaults
 import androidx.compose.material3.MaterialShapes
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -174,7 +173,8 @@ fun EvolveMonsterScreen(
 
         Crossfade(
             targetState = progress > 0.6f,
-            animationSpec = tween(durationMillis = 1_000)
+            animationSpec = tween(durationMillis = 1_000),
+            label = "EvolutionText"
         ) { targetState ->
             val rotatingText = if (targetState) {
                 "A New Form!"
@@ -224,10 +224,10 @@ fun EvolveMonsterScreen(
                     scaleY = indicatorScale
                 }
         )
-    }
 
-    LaunchedEffect(Unit) {
-        start = true
+        LaunchedEffect(Unit) {
+            start = true
+        }
     }
 }
 

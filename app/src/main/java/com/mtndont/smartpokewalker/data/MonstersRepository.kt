@@ -12,6 +12,8 @@ interface MonstersRepository {
 
     fun getMonstersInBox(boxId: Int): Flow<List<MonsterModel>>
 
+    suspend fun upsertMonster(monster: MonsterModel): Long
+
     suspend fun createMonster(
         dexId: Int,
         name: String,
@@ -30,11 +32,19 @@ interface MonstersRepository {
 
     fun getUsedBoxSlots(boxId: Int): Flow<List<Int>>
 
+    fun getAllBoxUsage(): Flow<List<Long>>
+
     suspend fun setPartyFromMonsters(monsters: List<MonsterModel>)
 
     suspend fun setPartyFromIDs(ids: List<Long>)
 
     suspend fun deleteMonster(id: Long): Int
+
+    fun getAllItems(): Flow<List<ItemModel>>
+
+    fun getItemsAvailable(): Flow<List<ItemModel>>
+
+    suspend fun addItem(item: ItemDefinition): Long
 
     suspend fun addStepsToParty(steps: Long)
 

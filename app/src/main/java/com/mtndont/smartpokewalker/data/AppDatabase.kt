@@ -7,7 +7,8 @@ import androidx.room.RoomDatabase
     entities = [
         Monster::class,
         Party::class,
-        MonsterBox::class
+        MonsterBox::class,
+        Item::class
     ],
     version = 1
 )

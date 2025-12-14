@@ -1,6 +1,5 @@
 package com.mtndont.smartpokewalker.presentation
 
-import android.util.Log
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -43,6 +42,8 @@ import androidx.wear.compose.navigation.rememberSwipeDismissableNavController
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.compose.layout.ColumnItemType
 import com.google.android.horologist.compose.layout.rememberResponsiveColumnPadding
+import com.mtndont.smartpokewalker.data.ItemDefinitions
+import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterBoxModel
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.PartyModel
@@ -52,6 +53,7 @@ enum class MonsterListAction(
     val labelResId: Int,
     val lastInPartyEnabled: Boolean
 ) {
+    Evolve(R.string.evolve, true),
     Release(R.string.release, false),
     MoveToParty(R.string.move_to_party, true),
     MoveToBox(R.string.move_to_box, false)
@@ -76,6 +78,9 @@ fun TrainerNav(
                 },
                 partyOnClick = {
                     navController.navigate("party")
+                },
+                itemsOnClick = {
+                    navController.navigate("items")
                 }
             )
         }
@@ -104,6 +109,16 @@ fun TrainerNav(
             )
         }
 
+        composable("items") {
+            val itemList by viewModel.getAllItems().collectAsStateWithLifecycle(
+                initialValue = listOf()
+            )
+
+            ItemsListScreen(
+                items = itemList
+            )
+        }
+
         composable("box/{boxId}") { backStackEntry ->
             val boxId = backStackEntry.arguments?.getString("boxId")?.toInt() ?: 0
 
@@ -112,6 +127,7 @@ fun TrainerNav(
             )
 
             MonsterListScreen(
+                boxId = boxId+1,
                 boxMonsters = boxList,
                 onMonsterSelected = { monsterId ->
                     navController.navigate("monster/$monsterId")
@@ -126,15 +142,33 @@ fun TrainerNav(
                 null
             )
 
+            val partyList by viewModel.getMonstersInParty().collectAsStateWithLifecycle(
+                initialValue = listOf()
+            )
+
+            val itemList by viewModel.getItemsAvailable().collectAsStateWithLifecycle(
+                initialValue = listOf()
+            )
+
             val isLastInParty by viewModel.isMonsterExclusiveInParty(monsterId).collectAsStateWithLifecycle(
                 true
             )
 
             MonsterActionScreen(
                 monster = monster,
+                canEvolve = monster?.getAvailableEvolutions(
+                    party = partyList.map { (_, monster) -> monster },
+                    items = itemList,
+                    includeHidden = false
+                )?.isNotEmpty() ?: false,
                 isLastInParty = isLastInParty,
                 actionOnHit = { action ->
                     when(action) {
+                        MonsterListAction.Evolve -> {
+                            monster?.let {
+                                navController.navigate("monster/${it.id}/evolve")
+                            }
+                        }
                         MonsterListAction.MoveToParty -> {
                             monster?.let {
                                 navController.navigate("monster/${it.id}/moveToParty")
@@ -151,6 +185,39 @@ fun TrainerNav(
                             }
                         }
                     }
+                }
+            )
+        }
+
+        composable("monster/{monsterId}/evolve") { backStackEntry ->
+            val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
+
+            val monster = viewModel.getMonsterInstanceFromId(monsterId)
+            val partyList = viewModel.getPartyListInstance()
+            val itemList = viewModel.getItemsAvailableInstance()
+
+            val evolutionDefinitions = monster.getAvailableEvolutions(
+                party = partyList,
+                items = itemList,
+                includeHidden = true
+            )
+            val hiddenMonsters = evolutionDefinitions.filter {
+                it.first.hidden
+            }.map { (_, definition) ->
+                monster.evolveToHiddenDefinition(definition)
+            }
+
+            SelectEvolveMonsterScreen(
+                monsterToEvolve = monster,
+                evolvedDefinitions = evolutionDefinitions.filter {
+                        !it.first.hidden
+                }.map { it.second },
+                confirmOnClick = { newMonster ->
+                    viewModel.evolveMonsters(newMonster)
+                    hiddenMonsters.forEach {
+                        viewModel.evolveHiddenMonster(it)
+                    }
+                    navController.popBackStack("monster/${monsterId}", true)
                 }
             )
         }
@@ -178,7 +245,12 @@ fun TrainerNav(
         composable("monster/{monsterId}/moveToBox") { backStackEntry ->
             val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
 
+            val boxesFull by viewModel.getFullBoxSlots().collectAsStateWithLifecycle(
+                initialValue = listOf()
+            )
+
             MoveToBoxScreen(
+                disabledBoxes = boxesFull,
                 boxIdOnHit = { boxId ->
                     viewModel.moveMonsterToBox(monsterId, boxId)
                     navController.popBackStack("monster/${monsterId}", true)
@@ -265,6 +337,7 @@ fun BoxListScreen(
 
 @Composable
 fun MonsterListScreen(
+    boxId: Int,
     boxMonsters: List<MonsterModel>,
     onMonsterSelected: (Long) -> Unit
 ) {
@@ -285,7 +358,7 @@ fun MonsterListScreen(
         ) {
             item {
                 Text(
-                    text = stringResource(R.string.monsters),
+                    text = stringResource(R.string.box_num_monsters, boxId),
                     color = colorResource(R.color.black),
                     fontSize = 24.sp,
                     fontFamily = FontFamily(
@@ -333,17 +406,22 @@ fun MonsterListScreen(
 @Composable
 fun MonsterActionScreen(
     monster: MonsterModel?,
+    canEvolve: Boolean,
     isLastInParty: Boolean,
     actionOnHit: (MonsterListAction) -> Unit
 ) {
     monster?.let {
-        val actions = listOf(
+        val actions = mutableListOf(
             //"Summary",
             MonsterListAction.MoveToParty,
             MonsterListAction.MoveToBox,
             MonsterListAction.Release,
             //"Rename"
         )
+
+        if (canEvolve) {
+            actions.add(0,MonsterListAction.Evolve)
+        }
 
         val listState = rememberTransformingLazyColumnState()
         val transformationSpec = rememberTransformationSpec()
@@ -506,7 +584,79 @@ fun PartyListScreen(
 }
 
 @Composable
+fun ItemsListScreen(
+    items: List<ItemModel>
+) {
+    val listState = rememberTransformingLazyColumnState()
+    val transformationSpec = rememberTransformationSpec()
+
+    ScreenScaffold(
+        scrollState = listState,
+        /*
+         * TransformingLazyColumn takes care of the horizontal and vertical
+         * padding for the list and handles scrolling.
+         * Use workaround from Horologist for padding or wait until fix lands
+         */
+        contentPadding = rememberResponsiveColumnPadding(
+            first = ColumnItemType.ListHeader,
+            last = ColumnItemType.IconButton
+        ),
+        modifier = Modifier.background(colorResource(R.color.background_gray))
+    ) { contentPadding ->
+        TransformingLazyColumn(
+            state = listState,
+            contentPadding = contentPadding
+        ) {
+            item {
+                Text(
+                    text = stringResource(R.string.items),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+            }
+            items(items) { item ->
+                Button(
+                    label = {
+                        Text(
+                            text = item.getItemName(),
+                            color = colorResource(R.color.light_gray),
+                            fontSize = 24.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
+                    secondaryLabel = {
+                        Text(
+                            text = "x${item.itemCount}",
+                            color = colorResource(R.color.light_gray),
+                            fontSize = 24.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
+                        )
+                    },
+                    onClick = {},
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(R.color.black)
+                    ),
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .transformedHeight(this, transformationSpec),
+                    transformation = SurfaceTransformation(transformationSpec)
+                )
+            }
+        }
+    }
+}
+
+@Composable
 fun MoveToBoxScreen(
+    disabledBoxes: List<Long>,
     boxIdOnHit: (Int) -> Unit
 ) {
     val listState = rememberTransformingLazyColumnState()
@@ -555,6 +705,7 @@ fun MoveToBoxScreen(
                     onClick = {
                         boxIdOnHit.invoke(idx)
                     },
+                    enabled = idx.toLong() !in disabledBoxes,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(R.color.black)
                     ),
@@ -646,6 +797,7 @@ fun BoxListScreenLargePreview() {
 @Composable
 fun MonsterListScreenLargePreview() {
     MonsterListScreen(
+        boxId = 1,
         boxMonsters = listOf(
             MonsterModel(id = 0, dexId = 1, name = "Android"),
             MonsterModel(id = 0, dexId = 1, name = "Android", experience = 2000L),
@@ -660,6 +812,7 @@ fun MonsterListScreenLargePreview() {
 fun MonsterActionScreenLargePreview() {
     MonsterActionScreen(
         monster = MonsterModel(id = 0, dexId = 1, name = "Android"),
+        canEvolve = true,
         isLastInParty = false,
         actionOnHit = {}
     )
@@ -681,8 +834,22 @@ fun PartyListScreenLargePreview() {
 
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
+fun ItemsListScreenLargePreview() {
+    ItemsListScreen(
+        items = listOf(
+            ItemModel(id = ItemDefinitions.entries[0].id, itemCount = 1),
+            ItemModel(id = ItemDefinitions.entries[1].id, itemCount = 2)
+        )
+    )
+}
+
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
 fun MoveToBoxScreenLargePreview() {
     MoveToBoxScreen(
+        disabledBoxes = listOf(
+            1
+        ),
         boxIdOnHit = {}
     )
 }

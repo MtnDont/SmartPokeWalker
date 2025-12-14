@@ -4,6 +4,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
 import com.mtndont.smartpokewalker.data.MonsterDefinitions
 import com.mtndont.smartpokewalker.data.MonsterModel
@@ -29,6 +30,9 @@ class MainScreenAppViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), 0L)
 
     val partyList: StateFlow<List<MonsterModel>?> = monstersRepository.getPartyStream()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), null)
+
+    val itemList: StateFlow<List<ItemModel>?> = monstersRepository.getItemsAvailable()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(2_000), null)
 
     val partyUiState: StateFlow<WalkUiState> = partyList

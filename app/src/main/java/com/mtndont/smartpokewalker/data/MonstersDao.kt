@@ -62,12 +62,19 @@ interface MonstersDao {
         val partyCount = countPartyMembers()
         val monsterId = upsert(monster)
         if (partyCount < PartyModel.MAX_PARTY_SIZE) {
-            insertPartyMember(
-                Party(
-                    slot = partyCount + 1,
-                    monsterId = monsterId
+            val usedSlots = getUsedPartySlots()
+            val nextSlot = (1..PartyModel.MAX_PARTY_SIZE).firstOrNull {
+                it !in usedSlots
+            }
+
+            nextSlot?.let {
+                insertPartyMember(
+                    Party(
+                        slot = it,
+                        monsterId = monsterId
+                    )
                 )
-            )
+            }
         } else {
             val boxUsage = getBoxUsage()
 
@@ -210,11 +217,22 @@ interface MonstersDao {
     @Query("SELECT * FROM party WHERE monsterId = :monsterId")
     suspend fun getPartyByMonsterId(monsterId: Long): Party?
 
+    @Query("SELECT DISTINCT slot FROM party")
+    suspend fun getUsedPartySlots(): List<Int>
+
     @Query("SELECT * FROM box WHERE monsterId = :monsterId")
     suspend fun getMonsterBoxByMonsterId(monsterId: Long): MonsterBox?
 
     @Query("SELECT boxId, COUNT(*) AS usedSlots FROM box GROUP BY boxId ORDER BY boxId ASC")
     suspend fun getBoxUsage(): List<BoxUsage>
+
+    @Query("""
+        SELECT boxId
+        FROM box
+        GROUP BY boxId
+        HAVING COUNT(boxSlot) >= ${MonsterBoxModel.MAX_BOX_SIZE}
+    """)
+    fun getAllBoxUsage(): Flow<List<Long>>
 
     @Query("SELECT MAX(boxSlot) FROM box WHERE boxId = :boxId")
     suspend fun getMaxBoxSlot(boxId: Int): Int?
@@ -227,6 +245,30 @@ interface MonstersDao {
 
     @Query("SELECT COUNT(*) FROM party")
     suspend fun countPartyMembers(): Int
+
+    @Query("SELECT * FROM items WHERE id = :id")
+    suspend fun getItemById(id: Int): Item?
+
+    @Upsert
+    suspend fun upsertItem(item: Item): Long
+
+    @Query("SELECT DISTINCT id, itemCount FROM items")
+    fun getAllItems(): Flow<List<Item>>
+
+    @Query("SELECT * FROM items WHERE itemCount > 0")
+    fun getItemsAvailable(): Flow<List<Item>>
+
+    @Transaction
+    suspend fun addItem(item: ItemDefinition): Long {
+        val dbItem = getItemById(item.id)
+
+        return upsertItem(
+            Item(
+                id = item.id,
+                itemCount = (dbItem?.itemCount ?: 0) + 1
+            )
+        )
+    }
 
     @Query("""
         UPDATE monsters

@@ -37,7 +37,8 @@ import java.util.Locale.getDefault
 fun TrainerDetailsApp(
     viewModel: TrainerDetailsViewModel = hiltViewModel(),
     boxOnClick: () -> Unit,
-    partyOnClick: () -> Unit
+    partyOnClick: () -> Unit,
+    itemsOnClick: () -> Unit
 ) {
     val trainerName by viewModel.trainerName.collectAsStateWithLifecycle()
 
@@ -50,7 +51,8 @@ fun TrainerDetailsApp(
             viewModel.explore()
         },
         boxOnClick = boxOnClick,
-        partyOnClick = partyOnClick
+        partyOnClick = partyOnClick,
+        itemsOnClick = itemsOnClick
     )
 }
 
@@ -60,7 +62,8 @@ fun TrainerDetailsScreen(
     testBluetoothOnClick: () -> Unit,
     exploreOnClick: () -> Unit,
     boxOnClick: () -> Unit,
-    partyOnClick: () -> Unit
+    partyOnClick: () -> Unit,
+    itemsOnClick: () -> Unit
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -141,6 +144,18 @@ fun TrainerDetailsScreen(
                     )
                 }
                 Button(
+                    onClick = itemsOnClick,
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Color.Black
+                    ),
+                    modifier = Modifier
+                ) {
+                    Text(
+                        text = stringResource(R.string.items),
+                        color = colorResource(R.color.background_gray)
+                    )
+                }
+                Button(
                     onClick = testBluetoothOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
@@ -165,6 +180,7 @@ fun TrainerDetailsScreenPreview() {
         testBluetoothOnClick = {},
         exploreOnClick = {},
         boxOnClick = {},
-        partyOnClick = {}
+        partyOnClick = {},
+        itemsOnClick = {}
     )
 }
