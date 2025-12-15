@@ -46,6 +46,8 @@ interface MonstersRepository {
 
     suspend fun addItem(item: ItemDefinition): Long
 
+    suspend fun subtractItem(itemId: Long)
+
     suspend fun addStepsToParty(steps: Long)
 
     fun isMonsterExclusiveInParty(monsterId: Long): Flow<Boolean>

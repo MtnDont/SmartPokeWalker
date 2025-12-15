@@ -270,6 +270,9 @@ interface MonstersDao {
         )
     }
 
+    @Query("UPDATE items SET itemCount = itemCount - 1 WHERE id = :itemId")
+    suspend fun subtractItem(itemId: Long)
+
     @Query("""
         UPDATE monsters
         SET experience = experience + :steps

@@ -115,7 +115,9 @@ fun TrainerNav(
             )
 
             ItemsListScreen(
-                items = itemList
+                items = itemList.sortedBy { itemModel ->
+                    itemModel.getItemName()
+                }
             )
         }
 
@@ -201,21 +203,30 @@ fun TrainerNav(
                 items = itemList,
                 includeHidden = true
             )
-            val hiddenMonsters = evolutionDefinitions.filter {
-                it.first.hidden
-            }.map { (_, definition) ->
-                monster.evolveToHiddenDefinition(definition)
+
+            val hiddenMonsters = evolutionDefinitions.filter { (_, evoDefinition) ->
+                evoDefinition?.isHidden() ?: false
             }
 
             SelectEvolveMonsterScreen(
                 monsterToEvolve = monster,
-                evolvedDefinitions = evolutionDefinitions.filter {
-                        !it.first.hidden
-                }.map { it.second },
-                confirmOnClick = { newMonster ->
-                    viewModel.evolveMonsters(newMonster)
-                    hiddenMonsters.forEach {
-                        viewModel.evolveHiddenMonster(it)
+                evolvedDefinitions = evolutionDefinitions.filter { (_, evoDefinition) ->
+                        !(evoDefinition?.isHidden() ?: false)
+                }.map { (monsterDefinition, _) ->
+                    monsterDefinition
+                },
+                confirmOnClick = { monsterDef ->
+                    viewModel.evolveMonsterFromDefinition(
+                        monster = monster,
+                        monsterDef = monsterDef,
+                        evoDef = evolutionDefinitions[monsterDef]
+                    )
+                    hiddenMonsters.forEach { (monsterDef, evoDef) ->
+                        viewModel.evolveHiddenMonsterFromDefinition(
+                            monster = monster,
+                            monsterDef = monsterDef,
+                            evoDef = evoDef
+                        )
                     }
                     navController.popBackStack("monster/${monsterId}", true)
                 }

@@ -128,6 +128,10 @@ class DefaultMonstersRepository @Inject constructor(
         return dataSource.addItem(item)
     }
 
+    override suspend fun subtractItem(itemId: Long) {
+        return dataSource.subtractItem(itemId)
+    }
+
     override suspend fun addStepsToParty(steps: Long) {
         dataSource.addStepsToParty(steps)
     }

@@ -3,9 +3,12 @@ package com.mtndont.smartpokewalker.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.ble.BLEManager
+import com.mtndont.smartpokewalker.data.EvolutionDefinition
+import com.mtndont.smartpokewalker.data.ItemDefinitions
 import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterBoxModel
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
+import com.mtndont.smartpokewalker.data.MonsterDefinition
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import com.mtndont.smartpokewalker.data.PartyMonsterModel
@@ -89,15 +92,33 @@ class TrainerDetailsViewModel @Inject constructor(
         return monstersRepository.isMonsterExclusiveInParty(monsterId)
     }
 
-    fun evolveMonsters(monster: MonsterModel) {
+    fun evolveMonsterFromDefinition(monster: MonsterModel, monsterDef: MonsterDefinition, evoDef: EvolutionDefinition?) {
+        val newMonster = monster.evolveToDefinition(monsterDef)
+        val usedItem = evoDef?.item?.let {
+            ItemDefinitions.entries.firstOrNull { item ->
+                item.nameId == it
+            }
+        }
         viewModelScope.launch {
-            monstersRepository.upsertMonster(monster)
+            usedItem?.let {
+                monstersRepository.subtractItem(it.id.toLong())
+            }
+            monstersRepository.upsertMonster(newMonster)
         }
     }
 
-    fun evolveHiddenMonster(monster: MonsterModel) {
+    fun evolveHiddenMonsterFromDefinition(monster: MonsterModel, monsterDef: MonsterDefinition, evoDef: EvolutionDefinition?) {
+        val newMonster = monster.evolveToHiddenDefinition(monsterDef)
+        val usedItem = evoDef?.item?.let {
+            ItemDefinitions.entries.firstOrNull { item ->
+                item.nameId == it
+            }
+        }
         viewModelScope.launch {
-            monstersRepository.createMonster(monster)
+            usedItem?.let {
+                monstersRepository.subtractItem(it.id.toLong())
+            }
+            monstersRepository.createMonster(newMonster)
         }
     }
 

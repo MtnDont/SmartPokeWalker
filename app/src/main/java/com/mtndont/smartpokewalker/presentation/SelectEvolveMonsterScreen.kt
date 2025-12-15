@@ -69,7 +69,7 @@ import kotlinx.coroutines.launch
 fun SelectEvolveMonsterScreen(
     monsterToEvolve: MonsterModel,
     evolvedDefinitions: List<MonsterDefinition>,
-    confirmOnClick: (MonsterModel) -> Unit
+    confirmOnClick: (MonsterDefinition) -> Unit
 ) {
     val configuration = LocalConfiguration.current
 
@@ -96,7 +96,9 @@ fun SelectEvolveMonsterScreen(
                 monster = monsterToEvolve,
                 evolvedMonster = evolvedMonsters[pagerState.currentPage],
                 onClick = {
-                    confirmOnClick.invoke(evolvedMonsters[pagerState.currentPage])
+                    confirmOnClick.invoke(
+                        evolvedDefinitions[pagerState.currentPage]
+                    )
                 }
             )
         }
@@ -224,9 +226,6 @@ fun SelectEvolveMonsterScreen(
                 EdgeButton(
                     onClick = {
                         confirmClicked = true
-                        /*confirmOnClick.invoke(
-                    evolvedMonsters[pagerState.currentPage]
-                )*/
                     },
                     colors = ButtonDefaults.buttonColors(
                         containerColor = colorResource(R.color.dark_gray)
