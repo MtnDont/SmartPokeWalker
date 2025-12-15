@@ -115,7 +115,11 @@ fun TrainerDetailsScreen(
                 Button(
                     label = {
                         Text(
-                            text = stringResource(R.string.explore_button, exploreSteps, MonsterModel.MAX_EXPLORE_STEPS),
+                            text = if (exploreSteps < MonsterModel.MAX_EXPLORE_STEPS) {
+                                stringResource(R.string.explore_button, exploreSteps, MonsterModel.MAX_EXPLORE_STEPS)
+                            } else {
+                                stringResource(R.string.explore)
+                            },
                             fontSize = 25.sp,
                             color = if (exploreSteps >= MonsterModel.MAX_EXPLORE_STEPS) {
                                 colorResource(R.color.light_gray)
