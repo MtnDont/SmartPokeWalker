@@ -19,6 +19,8 @@
     <string name="items">Items</string>
     <string name="explore_button">Explore\n(%1$dw/%2$dw)</string>
     <string name="explore">Explore</string>
+    <string name="explore_refreshed">Exploration Refreshed</string>
+    <string name="explore_flavor_text">You\'ve wandered into a new route!</string>
     <string name="monsters">Monsters</string>
     <string name="box_num_monsters">Box %1$d Monsters</string>
     <string name="actions">Actions</string>

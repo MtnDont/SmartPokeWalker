@@ -22,7 +22,8 @@ class MainActivity : ComponentActivity() {
     private val permissions = arrayOf(
         Manifest.permission.BLUETOOTH_CONNECT,
         Manifest.permission.BLUETOOTH_ADVERTISE,
-        Manifest.permission.BLUETOOTH_SCAN
+        Manifest.permission.BLUETOOTH_SCAN,
+        Manifest.permission.POST_NOTIFICATIONS
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {
