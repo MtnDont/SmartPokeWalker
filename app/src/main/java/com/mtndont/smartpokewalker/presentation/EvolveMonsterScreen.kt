@@ -35,7 +35,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.graphicsLayer
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -51,6 +53,7 @@ import androidx.wear.compose.material3.curvedText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.data.MonsterModel
+import com.mtndont.smartpokewalker.util.VibrationUtil
 
 @SuppressLint("ResourceType")
 @OptIn(ExperimentalMaterial3ExpressiveApi::class)
@@ -60,6 +63,7 @@ fun EvolveMonsterScreen(
     evolvedMonster: MonsterModel,
     onClick: () -> Unit
 ) {
+    val context = LocalContext.current
     var start by remember { mutableStateOf(false) }
 
     val progress by animateFloatAsState(
@@ -177,9 +181,9 @@ fun EvolveMonsterScreen(
             label = "EvolutionText"
         ) { targetState ->
             val rotatingText = if (targetState) {
-                "A New Form!"
+                stringResource(R.string.a_new_form)
             } else {
-                "Evolving..."
+                stringResource(R.string.evolving)
             }
 
             val curvedTextColor = colorResource(R.color.black)
@@ -227,6 +231,7 @@ fun EvolveMonsterScreen(
 
         LaunchedEffect(Unit) {
             start = true
+            VibrationUtil.vibrationEffectForEvolveScreen(context)
         }
     }
 }
