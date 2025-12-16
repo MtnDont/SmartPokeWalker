@@ -24,6 +24,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.FilterQuality
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.graphics.painter.BitmapPainter
@@ -32,19 +33,20 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.TimeTextDefaults
+import androidx.wear.compose.foundation.CurvedTextStyle
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.TimeTextDefaults
 import androidx.wear.compose.material3.Button
 import androidx.wear.compose.material3.ButtonDefaults
 import androidx.wear.compose.material3.EdgeButton
+import androidx.wear.compose.material3.TimeText
+import androidx.wear.compose.material3.timeTextCurvedText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.mtndont.smartpokewalker.R
@@ -136,16 +138,23 @@ fun StarterMonsterScreen(
         }
     }
 
-    TimeText(
-        timeTextStyle = TimeTextDefaults.timeTextStyle(
-            color = colorResource(R.color.black),
-            fontSize = 24.sp
-        ) + TextStyle(
-            fontFamily = FontFamily(
-                Font(R.font.pixelfont)
-            )
+    val timetextStyle = TimeTextDefaults.timeTextStyle(
+        color = colorResource(R.color.black),
+        fontSize = 24.sp
+    ) + CurvedTextStyle(
+        fontFamily = FontFamily(
+            Font(R.font.pixelfont)
         )
     )
+
+    TimeText(
+        backgroundColor = Color.Transparent
+    ) { time ->
+        timeTextCurvedText(
+            time,
+            style = timetextStyle
+        )
+    }
 
     Box(
         modifier = Modifier.fillMaxSize()

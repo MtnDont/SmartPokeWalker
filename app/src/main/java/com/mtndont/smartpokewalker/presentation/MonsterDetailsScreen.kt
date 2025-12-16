@@ -25,7 +25,6 @@ import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
@@ -35,13 +34,15 @@ import androidx.compose.ui.unit.sp
 import androidx.wear.compose.foundation.AnchorType
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
+import androidx.wear.compose.foundation.CurvedTextStyle
 import androidx.wear.compose.foundation.curvedComposable
 import androidx.wear.compose.material.CircularProgressIndicator
-import androidx.wear.compose.material.Icon
-import androidx.wear.compose.material.Text
-import androidx.wear.compose.material.TimeText
-import androidx.wear.compose.material.TimeTextDefaults
-import androidx.wear.compose.material.curvedText
+import androidx.wear.compose.material3.Icon
+import androidx.wear.compose.material3.Text
+import androidx.wear.compose.material3.TimeText
+import androidx.wear.compose.material3.TimeTextDefaults
+import androidx.wear.compose.material3.curvedText
+import androidx.wear.compose.material3.timeTextCurvedText
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.accompanist.drawablepainter.rememberDrawablePainter
 import com.mtndont.smartpokewalker.R
@@ -71,16 +72,23 @@ fun MonsterDetailsScreen(
                 0
             }
 
-            TimeText(
-                timeTextStyle = TimeTextDefaults.timeTextStyle(
-                    color = Color.Black,
-                    fontSize = 24.sp
-                ) + TextStyle(
-                    fontFamily = FontFamily(
-                        Font(R.font.pixelfont)
-                    )
+            val timetextStyle = TimeTextDefaults.timeTextStyle(
+                color = colorResource(R.color.black),
+                fontSize = 24.sp
+            ) + CurvedTextStyle(
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
                 )
             )
+
+            TimeText(
+                backgroundColor = Color.Transparent
+            ) { time ->
+                timeTextCurvedText(
+                    time,
+                    style = timetextStyle
+                )
+            }
 
             CircularProgressIndicator(
                 trackColor = Color.Black,

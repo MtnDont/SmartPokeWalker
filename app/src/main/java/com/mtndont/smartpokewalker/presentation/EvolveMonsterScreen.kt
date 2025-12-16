@@ -159,7 +159,7 @@ fun EvolveMonsterScreen(
                     enter = fadeIn()
                 ) {
                     Text(
-                        text = "Tap anywhere to continue",
+                        text = stringResource(R.string.tap_anywhere),
                         textAlign = TextAlign.Center,
                         fontSize = 18.sp,
                         color = Color.Black,

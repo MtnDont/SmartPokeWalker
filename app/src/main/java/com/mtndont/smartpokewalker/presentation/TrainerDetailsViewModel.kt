@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.ble.BLEManager
 import com.mtndont.smartpokewalker.data.EvolutionDefinition
+import com.mtndont.smartpokewalker.data.ItemDefinition
 import com.mtndont.smartpokewalker.data.ItemDefinitions
 import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterBoxModel
@@ -13,7 +14,6 @@ import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import com.mtndont.smartpokewalker.data.PartyMonsterModel
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -47,20 +47,18 @@ class TrainerDetailsViewModel @Inject constructor(
     }
 
     fun explore() {
-        viewModelScope.launch {
-            mOverlayState.value = AppOverlayState.RouteExploration
-            delay(10_000)
-            resetOverlay()
+        mOverlayState.value = AppOverlayState.RouteExploration
+    }
 
+    fun finishExploration(monster: MonsterModel, item: ItemDefinition) {
+        viewModelScope.launch {
             monsterDataRepository.setExploreSteps(0)
 
-            monstersRepository.addItem(
-                ItemModel.getRandomItem()
-            )
+            monstersRepository.addItem(item)
 
-            monstersRepository.createMonster(
-                MonsterModel.getRandomInitialMonster()
-            )
+            monstersRepository.createMonster(monster)
+
+            resetOverlay()
         }
     }
 

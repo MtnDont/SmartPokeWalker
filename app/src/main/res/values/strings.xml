@@ -29,4 +29,7 @@
     <string name="release_monster">Release %1$s?</string>
     <string name="a_new_form">A New Form!</string>
     <string name="evolving" tools:ignore="TypographyEllipsis">Evolving...</string>
+    <string name="tap_anywhere">Tap anywhere to continue</string>
+    <string name="name_and_item">%1$s\n%2$s</string>
+    <string name="wild_name_appeared">A wild %1$s appeared!</string>
 </resources>

@@ -70,7 +70,12 @@ fun TrainerViewNavigatorApp(
             label = "WalkPagerOverlay"
         ) { targetState ->
             when (targetState) {
-                is AppOverlayState.RouteExploration -> RouteExplorationScreen(durationMillis = 10_000)
+                is AppOverlayState.RouteExploration -> RouteExplorationScreen(
+                    durationMillis = 10_000,
+                    onClick = { monster, item ->
+                        viewModel.finishExploration(monster, item)
+                    }
+                )
                 is AppOverlayState.WalkPager -> {
                     val pagerState = rememberPagerState(pageCount = {
                         2
