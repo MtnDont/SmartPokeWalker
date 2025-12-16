@@ -26,6 +26,7 @@ object VibrationUtil {
         )
 
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.S) {
+            @Suppress("DEPRECATION")
             val vibrator = context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
             vibrator.vibrate(
                 VibrationEffect.createWaveform(
