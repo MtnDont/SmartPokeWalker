@@ -9,7 +9,6 @@ import android.hardware.SensorManager
 import android.os.IBinder
 import android.util.Log
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
-import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import com.mtndont.smartpokewalker.util.NotificationUtil
 import dagger.hilt.android.AndroidEntryPoint
@@ -17,7 +16,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -108,11 +106,9 @@ class StepService : Service(), SensorEventListener {
                     if (delta > 0) {
                         // STEP_COUNTER appears to be more trustworthy over the STEP_DETECTOR
                         //monsterDataRepository.addCurrentSteps(delta)
-                        val exploreSteps = monsterDataRepository.exploreSteps.first()
-                        monsterDataRepository.addExploreSteps(delta)
+                        val shouldNotify = monsterDataRepository.addExploreSteps(delta)
 
-                        if (exploreSteps < MonsterModel.MAX_EXPLORE_STEPS && (exploreSteps+delta) >= MonsterModel.MAX_EXPLORE_STEPS) {
-                            //showExploreNotification()
+                        if (shouldNotify) {
                             notificationUtil.showExploreNotification()
                         }
 

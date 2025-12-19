@@ -42,13 +42,20 @@ class MonsterDataRepository @Inject constructor(
         }
     }
 
-    suspend fun addExploreSteps(steps: Long) {
+    suspend fun addExploreSteps(steps: Long): Boolean {
+        var notify = false
         context.dataStore.edit { prefs ->
             val total = prefs[EXPLORE_STEPS] ?: 0
-            if (total <= MonsterModel.MAX_EXPLORE_STEPS) {
-                prefs[EXPLORE_STEPS] = total + steps.toInt()
+            if (total < MonsterModel.MAX_EXPLORE_STEPS) {
+                val newTotal = total + steps.toInt()
+                prefs[EXPLORE_STEPS] = newTotal
+
+                if (newTotal >= MonsterModel.MAX_EXPLORE_STEPS) {
+                    notify = true
+                }
             }
         }
+        return notify
     }
 
     suspend fun addWatts(watts: Long) {
