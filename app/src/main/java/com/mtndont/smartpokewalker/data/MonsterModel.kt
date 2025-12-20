@@ -153,7 +153,7 @@ data class MonsterModel(
             dexId = monsterDefinition.id,
             name = monsterDefinition.name,
             experience = this.experience,
-            sex = if (monsterDefinition.genderless) -1 else this.sex,
+            sex = if (monsterDefinition.genderRate == -1) -1 else this.sex,
             form = this.form,
             traded = false
         )
@@ -169,13 +169,18 @@ data class MonsterModel(
                 it.firstInEvolutionChain
             }.random()
 
-            val sex = if (randomDefinition.genderless) {
+            val sex = if (randomDefinition.genderRate == -1) {
                 -1
             } else {
-                Random.nextInt(1, 3)
+                val femaleChanceInEighths = Random.nextInt(1, 9)
+                if (femaleChanceInEighths < randomDefinition.genderRate) {
+                    1
+                } else {
+                    2
+                }
             }
 
-            val form = if (!randomDefinition.hasGenderDifferences || randomDefinition.genderless) {
+            val form = if (!randomDefinition.hasGenderDifferences || sex == -1) {
                 Random.nextInt(randomDefinition.formResIds.size)
             } else {
                 0
@@ -197,13 +202,18 @@ data class MonsterModel(
                 MonsterDefinitions.entries.random()
             }
 
-            val sex = if (definition.genderless) {
+            val sex = if (definition.genderRate == -1) {
                 -1
             } else {
-                Random.nextInt(1, 3)
+                val femaleChanceInEighths = Random.nextInt(1, 9)
+                if (femaleChanceInEighths < definition.genderRate) {
+                    1
+                } else {
+                    2
+                }
             }
 
-            val form = if (!definition.hasGenderDifferences || definition.genderless) {
+            val form = if (!definition.hasGenderDifferences || sex == -1) {
                 Random.nextInt(definition.formResIds.size)
             } else {
                 0
