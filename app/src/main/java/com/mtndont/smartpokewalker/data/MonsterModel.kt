@@ -1,6 +1,8 @@
 package com.mtndont.smartpokewalker.data
 
 import com.mtndont.smartpokewalker.R
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.time.LocalTime
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -159,6 +161,34 @@ data class MonsterModel(
         )
     }
 
+    fun toBytes(): ByteArray {
+        val buf = ByteBuffer.allocate(64).order(ByteOrder.LITTLE_ENDIAN)
+
+        /*
+            id: Long            *ignore
+            dexId: Int          4 bytes
+            name: String        12 bytes
+            experience: Long    8 bytes
+            sex: Int            1 byte
+            form: Int           4 bytes
+            traded: Boolean     1 byte
+                                30 bytes
+         */
+        // Version
+        buf.putShort(0x00.toShort())
+        buf.putInt(dexId)
+        buf.put(
+            name.toByteArray(Charsets.UTF_8).copyOf(12)
+        )
+        buf.putLong(experience)
+        buf.put(sex.toByte())
+        buf.putInt(form)
+        buf.put(
+            (if (traded) 1 else 0).toByte()
+        )
+        return buf.array()
+    }
+
     companion object {
         const val MAX_EXPERIENCE = 99000L
         const val MAX_EXPLORE_STEPS = 500
@@ -225,6 +255,40 @@ data class MonsterModel(
                 name = definition.name,
                 sex = sex,
                 form = form
+            )
+        }
+
+        fun fromBytes(bytes: ByteArray): MonsterModel? {
+            // Invalid Byte Size
+            if (bytes.size != 64) {
+                return null
+            }
+
+            val buf = ByteBuffer.wrap(bytes).order(ByteOrder.LITTLE_ENDIAN)
+
+            val version = buf.getShort()
+            // Version mismatch
+            if (version != 0.toShort()) {
+                return null
+            }
+
+            val dexId = buf.getInt()
+            val name = ByteArray(12).also {
+                buf.get(it)
+            }.toString(Charsets.UTF_8).trimEnd('\u0000')
+            val experience = buf.getLong()
+            val sex = buf.get()
+            val form = buf.getInt()
+            val traded = buf.get() > 0x00
+
+            return MonsterModel(
+                id = 0,
+                dexId = dexId,
+                name = name,
+                experience = experience,
+                sex = sex.toInt(),
+                form = form,
+                traded = traded
             )
         }
     }
