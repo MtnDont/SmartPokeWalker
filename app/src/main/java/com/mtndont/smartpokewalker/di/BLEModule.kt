@@ -3,6 +3,8 @@ package com.mtndont.smartpokewalker.di
 import android.bluetooth.BluetoothManager
 import android.content.Context
 import com.mtndont.smartpokewalker.ble.BLEManager
+import com.mtndont.smartpokewalker.ble.BLETradeClient
+import com.mtndont.smartpokewalker.ble.BLETradeServer
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -26,4 +28,18 @@ object BleModule {
         @ApplicationContext context: Context,
         bluetoothManager: BluetoothManager
     ): BLEManager = BLEManager(context, bluetoothManager)
+
+    @Provides
+    @Singleton
+    fun provideBLETradeClient(
+        @ApplicationContext context: Context,
+        bluetoothManager: BluetoothManager
+    ): BLETradeClient = BLETradeClient(context, bluetoothManager)
+
+    @Provides
+    @Singleton
+    fun provideBLETradeServer(
+        @ApplicationContext context: Context,
+        bluetoothManager: BluetoothManager
+    ): BLETradeServer = BLETradeServer(context, bluetoothManager)
 }

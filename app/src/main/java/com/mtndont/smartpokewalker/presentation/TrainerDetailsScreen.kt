@@ -39,7 +39,8 @@ fun TrainerDetailsApp(
     viewModel: TrainerDetailsViewModel = hiltViewModel(),
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
-    itemsOnClick: () -> Unit
+    itemsOnClick: () -> Unit,
+    tradeOnClick: () -> Unit
 ) {
     val trainerName by viewModel.trainerName.collectAsStateWithLifecycle()
 
@@ -56,7 +57,8 @@ fun TrainerDetailsApp(
         },
         boxOnClick = boxOnClick,
         partyOnClick = partyOnClick,
-        itemsOnClick = itemsOnClick
+        itemsOnClick = itemsOnClick,
+        tradeOnClick = tradeOnClick
     )
 }
 
@@ -68,7 +70,8 @@ fun TrainerDetailsScreen(
     exploreOnClick: () -> Unit,
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
-    itemsOnClick: () -> Unit
+    itemsOnClick: () -> Unit,
+    tradeOnClick: () -> Unit
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -196,7 +199,7 @@ fun TrainerDetailsScreen(
                             color = colorResource(R.color.background_gray)
                         )
                     },
-                    onClick = testBluetoothOnClick,
+                    onClick = tradeOnClick,//testBluetoothOnClick,
                     colors = ButtonDefaults.buttonColors(
                         containerColor = Color.Black
                     ),
@@ -218,6 +221,7 @@ fun TrainerDetailsScreenPreview() {
         exploreOnClick = {},
         boxOnClick = {},
         partyOnClick = {},
-        itemsOnClick = {}
+        itemsOnClick = {},
+        tradeOnClick = {}
     )
 }

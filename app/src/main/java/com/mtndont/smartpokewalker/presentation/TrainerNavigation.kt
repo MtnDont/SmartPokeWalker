@@ -81,6 +81,9 @@ fun TrainerNav(
                 },
                 itemsOnClick = {
                     navController.navigate("items")
+                },
+                tradeOnClick = {
+                    navController.navigate("trade")
                 }
             )
         }
@@ -283,6 +286,10 @@ fun TrainerNav(
                     navController.popBackStack("monster/${monsterId}", true)
                 }
             )
+        }
+
+        composable("trade") {
+            TradeScreen()
         }
     }
 }
