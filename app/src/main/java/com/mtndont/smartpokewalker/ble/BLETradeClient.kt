@@ -33,23 +33,27 @@ class BLETradeClient @Inject constructor(
     private lateinit var myMonster: MonsterModel
 
     private var scanCallback: ScanCallback? = null
+    private val discoveredHosts = mutableMapOf<String, DiscoveredHost>()
 
+    private var onHostsUpdated: ((List<DiscoveredHost>) -> Unit)? = null
     private var onOfferReceived: ((MonsterModel) -> Unit)? = null
     private var onTradeComplete: ((MonsterModel) -> Unit)? = null
     private var onTradeCancelled: (() -> Unit)? = null
 
     fun setCallbacks(
+        onHostsUpdated: (List<DiscoveredHost>) -> Unit,
         onOfferReceived: (MonsterModel) -> Unit,
         onTradeComplete: (MonsterModel) -> Unit,
         onTradeCancelled: () -> Unit
     ) {
+        this.onHostsUpdated = onHostsUpdated
         this.onOfferReceived = onOfferReceived
         this.onTradeComplete = onTradeComplete
         this.onTradeCancelled = onTradeCancelled
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
-    fun scanAndConnect(myMonster: MonsterModel) {
+    fun scanHosts(myMonster: MonsterModel) {
         this.myMonster = myMonster
         confirmation.localState = TradeConfirmState.NONE
         confirmation.remoteState = TradeConfirmState.NONE
@@ -70,8 +74,15 @@ class BLETradeClient @Inject constructor(
                 Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN
             ])
             override fun onScanResult(callbackType: Int, result: ScanResult) {
-                stopScan()
-                connect(result.device)
+                //stopScan()
+                //connect(result.device)
+                val code = parseTradeCode(result) ?: return
+                val host = DiscoveredHost(result.device, code, result.rssi)
+                discoveredHosts[result.device.address] = host
+                // Sort closest first so the two people trading are likely at the top
+                onHostsUpdated?.invoke(
+                    discoveredHosts.values.sortedByDescending { it.rssi }
+                )
             }
 
             override fun onScanFailed(errorCode: Int) {
@@ -80,6 +91,20 @@ class BLETradeClient @Inject constructor(
         }
 
         scanner.startScan(listOf(filter), settings, scanCallback)
+    }
+
+    @RequiresPermission(allOf = [
+        Manifest.permission.BLUETOOTH_CONNECT, Manifest.permission.BLUETOOTH_SCAN
+    ])
+    fun connectToHost(host: DiscoveredHost): Boolean {
+        stopScan()
+
+        if (host !in discoveredHosts.values) {
+            return false
+        }
+
+        connect(host.device)
+        return true
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -262,6 +287,16 @@ class BLETradeClient @Inject constructor(
             confirmation.eitherCancelled -> onTradeCancelled?.invoke()
         }
     }
+
+
+    private fun parseTradeCode(result: ScanResult): String? {
+        val bytes = result.scanRecord
+            ?.getServiceData(ParcelUuid(BleTradeUUIDs.SERVICE_UUID))
+            ?: return null
+        if (bytes.size < 2) return null
+        val codeInt = ((bytes[0].toUByte().toInt()) shl 8) or (bytes[1].toUByte().toInt())
+        return codeInt.toString().padStart(5, '0')
+    }
 }
 
 object BleTradeUUIDs {
@@ -270,6 +305,14 @@ object BleTradeUUIDs {
     val TRADE_CONFIRM_UUID: UUID = UUID.fromString("12345678-0002-1000-8000-00805f9b34fb")
     val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 }
+
+data class DiscoveredHost(
+    val device: BluetoothDevice,
+    // 6-digit code displayed on the host's watch
+    val code: String,
+    // signal strength
+    val rssi: Int
+)
 
 enum class TradeConfirmState { NONE, CONFIRMED, CANCELLED }
 

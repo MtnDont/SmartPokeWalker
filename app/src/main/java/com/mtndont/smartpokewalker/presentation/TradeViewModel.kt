@@ -5,6 +5,7 @@ import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
 import com.mtndont.smartpokewalker.ble.BLETradeClient
 import com.mtndont.smartpokewalker.ble.BLETradeServer
+import com.mtndont.smartpokewalker.ble.DiscoveredHost
 import com.mtndont.smartpokewalker.data.MonsterModel
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -33,7 +34,7 @@ class TradeViewModel @Inject constructor(
     ])
     fun hostTrade() {
         val monster = myMonster// ?: return
-        _state.value = TradeState.WaitingForOffer
+        //_state.value = TradeState.WaitingForOffer
 
         server.setCallbacks(
             onOfferReceived = { theirMonster ->
@@ -46,7 +47,8 @@ class TradeViewModel @Inject constructor(
                 handleCancellation()
             }
         )
-        server.startServer(monster)
+        val code = server.startServer(monster)
+        _state.value = TradeState.Hosting(code ?: "")
     }
 
     @RequiresPermission(allOf = [
@@ -56,9 +58,12 @@ class TradeViewModel @Inject constructor(
     ])
     fun joinTrade() {
         val monster = myMonster// ?: return
-        _state.value = TradeState.Searching
+        _state.value = TradeState.DiscoveringHosts(emptyList())
 
         client.setCallbacks(
+            onHostsUpdated = { hosts ->
+                _state.value = TradeState.DiscoveringHosts(hosts)
+            },
             onOfferReceived = { theirMonster ->
                 _state.value = TradeState.ReviewingOffer(theirMonster)
             },
@@ -69,7 +74,13 @@ class TradeViewModel @Inject constructor(
                 handleCancellation()
             }
         )
-        client.scanAndConnect(monster)
+        client.scanHosts(monster)
+    }
+
+    @RequiresPermission(allOf = [Manifest.permission.BLUETOOTH_SCAN, Manifest.permission.BLUETOOTH_CONNECT])
+    fun selectHost(host: DiscoveredHost) {
+        _state.value = TradeState.WaitingForOffer
+        client.connectToHost(host)
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -134,7 +145,10 @@ class TradeViewModel @Inject constructor(
 
 sealed class TradeState {
     object Idle: TradeState()
-    object Searching: TradeState()
+    data class Hosting(val code: String): TradeState()
+    data class DiscoveringHosts(
+        val hosts: List<DiscoveredHost>
+    ): TradeState()
     object WaitingForOffer: TradeState()
     data class ReviewingOffer(val theirMonster: MonsterModel): TradeState()
     object WaitingForPartner: TradeState()

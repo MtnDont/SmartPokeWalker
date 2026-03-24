@@ -18,8 +18,10 @@ import android.os.ParcelUuid
 import androidx.annotation.RequiresPermission
 import com.mtndont.smartpokewalker.data.MonsterModel
 import dagger.hilt.android.qualifiers.ApplicationContext
+import java.nio.ByteBuffer
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.random.Random
 
 @Singleton
 class BLETradeServer @Inject constructor(
@@ -31,6 +33,8 @@ class BLETradeServer @Inject constructor(
     private val confirmation = MutualConfirmation()
     private var pendingOffer: MonsterModel? = null
     private lateinit var myMonster: MonsterModel
+
+    private lateinit var tradeCode: ByteArray
 
     private var advertiseCallback: AdvertiseCallback? = null
 
@@ -49,16 +53,22 @@ class BLETradeServer @Inject constructor(
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
-    fun startServer(myMonster: MonsterModel) {
+    fun startServer(myMonster: MonsterModel): String? {
         this.myMonster = myMonster
         confirmation.localState = TradeConfirmState.NONE
         confirmation.remoteState = TradeConfirmState.NONE
 
         gattServer = bluetoothManager.openGattServer(context, gattCallback)
-            ?: run { onTradeCancelled?.invoke(); return }
+            ?: run {
+                onTradeCancelled?.invoke()
+                return null
+            }
 
         gattServer?.addService(buildService())
         startAdvertising()
+
+        val code = (tradeCode[0].toUByte().toInt() shl 8) or (tradeCode[1].toUByte().toInt())
+        return code.toString().padStart(5, '0')
     }
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
@@ -131,6 +141,9 @@ class BLETradeServer @Inject constructor(
     private fun startAdvertising() {
         val advertiser = bluetoothManager.adapter.bluetoothLeAdvertiser ?: return
 
+        val pairingCode = Random.nextBytes(ByteArray(2))
+        tradeCode = pairingCode
+
         val settings = AdvertiseSettings.Builder()
             .setAdvertiseMode(AdvertiseSettings.ADVERTISE_MODE_LOW_LATENCY)
             .setTxPowerLevel(AdvertiseSettings.ADVERTISE_TX_POWER_MEDIUM)
@@ -139,6 +152,10 @@ class BLETradeServer @Inject constructor(
 
         val data = AdvertiseData.Builder()
             .addServiceUuid(ParcelUuid(BleTradeUUIDs.SERVICE_UUID))
+            .addServiceData(
+                ParcelUuid(BleTradeUUIDs.SERVICE_UUID),
+                pairingCode
+            )
             .setIncludeDeviceName(false)
             .build()
 

@@ -17,6 +17,7 @@
     <string name="box">Box</string>
     <string name="party">Party</string>
     <string name="items">Items</string>
+    <string name="trade">Trade</string>
     <string name="explore_button">Explore\n(%1$dw/%2$dw)</string>
     <string name="explore">Explore</string>
     <string name="explore_refreshed">Exploration Refreshed</string>

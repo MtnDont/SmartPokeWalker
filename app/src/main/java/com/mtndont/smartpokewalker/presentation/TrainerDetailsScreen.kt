@@ -195,8 +195,12 @@ fun TrainerDetailsScreen(
                 Button(
                     label = {
                         Text(
-                            text = "Test Bluetooth Server",
-                            color = colorResource(R.color.background_gray)
+                            text = stringResource(R.string.trade),
+                            color = colorResource(R.color.background_gray),
+                            fontSize = 25.sp,
+                            fontFamily = FontFamily(
+                                Font(R.font.pixelfont)
+                            )
                         )
                     },
                     onClick = tradeOnClick,//testBluetoothOnClick,

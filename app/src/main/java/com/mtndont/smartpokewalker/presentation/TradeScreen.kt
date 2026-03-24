@@ -17,11 +17,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
+import com.mtndont.smartpokewalker.ble.DiscoveredHost
 import com.mtndont.smartpokewalker.data.MonsterDefinitions
 import com.mtndont.smartpokewalker.data.MonsterModel
 
@@ -57,6 +60,9 @@ fun TradeScreen(
             },
             cancelOnClick = {
                 viewModel.submitDecision(false)
+            },
+            codeSelectOnClick = { host ->
+                viewModel.selectHost(host)
             }
         )
     }
@@ -89,7 +95,8 @@ fun HostOrJoinWidget(
 fun TradeWidget(
     state: TradeState,
     acceptOnClick: () -> Unit,
-    cancelOnClick: () -> Unit
+    cancelOnClick: () -> Unit,
+    codeSelectOnClick: (DiscoveredHost) -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -124,6 +131,61 @@ fun TradeWidget(
                         Text(
                             text = "Decline"
                         )
+                    }
+                }
+            }
+
+            is TradeState.Hosting -> {
+                val code = state.code
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(15.dp)
+                ) {
+                    Text(
+                        text = "Your code",
+                        color = colorResource(R.color.background_gray)
+                    )
+                    Text(
+                        text = code,
+                        color = colorResource(R.color.background_gray)
+                    )
+                    Text(
+                        text = "Share this with your trade partner",
+                        color = colorResource(R.color.background_gray),
+                        textAlign = TextAlign.Center
+                    )
+                }
+            }
+
+            is TradeState.DiscoveringHosts -> {
+                val hosts = state.hosts
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(5.dp)
+                ) {
+                    Text(
+                        text = "Nearby traders",
+                        color = colorResource(R.color.background_gray)
+                    )
+                    if (hosts.isEmpty()) {
+                        CircularProgressIndicator()
+                        Text(
+                            text = "Searching...",
+                            color = colorResource(R.color.background_gray)
+                        )
+                    } else {
+                        hosts.forEach { host ->
+                            Button(
+                                onClick = {
+                                    codeSelectOnClick.invoke(host)
+                                }
+                            ) {
+                                Text(
+                                    text = host.code,
+                                    color = colorResource(R.color.background_gray)
+                                )
+                            }
+                        }
                     }
                 }
             }
@@ -192,18 +254,32 @@ fun TradeWidgetCancelledPreview() {
     TradeWidget(
         state = TradeState.Cancelled,
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetSearchingPreview() {
+fun TradeWidgetHostingPreview() {
     TradeWidget(
-        state = TradeState.Searching,
+        state = TradeState.Hosting("123456"),
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
+    )
+}
+
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
+@Composable
+fun TradeWidgetDiscoveringHostsPreview() {
+    TradeWidget(
+        state = TradeState.DiscoveringHosts(listOf()),
+        acceptOnClick = {},
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
 
@@ -214,7 +290,8 @@ fun TradeWidgetWaitingForOfferPreview() {
     TradeWidget(
         state = TradeState.WaitingForOffer,
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
 
@@ -225,7 +302,8 @@ fun TradeWidgetWaitingForPartnerPreview() {
     TradeWidget(
         state = TradeState.WaitingForPartner,
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
 
@@ -240,7 +318,8 @@ fun TradeWidgetReviewingOfferPreview() {
             )
         ),
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
 
@@ -255,6 +334,7 @@ fun TradeWidgetCompletePreview() {
             )
         ),
         acceptOnClick = {},
-        cancelOnClick = {}
+        cancelOnClick = {},
+        codeSelectOnClick = {}
     )
 }
