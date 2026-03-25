@@ -99,7 +99,7 @@ class BLETradeClient @Inject constructor(
     fun connectToHost(host: DiscoveredHost): Boolean {
         stopScan()
 
-        if (host !in discoveredHosts.values) {
+        if (host !in discoveredHosts.values || host.device == null) {
             return false
         }
 
@@ -210,7 +210,7 @@ class BLETradeClient @Inject constructor(
             }
         }
 
-        @Suppress("DEPRECATION")
+        @Suppress("DEPRECATION", "OVERRIDE_DEPRECATION")
         override fun onCharacteristicChanged(
             g: BluetoothGatt,
             char: BluetoothGattCharacteristic
@@ -307,7 +307,7 @@ object BleTradeUUIDs {
 }
 
 data class DiscoveredHost(
-    val device: BluetoothDevice,
+    val device: BluetoothDevice?,
     // 6-digit code displayed on the host's watch
     val code: String,
     // signal strength

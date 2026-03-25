@@ -229,11 +229,14 @@ class BLETradeServer @Inject constructor(
             offset: Int,
             value: ByteArray
         ) {
-            // Store the subscription state so notifyCharacteristicChanged
-            // knows which clients have notifications enabled
-            descriptor.value = value
             if (responseNeeded) {
-                gattServer?.sendResponse(device, requestId, GATT_SUCCESS, 0, null)
+                gattServer?.sendResponse(
+                    device,
+                    requestId,
+                    GATT_SUCCESS,
+                    0,
+                    null
+                )
             }
         }
 
@@ -249,7 +252,7 @@ class BLETradeServer @Inject constructor(
                 requestId,
                 GATT_SUCCESS,
                 0,
-                descriptor.value
+                BluetoothGattDescriptor.DISABLE_NOTIFICATION_VALUE
             )
         }
     }
