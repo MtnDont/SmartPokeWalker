@@ -289,7 +289,11 @@ fun TrainerNav(
         }
 
         composable("trade") {
-            TradeScreen()
+            TradeScreen(
+                returnOnClick = {
+                    navController.popBackStack()
+                }
+            )
         }
     }
 }

@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
@@ -28,6 +27,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
 import androidx.wear.compose.material3.Button
+import androidx.wear.compose.material3.OutlinedButton
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.HorizontalDivider
 import androidx.wear.compose.material3.Icon
@@ -79,6 +79,7 @@ import com.mtndont.smartpokewalker.data.MonsterModel
 
 @Composable
 fun TradeScreen(
+    returnOnClick: () -> Unit,
     viewModel: TradeViewModel = hiltViewModel()
 ) {
     val state by viewModel.state.collectAsState()
@@ -112,11 +113,13 @@ fun TradeScreen(
             },
             codeSelectOnClick = { host ->
                 viewModel.selectHost(host)
-            }
+            },
+            returnOnClick = returnOnClick
         )
     }
 }
 
+@SuppressLint("ResourceType")
 @Composable
 fun HostOrJoinWidget(
     hostOnClick: () -> Unit,
@@ -128,46 +131,186 @@ fun HostOrJoinWidget(
             .fillMaxSize()
             .background(colorResource(R.color.background_gray))
     ) {
-        Row(
-            horizontalArrangement = Arrangement.spacedBy(12.dp),
-            verticalAlignment = Alignment.CenterVertically,
-            modifier = Modifier.fillMaxSize(0.8f)
+        Column(
+            verticalArrangement = Arrangement.spacedBy(6.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
+            Text(
+                text = stringResource(R.string.link_trade),
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                ),
+                textAlign = TextAlign.Center
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Image(
+                    painter = BitmapPainter(
+                        image = ImageBitmap.imageResource(
+                            R.raw.ball
+                        ),
+                        filterQuality = FilterQuality.None
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+                Image(
+                    painter = BitmapPainter(
+                        image = ImageBitmap.imageResource(
+                            R.raw.item
+                        ),
+                        filterQuality = FilterQuality.None
+                    ),
+                    contentDescription = null,
+                    modifier = Modifier
+                        .size(20.dp)
+                )
+            }
+            HorizontalDivider(
+                color = colorResource(R.color.light_gray),
+                thickness = 2.dp,
+                modifier = Modifier.fillMaxWidth(0.8f)
+            )
             Button(
                 label = {
                     Text(
-                        text = "Host",
+                        text = stringResource(R.string.host_trade),
                         color = colorResource(R.color.light_gray),
                         fontSize = 24.sp,
                         fontFamily = FontFamily(
                             Font(R.font.pixelfont)
                         ),
-                        textAlign = TextAlign.End
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 },
                 onClick = hostOnClick,
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(R.color.black)
                 ),
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.fillMaxWidth(0.6f)
             )
-            Button(
+            OutlinedButton(
                 label = {
                     Text(
-                        text = "Join",
-                        color = colorResource(R.color.light_gray),
+                        text = stringResource(R.string.find_trade),
+                        color = colorResource(R.color.black),
                         fontSize = 24.sp,
                         fontFamily = FontFamily(
                             Font(R.font.pixelfont)
-                        )
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 },
                 onClick = joinOnClick,
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(R.color.black)
+                colors = ButtonDefaults.outlinedButtonColors(
+                    secondaryContentColor = colorResource(R.color.black)
                 ),
-                modifier = Modifier.weight(1f)
+                border = ButtonDefaults.outlinedButtonBorder(
+                    enabled = true,
+                    borderColor = colorResource(R.color.black),
+                    borderWidth = 2.dp
+                ),
+                modifier = Modifier.fillMaxWidth(0.6f)
             )
+        }
+    }
+}
+
+@Composable
+fun TradeCancelledScreen(
+    onScreenTap: () -> Unit
+) {
+    val infiniteTransitionText = rememberInfiniteTransition()
+    val textFlash by infiniteTransitionText.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1_000
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = onScreenTap
+            )
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxSize()
+                .background(colorResource(R.color.background_gray))
+        ) {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Text(
+                    text = stringResource(R.string.link_trade),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    )
+                )
+                HorizontalDivider(
+                    thickness = 2.dp,
+                    color = colorResource(R.color.light_gray),
+                    modifier = Modifier
+                        .fillMaxWidth(0.75f)
+                        .padding(vertical = 6.dp)
+                )
+                Icon(
+                    painter = painterResource(R.drawable.close),
+                    contentDescription = "Cancel Release",
+                    tint = colorResource(R.color.black),
+                    modifier = Modifier.size(48.dp)
+                )
+                Spacer(
+                    modifier = Modifier.size(4.dp)
+                )
+                Text(
+                    text = stringResource(R.string.trade_cancelled),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center
+                )
+                HorizontalDivider(
+                    thickness = 2.dp,
+                    color = colorResource(R.color.light_gray),
+                    modifier = Modifier
+                        .fillMaxWidth(0.75f)
+                        .padding(vertical = 6.dp)
+                )
+                Text(
+                    text = stringResource(R.string.tap_to_return),
+                    color = colorResource(R.color.black),
+                    fontSize = 24.sp,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier
+                        .alpha(textFlash)
+                )
+            }
         }
     }
 }
@@ -177,7 +320,8 @@ fun TradeWidget(
     state: TradeState,
     acceptOnClick: () -> Unit,
     cancelOnClick: () -> Unit,
-    codeSelectOnClick: (DiscoveredHost) -> Unit
+    codeSelectOnClick: (DiscoveredHost) -> Unit,
+    returnOnClick: () -> Unit
 ) {
     Box(
         contentAlignment = Alignment.Center,
@@ -208,31 +352,19 @@ fun TradeWidget(
                 )
             }
 
+            is TradeState.WaitingForOffer -> {
+                WaitingForOfferScreen()
+            }
+
             is TradeState.WaitingForPartner -> {
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    CircularProgressIndicator()
-                    Text(
-                        text = "Waiting for partner...",
-                        color = colorResource(R.color.background_gray)
-                    )
-                    Button(
-                        onClick = cancelOnClick
-                    ) {
-                        Text(
-                            text = "Cancel"
-                        )
-                    }
-                }
+                WaitingForPartnerScreen(
+                    cancelOnClick = cancelOnClick
+                )
             }
 
             is TradeState.Cancelled -> {
-                Text(
-                    text = "Trade cancelled.",
-                    color = colorResource(R.color.background_gray)
+                TradeCancelledScreen(
+                    onScreenTap = returnOnClick
                 )
             }
 
@@ -240,7 +372,7 @@ fun TradeWidget(
                 val received = state.received
                 TradeCompleteScreen(
                     monster = received,
-                    screenOnClick = {}
+                    screenOnClick = returnOnClick
                 )
             }
 
@@ -274,7 +406,7 @@ fun HostCodeScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "Link Trade",
+                text = stringResource(R.string.link_trade),
                 color = colorResource(R.color.black),
                 fontSize = 24.sp,
                 fontFamily = FontFamily(
@@ -315,7 +447,6 @@ fun HostCodeScreen(
                     )
                 }
             }
-            //Spacer(modifier = Modifier.size(12.dp))
             HorizontalDivider(
                 thickness = 2.dp,
                 color = colorResource(R.color.light_gray),
@@ -324,7 +455,7 @@ fun HostCodeScreen(
                     .padding(vertical = 6.dp)
             )
             Text(
-                text = "Your code",
+                text = stringResource(R.string.your_code),
                 color = colorResource(R.color.black),
                 fontSize = 24.sp,
                 fontFamily = FontFamily(
@@ -340,7 +471,6 @@ fun HostCodeScreen(
                 ),
                 fontWeight = FontWeight.Bold
             )
-            //Spacer(modifier = Modifier.size(12.dp))
             HorizontalDivider(
                 thickness = 2.dp,
                 color = colorResource(R.color.light_gray),
@@ -349,7 +479,7 @@ fun HostCodeScreen(
                     .padding(vertical = 6.dp)
             )
             Text(
-                text = "Waiting...",
+                text = stringResource(R.string.waiting),
                 color = colorResource(R.color.black),
                 fontSize = 24.sp,
                 fontFamily = FontFamily(
@@ -461,7 +591,7 @@ fun ListeningPairingCodeScreen(
         ) {
             item {
                 Text(
-                    text = "Nearby Traders",
+                    text = stringResource(R.string.nearby_traders),
                     color = colorResource(R.color.black),
                     fontSize = 24.sp,
                     fontFamily = FontFamily(
@@ -511,6 +641,195 @@ fun ListeningPairingCodeScreen(
 
 @SuppressLint("ResourceType")
 @Composable
+fun WaitingForOfferScreen() {
+    val infiniteTransition = rememberInfiniteTransition()
+    val animationDelay = 600
+    val duration = 3 * animationDelay
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.link_trade),
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                )
+            )
+            Spacer(
+                modifier = Modifier.size(4.dp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                repeat(3) {
+                    val anchor by infiniteTransition.animateFloat(
+                        initialValue = 0.2f,
+                        targetValue = 0.2f,
+                        animationSpec = infiniteRepeatable(
+                            animation = keyframes {
+                                durationMillis = duration + animationDelay
+                                0.2f at (it * animationDelay) using LinearEasing
+                                1f at (it * animationDelay) + (animationDelay/2) using FastOutSlowInEasing
+                                0.2f at (it * animationDelay) + (animationDelay*2)
+                            }
+                        )
+                    )
+
+                    Image(
+                        painter = BitmapPainter(
+                            image = ImageBitmap.imageResource(
+                                R.raw.ball
+                            ),
+                            filterQuality = FilterQuality.None
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .alpha(anchor)
+                    )
+                }
+            }
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = colorResource(R.color.light_gray),
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 6.dp)
+            )
+            Text(
+                text = stringResource(R.string.waiting_on_partner),
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                ),
+                textAlign = TextAlign.Center
+            )
+        }
+    }
+}
+
+@SuppressLint("ResourceType")
+@Composable
+fun WaitingForPartnerScreen(
+    cancelOnClick: () -> Unit
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val animationDelay = 600
+    val duration = 3 * animationDelay
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.link_trade),
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                )
+            )
+            Spacer(
+                modifier = Modifier.size(4.dp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                repeat(3) {
+                    val anchor by infiniteTransition.animateFloat(
+                        initialValue = 0.2f,
+                        targetValue = 0.2f,
+                        animationSpec = infiniteRepeatable(
+                            animation = keyframes {
+                                durationMillis = duration + animationDelay
+                                0.2f at (it * animationDelay) using LinearEasing
+                                1f at (it * animationDelay) + (animationDelay/2) using FastOutSlowInEasing
+                                0.2f at (it * animationDelay) + (animationDelay*2)
+                            }
+                        )
+                    )
+
+                    Image(
+                        painter = BitmapPainter(
+                            image = ImageBitmap.imageResource(
+                                R.raw.ball
+                            ),
+                            filterQuality = FilterQuality.None
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .alpha(anchor)
+                    )
+                }
+            }
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = colorResource(R.color.light_gray),
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 6.dp)
+            )
+            Text(
+                text = stringResource(R.string.offer_accepted),
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                ),
+                textAlign = TextAlign.Center
+            )
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = colorResource(R.color.light_gray),
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 6.dp)
+            )
+            OutlinedButton(
+                label = {
+                    Text(
+                        text = stringResource(R.string.cancel),
+                        color = colorResource(R.color.black),
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        ),
+                        textAlign = TextAlign.Center,
+                        modifier = Modifier.fillMaxWidth()
+                    )
+                },
+                onClick = cancelOnClick,
+                colors = ButtonDefaults.outlinedButtonColors(
+                    secondaryContentColor = colorResource(R.color.black)
+                ),
+                border = ButtonDefaults.outlinedButtonBorder(
+                    enabled = true,
+                    borderColor = colorResource(R.color.black),
+                    borderWidth = 2.dp
+                ),
+                modifier = Modifier.fillMaxWidth(0.6f)
+            )
+        }
+    }
+}
+
+@SuppressLint("ResourceType")
+@Composable
 fun TradeCompleteScreen(
     monster: MonsterModel,
     screenOnClick: () -> Unit
@@ -549,7 +868,7 @@ fun TradeCompleteScreen(
             .fillMaxSize()
             .background(colorResource(R.color.background_gray))
     ) {
-        val rotatingText = "Trade Complete!"//stringResource(R.string.wild_name_appeared, newMonster.getDefaultName()) //"You found..."
+        val rotatingText = stringResource(R.string.trade_complete)
         val tapAnywhereText = stringResource(R.string.tap_anywhere)
         val curvedTextColor = colorResource(R.color.black)
 
@@ -624,12 +943,9 @@ fun HostOrJoinWidgetPreview() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetCancelledPreview() {
-    TradeWidget(
-        state = TradeState.Cancelled,
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
+fun TradeCancelledPreview() {
+    TradeCancelledScreen(
+        onScreenTap = {}
     )
 }
 
@@ -669,24 +985,16 @@ fun ListeningPairingCodeScreenPreview() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetWaitingForOfferPreview() {
-    TradeWidget(
-        state = TradeState.WaitingForOffer,
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
-    )
+fun WaitingForOfferPreview() {
+    WaitingForOfferScreen()
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetWaitingForPartnerPreview() {
-    TradeWidget(
-        state = TradeState.WaitingForPartner,
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
+fun WaitingForPartnerPreview() {
+    WaitingForPartnerScreen(
+        cancelOnClick = {}
     )
 }
 
@@ -702,7 +1010,8 @@ fun TradeWidgetReviewingOfferPreview() {
         ),
         acceptOnClick = {},
         cancelOnClick = {},
-        codeSelectOnClick = {}
+        codeSelectOnClick = {},
+        returnOnClick = {}
     )
 }
 
