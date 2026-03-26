@@ -34,6 +34,7 @@ class BLETradeClient @Inject constructor(
 
     private var scanCallback: ScanCallback? = null
     private val discoveredHosts = mutableMapOf<String, DiscoveredHost>()
+    private var scanActive = false
 
     private var onHostsUpdated: ((List<DiscoveredHost>) -> Unit)? = null
     private var onOfferReceived: ((MonsterModel) -> Unit)? = null
@@ -54,9 +55,14 @@ class BLETradeClient @Inject constructor(
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     fun scanHosts(myMonster: MonsterModel) {
+        // Stop scans before starting a new one
+        stopScan()
+        scanActive = true
+
         this.myMonster = myMonster
         confirmation.localState = TradeConfirmState.NONE
         confirmation.remoteState = TradeConfirmState.NONE
+        discoveredHosts.clear()
 
         val adapter = bluetoothManager.adapter
         val scanner = adapter.bluetoothLeScanner ?: return
@@ -76,6 +82,8 @@ class BLETradeClient @Inject constructor(
             override fun onScanResult(callbackType: Int, result: ScanResult) {
                 //stopScan()
                 //connect(result.device)
+                if (!scanActive) return
+
                 val code = parseTradeCode(result) ?: return
                 val existing = discoveredHosts[result.device.address]
                 if (existing != null) {
@@ -140,6 +148,7 @@ class BLETradeClient @Inject constructor(
         stopScan()
         gatt?.close()
         gatt = null
+        discoveredHosts.clear()
     }
 
 
@@ -150,6 +159,7 @@ class BLETradeClient @Inject constructor(
 
     @RequiresPermission(Manifest.permission.BLUETOOTH_SCAN)
     private fun stopScan() {
+        scanActive = false
         val adapter = bluetoothManager.adapter
         scanCallback?.let { adapter.bluetoothLeScanner?.stopScan(it) }
         scanCallback = null
