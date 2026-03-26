@@ -58,8 +58,7 @@ fun TrainerViewNavigatorApp(
     viewModel: TrainerDetailsViewModel = hiltViewModel(),
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
-    itemsOnClick: () -> Unit,
-    tradeOnClick: () -> Unit
+    itemsOnClick: () -> Unit
 ) {
     val overlayState by viewModel.overlayState.collectAsStateWithLifecycle()
 
@@ -97,8 +96,7 @@ fun TrainerViewNavigatorApp(
                                     viewModel = viewModel,
                                     boxOnClick = boxOnClick,
                                     partyOnClick = partyOnClick,
-                                    itemsOnClick = itemsOnClick,
-                                    tradeOnClick = tradeOnClick
+                                    itemsOnClick = itemsOnClick
                                 )
 
                                 else -> WalkPagerApp()

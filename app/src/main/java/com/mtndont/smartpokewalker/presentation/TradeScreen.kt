@@ -79,9 +79,11 @@ import com.mtndont.smartpokewalker.data.MonsterModel
 
 @Composable
 fun TradeScreen(
+    monster: MonsterModel,
     returnOnClick: () -> Unit,
     viewModel: TradeViewModel = hiltViewModel()
 ) {
+    viewModel.setMonster(monster)
     val state by viewModel.state.collectAsState()
 
     val context = LocalContext.current

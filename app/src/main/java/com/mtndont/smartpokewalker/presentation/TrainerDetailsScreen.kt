@@ -39,8 +39,7 @@ fun TrainerDetailsApp(
     viewModel: TrainerDetailsViewModel = hiltViewModel(),
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
-    itemsOnClick: () -> Unit,
-    tradeOnClick: () -> Unit
+    itemsOnClick: () -> Unit
 ) {
     val trainerName by viewModel.trainerName.collectAsStateWithLifecycle()
 
@@ -49,16 +48,12 @@ fun TrainerDetailsApp(
     TrainerDetailsScreen(
         trainerName = trainerName,
         exploreSteps = exploreSteps,
-        testBluetoothOnClick = {
-            viewModel.testBluetooth()
-        },
         exploreOnClick = {
             viewModel.explore()
         },
         boxOnClick = boxOnClick,
         partyOnClick = partyOnClick,
-        itemsOnClick = itemsOnClick,
-        tradeOnClick = tradeOnClick
+        itemsOnClick = itemsOnClick
     )
 }
 
@@ -66,12 +61,10 @@ fun TrainerDetailsApp(
 fun TrainerDetailsScreen(
     trainerName: String,
     exploreSteps: Int,
-    testBluetoothOnClick: () -> Unit,
     exploreOnClick: () -> Unit,
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
-    itemsOnClick: () -> Unit,
-    tradeOnClick: () -> Unit
+    itemsOnClick: () -> Unit
 ) {
     SmartPokeWalkerTheme {
         Box(
@@ -192,23 +185,6 @@ fun TrainerDetailsScreen(
                     ),
                     modifier = Modifier
                 )
-                Button(
-                    label = {
-                        Text(
-                            text = stringResource(R.string.trade),
-                            color = colorResource(R.color.background_gray),
-                            fontSize = 25.sp,
-                            fontFamily = FontFamily(
-                                Font(R.font.pixelfont)
-                            )
-                        )
-                    },
-                    onClick = tradeOnClick,//testBluetoothOnClick,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
-                    ),
-                    modifier = Modifier
-                )
             }
         }
     }
@@ -221,11 +197,9 @@ fun TrainerDetailsScreenPreview() {
     TrainerDetailsScreen(
         trainerName = "Red",
         exploreSteps = 499,
-        testBluetoothOnClick = {},
         exploreOnClick = {},
         boxOnClick = {},
         partyOnClick = {},
-        itemsOnClick = {},
-        tradeOnClick = {}
+        itemsOnClick = {}
     )
 }

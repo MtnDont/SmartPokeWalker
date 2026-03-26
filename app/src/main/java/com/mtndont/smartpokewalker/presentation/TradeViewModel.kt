@@ -21,7 +21,7 @@ class TradeViewModel @Inject constructor(
     private val _state = MutableStateFlow<TradeState>(TradeState.Idle)
     val state: StateFlow<TradeState> = _state.asStateFlow()
 
-    private var myMonster: MonsterModel = MonsterModel.getRandomMonster()
+    private var myMonster: MonsterModel? = null
 
     fun setMonster(monster: MonsterModel) {
         myMonster = monster
@@ -33,15 +33,14 @@ class TradeViewModel @Inject constructor(
         Manifest.permission.BLUETOOTH_CONNECT
     ])
     fun hostTrade() {
-        val monster = myMonster// ?: return
-        //_state.value = TradeState.WaitingForOffer
+        val monster = myMonster ?: return
 
         server.setCallbacks(
             onOfferReceived = { theirMonster ->
                 _state.value = TradeState.ReviewingOffer(theirMonster)
             },
             onTradeComplete = { received ->
-                finaliseTrade(received)
+                finalizeTrade(received)
             },
             onTradeCancelled = {
                 handleCancellation()
@@ -57,7 +56,7 @@ class TradeViewModel @Inject constructor(
         Manifest.permission.BLUETOOTH_CONNECT
     ])
     fun joinTrade() {
-        val monster = myMonster// ?: return
+        val monster = myMonster ?: return
         _state.value = TradeState.DiscoveringHosts(emptyList())
 
         client.setCallbacks(
@@ -68,7 +67,7 @@ class TradeViewModel @Inject constructor(
                 _state.value = TradeState.ReviewingOffer(theirMonster)
             },
             onTradeComplete = { received ->
-                finaliseTrade(received)
+                finalizeTrade(received)
             },
             onTradeCancelled = {
                 handleCancellation()
@@ -101,7 +100,7 @@ class TradeViewModel @Inject constructor(
         Manifest.permission.BLUETOOTH_SCAN,
         Manifest.permission.BLUETOOTH_CONNECT
     ])
-    private fun finaliseTrade(received: MonsterModel) {
+    private fun finalizeTrade(received: MonsterModel) {
         // Both sides confirmed, safe to persist
         saveMonster(received)
         _state.value = TradeState.Complete(received)

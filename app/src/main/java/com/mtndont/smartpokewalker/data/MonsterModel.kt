@@ -281,6 +281,14 @@ data class MonsterModel(
             val form = buf.getInt()
             val traded = buf.get() > 0x00
 
+            // Validate the provided dex id and forms exist
+            if (dexId !in 1..MonsterDefinitions.entries.size) {
+                return null
+            }
+            if (form !in 0 until MonsterDefinitions.entries[dexId - 1].formResIds.size) {
+                return null
+            }
+
             return MonsterModel(
                 id = 0,
                 dexId = dexId,

@@ -56,7 +56,8 @@ enum class MonsterListAction(
     Evolve(R.string.evolve, true),
     Release(R.string.release, false),
     MoveToParty(R.string.move_to_party, true),
-    MoveToBox(R.string.move_to_box, false)
+    MoveToBox(R.string.move_to_box, false),
+    Trade(R.string.trade, false)
 }
 
 @Composable
@@ -81,9 +82,6 @@ fun TrainerNav(
                 },
                 itemsOnClick = {
                     navController.navigate("items")
-                },
-                tradeOnClick = {
-                    navController.navigate("trade")
                 }
             )
         }
@@ -189,6 +187,11 @@ fun TrainerNav(
                                 navController.navigate("monster/${it.id}/${it.name}/confirmRelease")
                             }
                         }
+                        MonsterListAction.Trade -> {
+                            monster?.let {
+                                navController.navigate("trade/${it.id}")
+                            }
+                        }
                     }
                 }
             )
@@ -288,10 +291,12 @@ fun TrainerNav(
             )
         }
 
-        composable("trade") {
+        composable("trade/{monsterId}") { backStackEntry ->
+            val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
             TradeScreen(
+                monster = viewModel.getMonsterInstanceFromId(monsterId),
                 returnOnClick = {
-                    navController.popBackStack()
+                    navController.popBackStack("monster/${monsterId}", true)
                 }
             )
         }
@@ -437,7 +442,8 @@ fun MonsterActionScreen(
             //"Summary",
             MonsterListAction.MoveToParty,
             MonsterListAction.MoveToBox,
-            MonsterListAction.Release,
+            MonsterListAction.Trade,
+            MonsterListAction.Release
             //"Rename"
         )
 
