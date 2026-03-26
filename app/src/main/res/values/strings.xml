@@ -33,4 +33,5 @@
     <string name="tap_anywhere">Tap anywhere to continue</string>
     <string name="name_and_item">%1$s\n%2$s</string>
     <string name="wild_name_appeared">A wild %1$s appeared!</string>
+    <string name="name_sex_level">%1$s\n%2$s Lv.%3$d</string>
 </resources>

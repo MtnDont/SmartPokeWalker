@@ -1,42 +1,73 @@
 package com.mtndont.smartpokewalker.presentation
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.pm.PackageManager
+import androidx.compose.animation.core.FastOutSlowInEasing
+import androidx.compose.animation.core.LinearEasing
+import androidx.compose.animation.core.RepeatMode
+import androidx.compose.animation.core.animateFloat
+import androidx.compose.animation.core.infiniteRepeatable
+import androidx.compose.animation.core.keyframes
+import androidx.compose.animation.core.rememberInfiniteTransition
+import androidx.compose.animation.core.tween
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.shape.CircleShape
 import androidx.wear.compose.material3.Button
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.HorizontalDivider
 import androidx.wear.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
+import androidx.compose.ui.graphics.FilterQuality
+import androidx.compose.ui.graphics.ImageBitmap
+import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
 import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
+import androidx.wear.compose.foundation.CurvedDirection
+import androidx.wear.compose.foundation.CurvedLayout
+import androidx.wear.compose.foundation.CurvedModifier
+import androidx.wear.compose.foundation.curvedRow
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
 import androidx.wear.compose.foundation.lazy.rememberTransformingLazyColumnState
 import androidx.wear.compose.material3.ButtonDefaults
+import androidx.wear.compose.material3.IconButton
 import androidx.wear.compose.material3.ScreenScaffold
 import androidx.wear.compose.material3.SurfaceTransformation
+import androidx.wear.compose.material3.curvedText
 import androidx.wear.compose.material3.lazy.rememberTransformationSpec
 import androidx.wear.tooling.preview.devices.WearDevices
 import com.google.android.horologist.compose.layout.ColumnItemType
@@ -91,20 +122,52 @@ fun HostOrJoinWidget(
     hostOnClick: () -> Unit,
     joinOnClick: () -> Unit
 ) {
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.SpaceEvenly,
-        modifier = Modifier.fillMaxSize()
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
     ) {
-        Button(
-            onClick = hostOnClick
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.fillMaxSize(0.8f)
         ) {
-            Text("Host")
-        }
-        Button(
-            onClick = joinOnClick
-        ) {
-            Text("Join")
+            Button(
+                label = {
+                    Text(
+                        text = "Host",
+                        color = colorResource(R.color.light_gray),
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        ),
+                        textAlign = TextAlign.End
+                    )
+                },
+                onClick = hostOnClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.black)
+                ),
+                modifier = Modifier.weight(1f)
+            )
+            Button(
+                label = {
+                    Text(
+                        text = "Join",
+                        color = colorResource(R.color.light_gray),
+                        fontSize = 24.sp,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        )
+                    )
+                },
+                onClick = joinOnClick,
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.black)
+                ),
+                modifier = Modifier.weight(1f)
+            )
         }
     }
 }
@@ -123,89 +186,26 @@ fun TradeWidget(
         when (state) {
             is TradeState.ReviewingOffer -> {
                 val offer = state.theirMonster
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.SpaceEvenly,
-                    modifier = Modifier.fillMaxHeight()
-                ) {
-                    Text(
-                        text = offer.name,
-                        color = colorResource(R.color.background_gray)
-                    )
-                    Text(
-                        text = "Lv${offer.getLevel()}",
-                        color = colorResource(R.color.background_gray)
-                    )
-                    Button(
-                        onClick = acceptOnClick
-                    ) {
-                        Text(
-                            text = "Accept"
-                        )
-                    }
-                    Button(
-                        onClick = cancelOnClick
-                    ) {
-                        Text(
-                            text = "Decline"
-                        )
-                    }
-                }
+                OfferScreen(
+                    monster = offer,
+                    acceptOnClick = acceptOnClick,
+                    cancelOnClick = cancelOnClick
+                )
             }
 
             is TradeState.Hosting -> {
                 val code = state.code
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(15.dp)
-                ) {
-                    Text(
-                        text = "Your code",
-                        color = colorResource(R.color.background_gray)
-                    )
-                    Text(
-                        text = code,
-                        color = colorResource(R.color.background_gray)
-                    )
-                    Text(
-                        text = "Share this with your trade partner",
-                        color = colorResource(R.color.background_gray),
-                        textAlign = TextAlign.Center
-                    )
-                }
+                HostCodeScreen(code)
             }
 
             is TradeState.DiscoveringHosts -> {
                 val hosts = state.hosts
-                Column(
-                    horizontalAlignment = Alignment.CenterHorizontally,
-                    verticalArrangement = Arrangement.spacedBy(5.dp)
-                ) {
-                    Text(
-                        text = "Nearby traders",
-                        color = colorResource(R.color.background_gray)
-                    )
-                    if (hosts.isEmpty()) {
-                        CircularProgressIndicator()
-                        Text(
-                            text = "Searching...",
-                            color = colorResource(R.color.background_gray)
-                        )
-                    } else {
-                        hosts.forEach { host ->
-                            Button(
-                                onClick = {
-                                    codeSelectOnClick.invoke(host)
-                                }
-                            ) {
-                                Text(
-                                    text = host.code,
-                                    color = colorResource(R.color.background_gray)
-                                )
-                            }
-                        }
+                ListeningPairingCodeScreen(
+                    items = hosts,
+                    itemOnSelect = { host ->
+                        codeSelectOnClick.invoke(host)
                     }
-                }
+                )
             }
 
             is TradeState.WaitingForPartner -> {
@@ -238,9 +238,9 @@ fun TradeWidget(
 
             is TradeState.Complete -> {
                 val received = state.received
-                Text(
-                    text = "Got ${received.name}!",
-                    color = colorResource(R.color.background_gray)
+                TradeCompleteScreen(
+                    monster = received,
+                    screenOnClick = {}
                 )
             }
 
@@ -249,6 +249,180 @@ fun TradeWidget(
                 Text(
                     text = state.javaClass.simpleName,
                     color = colorResource(R.color.background_gray)
+                )
+            }
+        }
+    }
+}
+
+@SuppressLint("ResourceType")
+@Composable
+fun HostCodeScreen(
+    code: String
+) {
+    val infiniteTransition = rememberInfiniteTransition()
+    val animationDelay = 600
+    val duration = 3 * animationDelay
+
+    Box(
+        contentAlignment = Alignment.Center,
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        Column(
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = "Link Trade",
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                )
+            )
+            Spacer(
+                modifier = Modifier.size(4.dp)
+            )
+            Row(
+                horizontalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                repeat(3) {
+                    val anchor by infiniteTransition.animateFloat(
+                        initialValue = 0.2f,
+                        targetValue = 0.2f,
+                        animationSpec = infiniteRepeatable(
+                            animation = keyframes {
+                                durationMillis = duration + animationDelay
+                                0.2f at (it * animationDelay) using LinearEasing
+                                1f at (it * animationDelay) + (animationDelay/2) using FastOutSlowInEasing
+                                0.2f at (it * animationDelay) + (animationDelay*2)
+                            }
+                        )
+                    )
+
+                    Image(
+                        painter = BitmapPainter(
+                            image = ImageBitmap.imageResource(
+                                R.raw.ball
+                            ),
+                            filterQuality = FilterQuality.None
+                        ),
+                        contentDescription = null,
+                        modifier = Modifier
+                            .size(20.dp)
+                            .alpha(anchor)
+                    )
+                }
+            }
+            //Spacer(modifier = Modifier.size(12.dp))
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = colorResource(R.color.light_gray),
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 6.dp)
+            )
+            Text(
+                text = "Your code",
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                )
+            )
+            Text(
+                text = code.chunked(1).joinToString(" "),
+                color = colorResource(R.color.black),
+                fontSize = 40.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                ),
+                fontWeight = FontWeight.Bold
+            )
+            //Spacer(modifier = Modifier.size(12.dp))
+            HorizontalDivider(
+                thickness = 2.dp,
+                color = colorResource(R.color.light_gray),
+                modifier = Modifier
+                    .fillMaxWidth(0.75f)
+                    .padding(vertical = 6.dp)
+            )
+            Text(
+                text = "Waiting...",
+                color = colorResource(R.color.black),
+                fontSize = 24.sp,
+                fontFamily = FontFamily(
+                    Font(R.font.pixelfont)
+                )
+            )
+        }
+    }
+}
+
+@SuppressLint("ResourceType")
+@Composable
+fun OfferScreen(
+    monster: MonsterModel,
+    acceptOnClick: () -> Unit,
+    cancelOnClick: () -> Unit,
+) {
+    MonsterImage(
+        name = stringResource(
+            R.string.name_sex_level,
+            monster.name,
+            when(monster.sex) {
+                1 -> "♂"
+                2 -> "♀"
+                else -> ""
+            },
+            monster.getLevel()
+        ),
+        monsterResId = monster.getFormResId(),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+            .offset(
+                y = (-24).dp
+            )
+    ) {
+        Spacer(
+            modifier = Modifier.size(12.dp)
+        )
+        Row(
+            horizontalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
+            IconButton(
+                onClick = cancelOnClick,
+                modifier = Modifier
+                    .size(46.dp)
+                    .background(
+                        colorResource(R.color.black),
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.close),
+                    contentDescription = "Decline Trade",
+                    tint = colorResource(R.color.background_gray),
+                    modifier = Modifier.size(32.dp)
+                )
+            }
+
+            IconButton(
+                onClick = acceptOnClick,
+                modifier = Modifier
+                    .size(46.dp)
+                    .background(
+                        colorResource(R.color.black),
+                        shape = CircleShape
+                    )
+            ) {
+                Icon(
+                    painter = painterResource(R.drawable.check),
+                    contentDescription = "Accept Trade",
+                    tint = colorResource(R.color.background_gray),
+                    modifier = Modifier.size(32.dp)
                 )
             }
         }
@@ -335,6 +509,108 @@ fun ListeningPairingCodeScreen(
     }
 }
 
+@SuppressLint("ResourceType")
+@Composable
+fun TradeCompleteScreen(
+    monster: MonsterModel,
+    screenOnClick: () -> Unit
+) {
+    val infiniteTransitionEdgeText = rememberInfiniteTransition()
+    val edgeTextRotate by infiniteTransitionEdgeText.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 15_000,
+                easing = LinearEasing
+            ),
+            repeatMode = RepeatMode.Restart
+        )
+    )
+    val infiniteTransitionText = rememberInfiniteTransition()
+    val textFlash by infiniteTransitionText.animateFloat(
+        initialValue = 0f,
+        targetValue = 1f,
+        animationSpec = infiniteRepeatable(
+            animation = tween(
+                durationMillis = 1_000
+            ),
+            repeatMode = RepeatMode.Reverse
+        )
+    )
+
+    Box(
+        modifier = Modifier
+            .clickable(
+                interactionSource = remember { MutableInteractionSource() },
+                indication = null,
+                onClick = screenOnClick
+            )
+            .fillMaxSize()
+            .background(colorResource(R.color.background_gray))
+    ) {
+        val rotatingText = "Trade Complete!"//stringResource(R.string.wild_name_appeared, newMonster.getDefaultName()) //"You found..."
+        val tapAnywhereText = stringResource(R.string.tap_anywhere)
+        val curvedTextColor = colorResource(R.color.black)
+
+        MonsterImage(
+            monsterResId = monster.getFormResId(),
+            name = stringResource(
+                R.string.name_sex_level,
+                monster.name,
+                when(monster.sex) {
+                    1 -> "♂"
+                    2 -> "♀"
+                    else -> ""
+                },
+                monster.getLevel()
+            ),
+            modifier = Modifier
+                .fillMaxSize()
+        )
+
+        CurvedLayout(
+            anchor = 270f + 360f * edgeTextRotate,
+            modifier = Modifier
+                .fillMaxSize()
+        ) {
+            curvedRow {
+                curvedText(
+                    text = rotatingText,
+                    fontSize = 24.sp,
+                    color = curvedTextColor,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    angularDirection = CurvedDirection.Angular.Normal,
+                    maxSweepAngle = 360f,
+                    modifier = CurvedModifier
+                )
+            }
+        }
+        CurvedLayout(
+            anchor = 90f + 360f * edgeTextRotate,
+            modifier = Modifier
+                .fillMaxSize()
+                .alpha(textFlash)
+        ) {
+            curvedRow {
+                curvedText(
+                    text = tapAnywhereText,
+                    fontSize = 20.sp,
+                    color = curvedTextColor,
+                    fontFamily = FontFamily(
+                        Font(R.font.pixelfont)
+                    ),
+                    angularDirection = CurvedDirection.Angular.Normal,
+                    maxSweepAngle = 360f,
+                    modifier = CurvedModifier
+                )
+            }
+        }
+    }
+}
+
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
@@ -360,25 +636,8 @@ fun TradeWidgetCancelledPreview() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetHostingPreview() {
-    TradeWidget(
-        state = TradeState.Hosting("123456"),
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
-    )
-}
-
-@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
-@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
-@Composable
-fun TradeWidgetDiscoveringHostsPreview() {
-    TradeWidget(
-        state = TradeState.DiscoveringHosts(listOf()),
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
-    )
+fun HostCodePreview() {
+    HostCodeScreen("12345")
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
@@ -387,11 +646,21 @@ fun TradeWidgetDiscoveringHostsPreview() {
 fun ListeningPairingCodeScreenPreview() {
     ListeningPairingCodeScreen(
         items = listOf(
-            DiscoveredHost(device = null, code = "12345", rssi = -60),
-            DiscoveredHost(device = null, code = "12345", rssi = -70),
-            DiscoveredHost(device = null, code = "12345", rssi = -80),
-            DiscoveredHost(device = null, code = "12345", rssi = -90),
-            DiscoveredHost(device = null, code = "12345", rssi = -100),
+            DiscoveredHost(device = null, code = "12345").apply {
+                addRssiSample(-60)
+            },
+            DiscoveredHost(device = null, code = "12345").apply {
+                addRssiSample(-70)
+            },
+            DiscoveredHost(device = null, code = "12345").apply {
+                addRssiSample(-80)
+            },
+            DiscoveredHost(device = null, code = "12345").apply {
+                addRssiSample(-90)
+            },
+            DiscoveredHost(device = null, code = "12345").apply {
+                addRssiSample(-100)
+            },
         ),
         itemOnSelect = {}
     )
@@ -440,15 +709,11 @@ fun TradeWidgetReviewingOfferPreview() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetCompletePreview() {
-    TradeWidget(
-        state = TradeState.Complete(
-            MonsterModel.getRandomMonster(
-                MonsterDefinitions.entries[0].id
-            )
+fun TradeCompletePreview() {
+    TradeCompleteScreen(
+        monster = MonsterModel.getRandomMonster(
+            MonsterDefinitions.entries[0].id
         ),
-        acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {}
+        screenOnClick = {}
     )
 }

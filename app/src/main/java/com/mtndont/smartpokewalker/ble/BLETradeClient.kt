@@ -77,8 +77,17 @@ class BLETradeClient @Inject constructor(
                 //stopScan()
                 //connect(result.device)
                 val code = parseTradeCode(result) ?: return
-                val host = DiscoveredHost(result.device, code, result.rssi)
-                discoveredHosts[result.device.address] = host
+                val existing = discoveredHosts[result.device.address]
+                if (existing != null) {
+                    existing.addRssiSample(result.rssi)
+                } else {
+                    val host = DiscoveredHost(
+                        result.device,
+                        code
+                    )
+                    host.addRssiSample(result.rssi)
+                    discoveredHosts[result.device.address] = host
+                }
                 // Sort closest first so the two people trading are likely at the top
                 onHostsUpdated?.invoke(
                     discoveredHosts.values.sortedByDescending { it.rssi }
@@ -306,13 +315,22 @@ object BleTradeUUIDs {
     val CCCD_UUID: UUID = UUID.fromString("00002902-0000-1000-8000-00805f9b34fb")
 }
 
-data class DiscoveredHost(
+class DiscoveredHost(
     val device: BluetoothDevice?,
     // 6-digit code displayed on the host's watch
     val code: String,
+) {
+    private val rssiSamples = ArrayDeque<Int>(5)
+
     // signal strength
-    val rssi: Int
-)
+    val rssi: Int get() = if (rssiSamples.isEmpty()) Int.MIN_VALUE
+        else rssiSamples.average().toInt()
+
+    fun addRssiSample(rssi: Int) {
+        if (rssiSamples.size >= 5) rssiSamples.removeFirst()
+        rssiSamples.addLast(rssi)
+    }
+}
 
 enum class TradeConfirmState { NONE, CONFIRMED, CANCELLED }
 
