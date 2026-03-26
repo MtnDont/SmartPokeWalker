@@ -71,6 +71,16 @@ class DefaultMonstersRepository @Inject constructor(
         return dataSource.createMonster(monster.toLocal())
     }
 
+    override suspend fun tradeMonster(
+        newMonster: MonsterModel,
+        oldMonsterId: Long
+    ): Long {
+        return dataSource.tradeMonster(
+            newMonster = newMonster.toLocal(),
+            oldMonsterId = oldMonsterId
+        )
+    }
+
     override suspend fun moveMonsterToParty(monsterId: Long, partySlot: Int): Long {
         return dataSource.moveMonsterToParty(monsterId, partySlot)
     }

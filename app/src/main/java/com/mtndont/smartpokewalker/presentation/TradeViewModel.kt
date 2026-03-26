@@ -3,27 +3,31 @@ package com.mtndont.smartpokewalker.presentation
 import android.Manifest
 import androidx.annotation.RequiresPermission
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.mtndont.smartpokewalker.ble.BLETradeClient
 import com.mtndont.smartpokewalker.ble.BLETradeServer
 import com.mtndont.smartpokewalker.ble.DiscoveredHost
 import com.mtndont.smartpokewalker.data.MonsterModel
+import com.mtndont.smartpokewalker.data.MonstersRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class TradeViewModel @Inject constructor(
     private val server: BLETradeServer,
-    private val client: BLETradeClient
+    private val client: BLETradeClient,
+    private val monstersRepository: MonstersRepository
 ): ViewModel() {
     private val _state = MutableStateFlow<TradeState>(TradeState.Idle)
     val state: StateFlow<TradeState> = _state.asStateFlow()
 
     private var myMonster: MonsterModel? = null
 
-    fun setMonster(monster: MonsterModel) {
+    fun setMonster(monster: MonsterModel?) {
         myMonster = monster
     }
 
@@ -118,7 +122,14 @@ class TradeViewModel @Inject constructor(
     }
 
     private fun saveMonster(monster: MonsterModel) {
-        // TODO save monster to repository
+        viewModelScope.launch {
+            myMonster?.let {
+                monstersRepository.tradeMonster(
+                    newMonster = monster,
+                    oldMonsterId = it.id
+                )
+            }
+        }
     }
 
     @RequiresPermission(allOf = [
