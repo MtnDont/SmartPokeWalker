@@ -187,19 +187,23 @@ class BLETradeServer @Inject constructor(
                 BluetoothProfile.STATE_CONNECTED -> {
                     // Stop advertising once a client connects so no second
                     // device can interrupt an in-progress trade
-                    stopAdvertising()
-                    connectedDevice = device
+                    //stopAdvertising()
+                    //connectedDevice = device
                 }
                 BluetoothProfile.STATE_DISCONNECTED -> {
-                    if (!confirmation.bothConfirmed) {
-                        onTradeCancelled?.invoke()
+                    if (device == connectedDevice) {
+                        if (!confirmation.bothConfirmed) {
+                            onTradeCancelled?.invoke()
+                        }
+                        connectedDevice = null
                     }
-                    connectedDevice = null
                 }
             }
         }
 
-        @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+        @RequiresPermission(allOf = [
+            Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT
+        ])
         override fun onCharacteristicWriteRequest(
             device: BluetoothDevice,
             requestId: Int,
@@ -257,8 +261,19 @@ class BLETradeServer @Inject constructor(
         }
     }
 
-    @RequiresPermission(Manifest.permission.BLUETOOTH_CONNECT)
+    @RequiresPermission(allOf = [
+        Manifest.permission.BLUETOOTH_ADVERTISE, Manifest.permission.BLUETOOTH_CONNECT
+    ])
     private fun handleOfferReceived(device: BluetoothDevice, value: ByteArray) {
+        if (connectedDevice != null && connectedDevice != device) {
+            return
+        }
+
+        if (connectedDevice == null) {
+            connectedDevice = device
+            stopAdvertising()
+        }
+
         val parsed = MonsterModel.fromBytes(value)
         if (parsed == null) {
             onTradeCancelled?.invoke()
