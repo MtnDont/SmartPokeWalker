@@ -1001,17 +1001,13 @@ fun WaitingForPartnerPreview() {
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun TradeWidgetReviewingOfferPreview() {
-    TradeWidget(
-        state = TradeState.ReviewingOffer(
-            MonsterModel.getRandomMonster(
-                MonsterDefinitions.entries[0].id
-            )
+fun OfferPreview() {
+    OfferScreen(
+        monster = MonsterModel.getRandomMonster(
+            MonsterDefinitions.entries[0].id
         ),
         acceptOnClick = {},
-        cancelOnClick = {},
-        codeSelectOnClick = {},
-        returnOnClick = {}
+        cancelOnClick = {}
     )
 }
 

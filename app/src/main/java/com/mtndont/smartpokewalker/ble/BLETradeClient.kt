@@ -330,14 +330,14 @@ class DiscoveredHost(
     // 6-digit code displayed on the host's watch
     val code: String,
 ) {
-    private val rssiSamples = ArrayDeque<Int>(5)
+    private val rssiSamples = ArrayDeque<Int>(10)
 
     // signal strength
     val rssi: Int get() = if (rssiSamples.isEmpty()) Int.MIN_VALUE
         else rssiSamples.average().toInt()
 
     fun addRssiSample(rssi: Int) {
-        if (rssiSamples.size >= 5) rssiSamples.removeFirst()
+        if (rssiSamples.size >= 10) rssiSamples.removeFirst()
         rssiSamples.addLast(rssi)
     }
 }
