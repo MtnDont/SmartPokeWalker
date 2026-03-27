@@ -95,18 +95,14 @@ fun TradeScreen(
     ) {
         Text("missing ble permissions")
     } else {
-        if (state == TradeState.Idle) {
-            HostOrJoinWidget(
-                hostOnClick = {
-                    viewModel.hostTrade()
-                },
-                joinOnClick = {
-                    viewModel.joinTrade()
-                }
-            )
-        }
         TradeWidget(
             state = state,
+            hostOnClick = {
+                viewModel.hostTrade()
+            },
+            joinOnClick = {
+                viewModel.joinTrade()
+            },
             acceptOnClick = {
                 viewModel.submitDecision(true)
             },
@@ -320,6 +316,8 @@ fun TradeCancelledScreen(
 @Composable
 fun TradeWidget(
     state: TradeState,
+    hostOnClick: () -> Unit,
+    joinOnClick: () -> Unit,
     acceptOnClick: () -> Unit,
     cancelOnClick: () -> Unit,
     codeSelectOnClick: (DiscoveredHost) -> Unit,
@@ -330,6 +328,13 @@ fun TradeWidget(
         modifier = Modifier.fillMaxSize()
     ) {
         when (state) {
+            is TradeState.Idle -> {
+                HostOrJoinWidget(
+                    hostOnClick = hostOnClick,
+                    joinOnClick = joinOnClick
+                )
+            }
+
             is TradeState.ReviewingOffer -> {
                 val offer = state.theirMonster
                 OfferScreen(
@@ -375,14 +380,6 @@ fun TradeWidget(
                 TradeCompleteScreen(
                     monster = received,
                     screenOnClick = returnOnClick
-                )
-            }
-
-            // Idle, Searching, etc.
-            else -> {
-                Text(
-                    text = state.javaClass.simpleName,
-                    color = colorResource(R.color.background_gray)
                 )
             }
         }
