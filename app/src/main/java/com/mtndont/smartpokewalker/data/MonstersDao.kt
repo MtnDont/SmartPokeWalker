@@ -109,6 +109,14 @@ interface MonstersDao {
     }
 
     @Transaction
+    suspend fun tradeMonster(newMonster: Monster, oldMonsterId: Long): Long {
+        deleteById(oldMonsterId)
+        val monsterId = createMonster(newMonster)
+
+        return monsterId
+    }
+
+    @Transaction
     suspend fun moveMonsterToParty(monsterId: Long, partySlot: Int): Long {
         val partyEntry = getPartyByMonsterId(monsterId)
         val boxEntry = getMonsterBoxByMonsterId(monsterId)

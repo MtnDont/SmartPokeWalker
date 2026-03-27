@@ -48,9 +48,6 @@ fun TrainerDetailsApp(
     TrainerDetailsScreen(
         trainerName = trainerName,
         exploreSteps = exploreSteps,
-        testBluetoothOnClick = {
-            viewModel.testBluetooth()
-        },
         exploreOnClick = {
             viewModel.explore()
         },
@@ -64,7 +61,6 @@ fun TrainerDetailsApp(
 fun TrainerDetailsScreen(
     trainerName: String,
     exploreSteps: Int,
-    testBluetoothOnClick: () -> Unit,
     exploreOnClick: () -> Unit,
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
@@ -189,19 +185,6 @@ fun TrainerDetailsScreen(
                     ),
                     modifier = Modifier
                 )
-                Button(
-                    label = {
-                        Text(
-                            text = "Test Bluetooth Server",
-                            color = colorResource(R.color.background_gray)
-                        )
-                    },
-                    onClick = testBluetoothOnClick,
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
-                    ),
-                    modifier = Modifier
-                )
             }
         }
     }
@@ -214,7 +197,6 @@ fun TrainerDetailsScreenPreview() {
     TrainerDetailsScreen(
         trainerName = "Red",
         exploreSteps = 499,
-        testBluetoothOnClick = {},
         exploreOnClick = {},
         boxOnClick = {},
         partyOnClick = {},

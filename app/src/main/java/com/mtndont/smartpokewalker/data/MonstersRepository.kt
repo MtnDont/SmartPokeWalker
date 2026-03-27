@@ -22,6 +22,11 @@ interface MonstersRepository {
         form: Int
     ): Long
 
+    suspend fun tradeMonster(
+        newMonster: MonsterModel,
+        oldMonsterId: Long
+    ): Long
+
     suspend fun createMonster(monster: MonsterModel): Long
 
     suspend fun moveMonsterToParty(monsterId: Long, partySlot: Int): Long

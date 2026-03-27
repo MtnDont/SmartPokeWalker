@@ -169,15 +169,6 @@ class TrainerDetailsViewModel @Inject constructor(
             monstersRepository.deleteMonster(monsterId)
         }
     }
-
-    fun testBluetooth() {
-        bleManager.startServer()
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        bleManager.stopServer()
-    }
 }
 
 sealed interface AppOverlayState {

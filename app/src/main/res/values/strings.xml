@@ -9,6 +9,7 @@
     <string name="complication_label">Example complication</string>
     <string name="trainer_card">Trainer Card</string>
     <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
     <string name="slot_num">Slot %1$d</string>
     <string name="box_num">Box %1$d</string>
     <string name="evolve">Evolve</string>
@@ -17,6 +18,7 @@
     <string name="box">Box</string>
     <string name="party">Party</string>
     <string name="items">Items</string>
+    <string name="trade">Trade</string>
     <string name="explore_button">Explore\n(%1$dw/%2$dw)</string>
     <string name="explore">Explore</string>
     <string name="explore_refreshed">Exploration Refreshed</string>
@@ -30,6 +32,18 @@
     <string name="a_new_form">A New Form!</string>
     <string name="evolving" tools:ignore="TypographyEllipsis">Evolving...</string>
     <string name="tap_anywhere">Tap anywhere to continue</string>
+    <string name="tap_to_return">Tap to return</string>
     <string name="name_and_item">%1$s\n%2$s</string>
     <string name="wild_name_appeared">A wild %1$s appeared!</string>
+    <string name="name_sex_level">%1$s\n%2$s Lv.%3$d</string>
+    <string name="link_trade">Link Trade</string>
+    <string name="offer_accepted" tools:ignore="TypographyEllipsis">Offer accepted\nWaiting on Partner...</string>
+    <string name="host_trade">Host Trade</string>
+    <string name="find_trade">Find Trade</string>
+    <string name="trade_cancelled">Trade Cancelled</string>
+    <string name="nearby_traders">Nearby traders</string>
+    <string name="your_code">Your code</string>
+    <string name="waiting" tools:ignore="TypographyEllipsis">Waiting...</string>
+    <string name="waiting_on_partner" tools:ignore="TypographyEllipsis">Waiting on partner...</string>
+    <string name="trade_complete">Trade Complete!</string>
 </resources>
