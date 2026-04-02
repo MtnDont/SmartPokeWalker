@@ -13,6 +13,7 @@
     <string name="slot_num">Slot %1$d</string>
     <string name="box_num">Box %1$d</string>
     <string name="evolve">Evolve</string>
+    <string name="summary">Summary</string>
     <string name="select_evolution">Select Evolution</string>
     <string name="release">Release</string>
     <string name="box">Box</string>

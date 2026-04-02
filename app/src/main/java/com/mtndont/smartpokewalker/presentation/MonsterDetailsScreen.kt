@@ -55,7 +55,7 @@ import kotlin.math.min
 @Composable
 fun MonsterDetailsScreen(
     currentSteps: Long,
-    totalWatts: Long,
+    totalWatts: Long = -1L,
     sex: Int? = null,
     canEvolve: Boolean = false
 ) {
@@ -115,18 +115,22 @@ fun MonsterDetailsScreen(
                         scaleY = 1f
                     )
             )
-            CurvedLayout(
-                anchor = 215f //225f
-            ) {
-                curvedText(
-                    text = "$totalWatts w",
-                    fontSize = 24.sp,
-                    color = Color.Black,
-                    fontFamily = FontFamily(
-                        Font(R.font.pixelfont)
+
+            if (totalWatts > -1L) {
+                CurvedLayout(
+                    anchor = 215f //225f
+                ) {
+                    curvedText(
+                        text = "$totalWatts w",
+                        fontSize = 24.sp,
+                        color = Color.Black,
+                        fontFamily = FontFamily(
+                            Font(R.font.pixelfont)
+                        )
                     )
-                )
+                }
             }
+
             CurvedLayout(
                 anchor = 315f
             ) {
@@ -266,26 +270,29 @@ fun MonsterImage(
 }
 
 @Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
+@Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun MonsterDetailsScreenSmallPreview() {
+fun MonsterDetailsScreenPreview() {
     MonsterDetailsScreen(
         125L,
         1234L,
-        canEvolve = true
+        canEvolve = true,
+        sex = 1
     )
     MonsterImage(
         name = "Android"
     )
 }
 
+@Preview(device = WearDevices.SMALL_ROUND, showSystemUi = true)
 @Preview(device = WearDevices.LARGE_ROUND, showSystemUi = true)
 @Composable
-fun MonsterDetailsScreenLargePreview() {
+fun MonsterDetailsScreenNoTotalPreview() {
     MonsterDetailsScreen(
         //125L,
-        99500L,
-        1234L,
-        canEvolve = true
+        currentSteps = 99500L,
+        canEvolve = true,
+        sex = 1
     )
     MonsterImage(
         name = "Android"

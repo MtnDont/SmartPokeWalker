@@ -12,6 +12,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import com.mtndont.smartpokewalker.R
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
@@ -53,6 +54,7 @@ enum class MonsterListAction(
     val labelResId: Int,
     val lastInPartyEnabled: Boolean
 ) {
+    Summary(R.string.summary, true),
     Evolve(R.string.evolve, true),
     Release(R.string.release, false),
     MoveToParty(R.string.move_to_party, true),
@@ -167,6 +169,11 @@ fun TrainerNav(
                 isLastInParty = isLastInParty,
                 actionOnHit = { action ->
                     when(action) {
+                        MonsterListAction.Summary -> {
+                            monster?.let {
+                                navController.navigate("monster/${it.id}/summary")
+                            }
+                        }
                         MonsterListAction.Evolve -> {
                             monster?.let {
                                 navController.navigate("monster/${it.id}/evolve")
@@ -236,6 +243,28 @@ fun TrainerNav(
                     }
                     navController.popBackStack("monster/${monsterId}", true)
                 }
+            )
+        }
+
+        composable("monster/{monsterId}/summary") { backStackEntry ->
+            val monsterId = backStackEntry.arguments?.getString("monsterId")?.toLong() ?: 0
+            val monster = viewModel.getMonsterInstanceFromId(monsterId)
+            val partyList = viewModel.getPartyListInstance()
+            val itemList = viewModel.getItemsAvailableInstance()
+
+            MonsterDetailsScreen(
+                currentSteps = monster.experience,
+                sex = monster.sex,
+                canEvolve = monster.getAvailableEvolutions(
+                    party = partyList,
+                    items = itemList,
+                    includeHidden = false
+                ).isNotEmpty()
+            )
+            MonsterImage(
+                monsterResId = monster.getFormResId(),
+                name = monster.name,
+                modifier = Modifier.graphicsLayer()
             )
         }
 
@@ -439,7 +468,8 @@ fun MonsterActionScreen(
 ) {
     monster?.let {
         val actions = mutableListOf(
-            //"Summary",
+            MonsterListAction.Summary,
+            MonsterListAction.Evolve,
             MonsterListAction.MoveToParty,
             MonsterListAction.MoveToBox,
             MonsterListAction.Trade,
@@ -447,8 +477,8 @@ fun MonsterActionScreen(
             //"Rename"
         )
 
-        if (canEvolve) {
-            actions.add(0,MonsterListAction.Evolve)
+        if (!canEvolve) {
+            actions.remove(MonsterListAction.Evolve)
         }
 
         val listState = rememberTransformingLazyColumnState()
