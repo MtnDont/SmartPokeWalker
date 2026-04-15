@@ -1,17 +1,22 @@
-import org.jetbrains.kotlin.gradle.dsl.JvmTarget
-
 plugins {
     alias(libs.plugins.android.application)
-    alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
     alias(libs.plugins.hilt)
     alias(libs.plugins.room)
 }
 
+room {
+    schemaDirectory("$projectDir/schemas")
+}
+
 android {
     namespace = "com.mtndont.smartpokewalker"
-    compileSdk = 36
+    compileSdk {
+        version = release(36) {
+            minorApiLevel = 1
+        }
+    }
 
     defaultConfig {
         applicationId = "com.mtndont.smartpokewalker"
@@ -31,45 +36,45 @@ android {
             )
         }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
     }
-    kotlin {
-        compilerOptions {
-            jvmTarget.set(JvmTarget.JVM_11)
-            freeCompilerArgs.addAll(
-                listOf(
-                    "-Xcontext-parameters",
-                    "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
-                )
-            )
-        }
-    }
+
     useLibrary("wear-sdk")
+
     buildFeatures {
         compose = true
     }
-    room {
-        schemaDirectory("$projectDir/schemas")
+}
+
+kotlin {
+    compilerOptions {
+        freeCompilerArgs.addAll(
+            listOf(
+                "-Xcontext-parameters",
+                "-XXLanguage:+PropertyParamAnnotationDefaultTargetMode"
+            )
+        )
     }
 }
 
 /**
  * Extracts images from NDS ROM into res/ directory
  */
-android.applicationVariants.all {
-    val variantName = name.replaceFirstChar { it.uppercase() }
-    val mergeResourcesTask = tasks.named("merge${variantName}Resources")
-
-    mergeResourcesTask.configure {
-        dependsOn(tasks.named("extractImageBinaries"))
+androidComponents {
+    onVariants { variant ->
+        val variantName = variant.name.replaceFirstChar { it.uppercase() }
+        tasks.matching { it.name == "merge${variantName}Resources" }.configureEach {
+            dependsOn(tasks.named("extractImageBinaries"))
+        }
     }
 }
 
 tasks.register<Exec>("extractImageBinaries") {
     group = "python"
-    description = "Runs a Python script safely (Gradle 8 compatible)."
+    description = "Runs a Python script safely to extract images from a ROM."
 
     workingDir = rootDir
     commandLine("python", "scripts/extract_walker_images.py", "rom.nds", "-o", "app/src/main/res/raw", "-s")
@@ -91,7 +96,6 @@ dependencies {
     implementation(libs.androidx.room.ktx)
     implementation(libs.hilt.android)
     implementation(libs.androidx.hilt.common)
-    implementation(libs.androidx.hilt.work)
     implementation(libs.androidx.hilt.navigation.compose)
     ksp(libs.hilt.compiler)
     implementation(libs.wear.tooling.preview)
@@ -103,13 +107,8 @@ dependencies {
     implementation(libs.androidx.annotation)
     implementation(libs.androidx.datastore)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
-    implementation(libs.androidx.work.ktx)
-    implementation(libs.androidx.work)
     implementation(libs.horologist.compose.tools)
     implementation(libs.horologist.tiles)
-    implementation(libs.coil3.kt.gif)
-    implementation(libs.coil3.kt.compose)
-    implementation(libs.apng4android)
     implementation(libs.accompanist.drawablepainter)
     implementation(libs.watchface.complications.data.source.ktx)
     implementation(libs.horologist.compose.layout)
