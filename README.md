@@ -6,22 +6,22 @@ SmartPokeWalker is a game for WearOS devices that integrates real-world movement
 ### **Train your Monsters**
 The application accurately tracks movement and converts physical activity into in-game progress for your monsters
 
-![something](docs/test.png)
+![Monster Summary preview](docs/test.png)
 
 ### **Explore and Find New Friends**
 Explore to find new Monsters and train them in your party. The rest of your monsters can stay in any of your 32 boxes.
 
-![](docs/test2.png)
+![Exploration preview](docs/test2.png)
 
 ### **Extensive Monster Support**
 Robust architecture for supporting different Monsters, current definitions cover Generation 4 Pokemon.
 
-![](docs/test3.png)
+![Found Monster preview](docs/test3.png)
 
 ### **Wireless BLE Trading**
 Trade monsters directly between smartwatches, utilizing a Bluetooth Low Energy (BLE) server, the app supports fast, reliable, and authentic local trading without requiring an internet connection.
 
-![](docs/test5.png)
+![Trading preview](docs/tiles-trade.png)
 
 ## Build Preparation & Requirements
 Graphics are not included with this project. A ROM of ***your own*** must be supplied. For testing purposes I utilize a backup of my copy of SoulSilver.
