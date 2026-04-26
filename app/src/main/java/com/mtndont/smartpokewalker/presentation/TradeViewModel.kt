@@ -9,15 +9,14 @@ import com.mtndont.smartpokewalker.ble.BLETradeServer
 import com.mtndont.smartpokewalker.ble.DiscoveredHost
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.core.annotation.KoinViewModel
 
-@HiltViewModel
-class TradeViewModel @Inject constructor(
+@KoinViewModel
+class TradeViewModel(
     private val server: BLETradeServer,
     private val client: BLETradeClient,
     private val monstersRepository: MonstersRepository

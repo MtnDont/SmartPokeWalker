@@ -55,7 +55,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.core.app.ActivityCompat
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
 import androidx.wear.compose.foundation.CurvedModifier
@@ -76,12 +75,13 @@ import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.ble.DiscoveredHost
 import com.mtndont.smartpokewalker.data.MonsterDefinitions
 import com.mtndont.smartpokewalker.data.MonsterModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TradeScreen(
     monster: MonsterModel,
     returnOnClick: () -> Unit,
-    viewModel: TradeViewModel = hiltViewModel()
+    viewModel: TradeViewModel = koinViewModel()
 ) {
     viewModel.setMonster(monster)
     val state by viewModel.state.collectAsState()

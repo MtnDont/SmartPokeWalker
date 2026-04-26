@@ -20,7 +20,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.CurvedDirection
 import androidx.wear.compose.foundation.CurvedLayout
@@ -32,11 +31,12 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.presentation.theme.SmartPokeWalkerTheme
+import org.koin.compose.viewmodel.koinViewModel
 import java.util.Locale.getDefault
 
 @Composable
 fun TrainerDetailsApp(
-    viewModel: TrainerDetailsViewModel = hiltViewModel(),
+    viewModel: TrainerDetailsViewModel = koinViewModel(),
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
     itemsOnClick: () -> Unit

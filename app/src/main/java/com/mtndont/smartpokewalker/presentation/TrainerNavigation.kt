@@ -23,7 +23,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.lazy.TransformingLazyColumn
 import androidx.wear.compose.foundation.lazy.items
@@ -49,6 +48,7 @@ import com.mtndont.smartpokewalker.data.MonsterBoxModel
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.PartyModel
 import com.mtndont.smartpokewalker.data.PartyMonsterModel
+import org.koin.compose.viewmodel.koinViewModel
 
 enum class MonsterListAction(
     val labelResId: Int,
@@ -64,7 +64,7 @@ enum class MonsterListAction(
 
 @Composable
 fun TrainerNav(
-    viewModel: TrainerDetailsViewModel = hiltViewModel()
+    viewModel: TrainerDetailsViewModel = koinViewModel()
 ) {
     val navController = rememberSwipeDismissableNavController()
 

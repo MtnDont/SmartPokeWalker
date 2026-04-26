@@ -21,16 +21,14 @@ import android.os.ParcelUuid
 import android.util.Log
 import androidx.annotation.RequiresPermission
 import androidx.core.app.ActivityCompat
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.asSharedFlow
+import org.koin.core.annotation.Single
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class BLEManager @Inject constructor(
-    @ApplicationContext private val context: Context,
+@Single
+class BLEManager (
+    private val context: Context,
     private val bluetoothManager: BluetoothManager
 ) {
     private val adapter = bluetoothManager.adapter

@@ -13,13 +13,9 @@ import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
 import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.presentation.MainActivity
-import dagger.hilt.android.qualifiers.ApplicationContext
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class NotificationUtil @Inject constructor(
-    @ApplicationContext private val context: Context,
+class NotificationUtil(
+    private val context: Context,
     private val notificationManager: NotificationManager
 ) {
     fun getServiceNotification(): Notification {

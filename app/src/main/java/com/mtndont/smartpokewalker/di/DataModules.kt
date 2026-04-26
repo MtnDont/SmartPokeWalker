@@ -3,33 +3,18 @@ package com.mtndont.smartpokewalker.di
 import android.content.Context
 import androidx.room.Room
 import com.mtndont.smartpokewalker.data.AppDatabase
-import com.mtndont.smartpokewalker.data.DefaultMonstersRepository
 import com.mtndont.smartpokewalker.data.MonstersDao
-import com.mtndont.smartpokewalker.data.MonstersRepository
-import dagger.Binds
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Factory
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
 @Module
-@InstallIn(SingletonComponent::class)
-abstract class RepositoryModule {
+@Configuration
+class DataModule {
 
-    @Singleton
-    @Binds
-    abstract fun bindMonsterRepository(repository: DefaultMonstersRepository): MonstersRepository
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-object DataModule {
-
-    @Singleton
-    @Provides
-    fun provideDatabase(@ApplicationContext context: Context): AppDatabase {
+    @Single
+    fun provideDatabase(context: Context): AppDatabase {
         return Room.databaseBuilder(
             context.applicationContext,
             AppDatabase::class.java,
@@ -37,6 +22,6 @@ object DataModule {
         ).build()
     }
 
-    @Provides
+    @Factory
     fun provideMonstersDao(database: AppDatabase): MonstersDao = database.monstersDao()
 }

@@ -11,14 +11,11 @@ import androidx.core.content.ContextCompat
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.mtndont.smartpokewalker.service.StepService
 import com.mtndont.smartpokewalker.util.NotificationUtil
-import dagger.hilt.android.AndroidEntryPoint
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var notificationUtil: NotificationUtil
+    private val notificationUtil: NotificationUtil by inject()
 
     private val criticalPermissions = arrayOf(
         Manifest.permission.ACTIVITY_RECOGNITION

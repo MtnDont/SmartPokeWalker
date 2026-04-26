@@ -34,7 +34,6 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.imageResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.hilt.lifecycle.viewmodel.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.wear.compose.foundation.CurvedAlignment
 import androidx.wear.compose.foundation.CurvedDirection
@@ -52,10 +51,11 @@ import androidx.wear.tooling.preview.devices.WearDevices
 import com.mtndont.smartpokewalker.R
 import com.mtndont.smartpokewalker.data.ItemModel
 import com.mtndont.smartpokewalker.data.MonsterModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun TrainerViewNavigatorApp(
-    viewModel: TrainerDetailsViewModel = hiltViewModel(),
+    viewModel: TrainerDetailsViewModel = koinViewModel(),
     boxOnClick: () -> Unit,
     partyOnClick: () -> Unit,
     itemsOnClick: () -> Unit
@@ -133,7 +133,7 @@ fun TrainerViewNavigatorApp(
 
 @Composable
 fun WalkPagerApp(
-    viewModel: MainScreenAppViewModel = hiltViewModel()
+    viewModel: MainScreenAppViewModel = koinViewModel<MainScreenAppViewModel>()
 ) {
     val uiState by viewModel.uiState
     val partyList by viewModel.partyList.collectAsStateWithLifecycle()

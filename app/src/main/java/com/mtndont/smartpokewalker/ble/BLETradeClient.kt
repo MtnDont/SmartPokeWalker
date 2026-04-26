@@ -17,14 +17,10 @@ import android.os.Build
 import android.os.ParcelUuid
 import androidx.annotation.RequiresPermission
 import com.mtndont.smartpokewalker.data.MonsterModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.UUID
-import javax.inject.Inject
-import javax.inject.Singleton
 
-@Singleton
-class BLETradeClient @Inject constructor(
-    @ApplicationContext private val context: Context,
+class BLETradeClient(
+    private val context: Context,
     private val bluetoothManager: BluetoothManager
 ) {
     private var gatt: BluetoothGatt? = null

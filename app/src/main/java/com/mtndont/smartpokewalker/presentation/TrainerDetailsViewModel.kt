@@ -13,7 +13,6 @@ import com.mtndont.smartpokewalker.data.MonsterDefinition
 import com.mtndont.smartpokewalker.data.MonsterModel
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import com.mtndont.smartpokewalker.data.PartyMonsterModel
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -24,10 +23,10 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
-import javax.inject.Inject
+import org.koin.core.annotation.KoinViewModel
 
-@HiltViewModel
-class TrainerDetailsViewModel @Inject constructor(
+@KoinViewModel
+class TrainerDetailsViewModel(
     private val bleManager: BLEManager,
     private val monsterDataRepository: MonsterDataRepository,
     private val monstersRepository: MonstersRepository

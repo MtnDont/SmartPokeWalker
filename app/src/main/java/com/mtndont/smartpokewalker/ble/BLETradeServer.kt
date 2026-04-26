@@ -17,15 +17,10 @@ import android.content.Context
 import android.os.ParcelUuid
 import androidx.annotation.RequiresPermission
 import com.mtndont.smartpokewalker.data.MonsterModel
-import dagger.hilt.android.qualifiers.ApplicationContext
-import java.nio.ByteBuffer
-import javax.inject.Inject
-import javax.inject.Singleton
 import kotlin.random.Random
 
-@Singleton
-class BLETradeServer @Inject constructor(
-    @ApplicationContext private val context: Context,
+class BLETradeServer(
+    private val context: Context,
     private val bluetoothManager: BluetoothManager
 ) {
     private var gattServer: BluetoothGattServer? = null

@@ -11,15 +11,13 @@ import android.util.Log
 import com.mtndont.smartpokewalker.data.MonsterDataRepository
 import com.mtndont.smartpokewalker.data.MonstersRepository
 import com.mtndont.smartpokewalker.util.NotificationUtil
-import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import javax.inject.Inject
+import org.koin.android.ext.android.inject
 
-@AndroidEntryPoint
 class StepService : Service(), SensorEventListener {
 
     private val totalStepScope = CoroutineScope(SupervisorJob() + Dispatchers.Default)
@@ -28,14 +26,11 @@ class StepService : Service(), SensorEventListener {
     private var stepsOnOpen = -1L
     private var lastSteps = -1L
 
-    @Inject
-    lateinit var monsterDataRepository: MonsterDataRepository
+    private val monsterDataRepository: MonsterDataRepository by inject()
 
-    @Inject
-    lateinit var monstersRepository: MonstersRepository
+    private val monstersRepository: MonstersRepository by inject()
 
-    @Inject
-    lateinit var notificationUtil: NotificationUtil
+    private val notificationUtil: NotificationUtil by inject()
 
     private val sensorManager by lazy {
         this.applicationContext.getSystemService(SENSOR_SERVICE) as SensorManager

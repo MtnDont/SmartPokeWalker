@@ -2,8 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
     alias(libs.plugins.ksp)
-    alias(libs.plugins.hilt)
     alias(libs.plugins.room)
+    alias(libs.plugins.koin.compiler)
 }
 
 room {
@@ -60,6 +60,11 @@ kotlin {
     }
 }
 
+koinCompiler {
+    compileSafety = true    // Default: true — validates dependency graph
+    //userLogs = true         // See what components are detected
+}
+
 /**
  * Extracts images from NDS ROM into res/ directory
  */
@@ -94,10 +99,16 @@ dependencies {
     implementation(libs.androidx.compose.navigation)
     ksp(libs.androidx.room.compiler)
     implementation(libs.androidx.room.ktx)
-    implementation(libs.hilt.android)
-    implementation(libs.androidx.hilt.common)
-    implementation(libs.androidx.hilt.navigation.compose)
-    ksp(libs.hilt.compiler)
+
+    implementation(platform(libs.koin.bom))
+    implementation(libs.koin.android)
+    implementation(libs.koin.annotations)
+    implementation(libs.koin.compose)
+    implementation(libs.koin.compose.viewmodel)
+    implementation(libs.koin.compose.navigation3)
+    implementation(libs.koin.core)
+    implementation(libs.koin.core.viewmodel)
+
     implementation(libs.wear.tooling.preview)
     implementation(libs.activity.compose)
     implementation(libs.core.splashscreen)

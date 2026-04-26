@@ -5,41 +5,34 @@ import android.content.Context
 import com.mtndont.smartpokewalker.ble.BLEManager
 import com.mtndont.smartpokewalker.ble.BLETradeClient
 import com.mtndont.smartpokewalker.ble.BLETradeServer
-import dagger.Module
-import dagger.Provides
-import dagger.hilt.InstallIn
-import dagger.hilt.android.qualifiers.ApplicationContext
-import dagger.hilt.components.SingletonComponent
-import javax.inject.Singleton
+import org.koin.core.annotation.Configuration
+import org.koin.core.annotation.Module
+import org.koin.core.annotation.Single
 
 @Module
-@InstallIn(SingletonComponent::class)
-object BleModule {
+@Configuration
+class BleModule {
 
-    @Provides
-    @Singleton
+    @Single
     fun provideBluetoothManager(
-        @ApplicationContext context: Context
+        context: Context
     ): BluetoothManager = context.getSystemService(BluetoothManager::class.java)
 
-    @Provides
-    @Singleton
+    @Single
     fun provideBLEManager(
-        @ApplicationContext context: Context,
+        context: Context,
         bluetoothManager: BluetoothManager
     ): BLEManager = BLEManager(context, bluetoothManager)
 
-    @Provides
-    @Singleton
+    @Single
     fun provideBLETradeClient(
-        @ApplicationContext context: Context,
+        context: Context,
         bluetoothManager: BluetoothManager
     ): BLETradeClient = BLETradeClient(context, bluetoothManager)
 
-    @Provides
-    @Singleton
+    @Single
     fun provideBLETradeServer(
-        @ApplicationContext context: Context,
+        context: Context,
         bluetoothManager: BluetoothManager
     ): BLETradeServer = BLETradeServer(context, bluetoothManager)
 }
